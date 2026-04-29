@@ -51,7 +51,7 @@ Weights live in `src/lib/scoring/weights.ts` — single source of truth, tweakab
 
 The brief leaves several details open. Where I chose:
 
-- **PR sample size** — first 30 merged PRs by recency, ranked into the dashboard. Configurable from the URL field on the LP. Reason: 30 is enough for a stable aggregate without burning OpenAI credits.
+- **PR sample size** — latest 5 merged PRs, ranked into the dashboard. Reason: recent work is the strongest signal of how someone codes today, and a tight sample keeps OpenAI spend and round-trip latency low.
 - **GitHub auth** — anonymous by default (60 req/h). If `GITHUB_TOKEN` is in env, it is used (5000 req/h). When the public limit is hit we degrade gracefully with an inline message and a token field.
 - **LLM model** — `gpt-5-mini` for individual PR scoring (cheap, fast, accurate at this constrained task), `gpt-5` for the repo-level recommendations (3 sentences, higher leverage). Both via structured outputs.
 - **Caching** — repo analysis hashed by `(owner, repo, latest-merge-sha)` and cached in memory for the lifetime of the server process. Good enough for a demo; Redis is the obvious next step.
@@ -60,7 +60,7 @@ The brief leaves several details open. Where I chose:
 ## What I would do next
 
 - Persist analyses in Postgres (currently in-memory) — enables shareable `/results/[hash]` URLs, history, leaderboards.
-- Stream the scoring step from the server with a `useEffect` + Server-Sent Events for true realtime progress instead of a single ~30s wait.
+- Stream the scoring step from the server with a `useEffect` + Server-Sent Events for true realtime progress instead of a single blocking wait.
 - Per-author drilldown view (radar chart of their median scores, PR count, trend line over the last N PRs).
 - PNG / SVG badge export for PRs and repos so candidates can drop them into their own READMEs.
 - Add Anthropic Claude as an alternative provider behind a feature flag — the brief is from a Claude shop, even if my key was OpenAI.
