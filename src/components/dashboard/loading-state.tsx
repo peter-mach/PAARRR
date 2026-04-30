@@ -28,13 +28,14 @@ const FINAL_MESSAGES = [
   { label: "Preparing dashboard", sub: "Packing the report for the results view" },
 ] as const;
 
-const INITIAL_PROGRESS_MS = 4200;
-const LONG_WAIT_PROGRESS_MS = 30000;
+// Stage timings derived from the same curve the bar's CSS animation uses,
+// so the four stage indicators advance roughly in step with the bar's fill.
+const STAGE_TIMING_MS = [0, 1500, 3500, 7000] as const;
 const FINAL_MESSAGE_MS = 4500;
+const LAST_STAGE = STAGES.length - 1;
 
 export function LoadingState({ url, promise, onDone, onError }: LoadingStateProps) {
   const [stage, setStage] = useState(0);
-  const [progress, setProgress] = useState(0);
   const [finalMessage, setFinalMessage] = useState(0);
   const [complete, setComplete] = useState(false);
 
@@ -46,18 +47,21 @@ export function LoadingState({ url, promise, onDone, onError }: LoadingStateProp
     let cancelled = false;
     setComplete(false);
     setFinalMessage(0);
+    setStage(0);
 
     const tick = (now: number) => {
       const elapsed = now - start;
-      const initial = Math.min(1, elapsed / INITIAL_PROGRESS_MS);
-      const waiting = Math.max(0, elapsed - INITIAL_PROGRESS_MS);
-      const finalCreep = Math.min(0.13, (waiting / LONG_WAIT_PROGRESS_MS) * 0.13);
-      const p = initial < 1 ? initial * 0.82 : 0.82 + finalCreep;
-      setProgress(p);
-      const idx = Math.min(STAGES.length - 1, Math.max(0, Math.floor(p * STAGES.length)));
+      let idx = 0;
+      for (let i = STAGE_TIMING_MS.length - 1; i >= 0; i -= 1) {
+        if (elapsed >= STAGE_TIMING_MS[i]!) {
+          idx = i;
+          break;
+        }
+      }
       setStage(idx);
-      if (idx === STAGES.length - 1) {
-        setFinalMessage(Math.floor(waiting / FINAL_MESSAGE_MS) % FINAL_MESSAGES.length);
+      if (idx === LAST_STAGE) {
+        const waitingInLast = elapsed - STAGE_TIMING_MS[LAST_STAGE]!;
+        setFinalMessage(Math.floor(waitingInLast / FINAL_MESSAGE_MS) % FINAL_MESSAGES.length);
       }
       if (!settled) {
         raf = requestAnimationFrame(tick);
@@ -70,8 +74,7 @@ export function LoadingState({ url, promise, onDone, onError }: LoadingStateProp
         if (cancelled) return undefined;
         settled = true;
         cancelAnimationFrame(raf);
-        setProgress(1);
-        setStage(STAGES.length - 1);
+        setStage(LAST_STAGE);
         setComplete(true);
         doneTimer = setTimeout(() => onDone(analysis), 200);
         return undefined;
@@ -165,25 +168,13 @@ export function LoadingState({ url, promise, onDone, onError }: LoadingStateProp
           {displayStage.sub}
         </p>
         <div
-          style={{
-            height: 6,
-            background: "var(--ink-100)",
-            borderRadius: 999,
-            overflow: "hidden",
-            maxWidth: 360,
-            margin: "0 auto",
-          }}
+          className="loading-bar-track"
+          role="progressbar"
+          aria-valuemin={0}
+          aria-valuemax={100}
+          aria-valuetext={complete ? "Complete" : "Analyzing"}
         >
-          <div
-            style={{
-              width: `${progress * 100}%`,
-              height: "100%",
-              background: "linear-gradient(90deg, var(--primary), var(--accent))",
-              backgroundSize: "200% 100%",
-              animation: "shimmer 2s linear infinite",
-              transition: "width .3s ease",
-            }}
-          />
+          <div className={`loading-bar-fill${complete ? " is-complete" : ""}`} />
         </div>
         <div
           style={{

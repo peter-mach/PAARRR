@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { CountUp } from "@/components/charts/count-up";
 import { RadarChart } from "@/components/charts/radar-chart";
 import { AIInsights } from "@/components/dashboard/ai-insights";
@@ -26,14 +26,41 @@ type DashboardProps = {
 
 type TabId = "prs" | "authors";
 
+const CONFETTI_THRESHOLD = 70;
+
 export function Dashboard({ analysis, onBack }: DashboardProps) {
   const [filters, setFilters] = useState<Filters>({ q: "", author: "" });
   const [sort, setSort] = useState<SortKey>("total-desc");
   const [tab, setTab] = useState<TabId>("prs");
 
+  // Fire confetti once per unique analysis, and only when the verdict actually
+  // earns the celebration (≥70). Re-renders, tab switches, and back-navigation
+  // to the same dashboard never re-trigger it.
+  const confettiFiredFor = useRef<string | null>(null);
   useEffect(() => {
+    if (analysis.aggregate.total < CONFETTI_THRESHOLD) return;
+    if (confettiFiredFor.current === analysis.analyzedAt) return;
+    confettiFiredFor.current = analysis.analyzedAt;
     const t = setTimeout(() => fireConfetti(), 600);
     return () => clearTimeout(t);
+  }, [analysis.analyzedAt, analysis.aggregate.total]);
+
+  const handleExport = useCallback(() => {
+    if (typeof window === "undefined") return;
+    const blob = new Blob([JSON.stringify(analysis, null, 2)], { type: "application/json" });
+    const objectUrl = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = objectUrl;
+    a.download = `paarrr-${analysis.owner}-${analysis.repo}.json`;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    setTimeout(() => URL.revokeObjectURL(objectUrl), 1_000);
+  }, [analysis]);
+
+  const handleShare = useCallback(() => {
+    if (typeof window === "undefined") return;
+    void navigator.clipboard?.writeText(window.location.href);
   }, []);
 
   const dashboardPRs = useMemo(
@@ -132,6 +159,8 @@ export function Dashboard({ analysis, onBack }: DashboardProps) {
               type="button"
               className="btn btn-ghost btn-export"
               style={{ height: 38, fontSize: 13 }}
+              onClick={handleExport}
+              aria-label="Download analysis as JSON"
             >
               Export JSON
             </button>
@@ -139,6 +168,8 @@ export function Dashboard({ analysis, onBack }: DashboardProps) {
               type="button"
               className="btn btn-ghost btn-share"
               style={{ height: 38, fontSize: 13 }}
+              onClick={handleShare}
+              aria-label="Copy current URL to clipboard"
             >
               Share link
             </button>

@@ -22,11 +22,11 @@ export function AIInsights({ insights }: AIInsightsProps) {
         gap: 16,
       }}
     >
-      {insights.map((insight) => {
+      {insights.map((insight, index) => {
         const color = TAG_COLORS[insight.tag];
         return (
           <div
-            key={insight.tag}
+            key={`${insight.tag}-${index}`}
             style={{
               padding: 16,
               background: "white",
