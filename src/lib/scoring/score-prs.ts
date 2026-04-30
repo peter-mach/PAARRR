@@ -127,6 +127,7 @@ function prPrompt(pr: PullRequestSummary): string {
       changedFiles: pr.changedFiles,
       additions: pr.additions,
       deletions: pr.deletions,
+      aiSignals: pr.aiSignals,
     },
     null,
     2,
