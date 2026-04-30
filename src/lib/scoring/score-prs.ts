@@ -5,7 +5,7 @@ import { weightedTotal } from "@/lib/scoring/weights";
 import type { PullRequestScore, PullRequestSummary, ScoredPullRequest } from "@/types";
 import { PullRequestScoreSchema } from "@/types";
 
-const SCORE_MODEL = process.env.OPENAI_MODEL ?? "gpt-5-mini";
+const SCORE_MODEL = process.env.OPENAI_MODEL ?? "gpt-5.5";
 const SCORE_CONCURRENCY = 2;
 
 type ScoreAttempt = ScoredPullRequest & {
@@ -23,7 +23,7 @@ export async function scorePR(pr: PullRequestSummary): Promise<PullRequestScore>
     model: SCORE_MODEL,
     instructions: SCORING_SYSTEM_PROMPT,
     input: prPrompt(pr),
-    reasoning: { effort: "minimal" },
+    reasoning: { effort: "low" },
     text: {
       format: zodTextFormat(PullRequestScoreSchema, "pull_request_score"),
     },

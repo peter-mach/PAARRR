@@ -4,7 +4,7 @@ import { getOpenAI } from "@/lib/openai/client";
 import type { AIInsight, ScoredPullRequest } from "@/types";
 import { AIInsightSchema } from "@/types";
 
-const INSIGHTS_MODEL = process.env.OPENAI_INSIGHTS_MODEL ?? "gpt-5";
+const INSIGHTS_MODEL = process.env.OPENAI_INSIGHTS_MODEL ?? "gpt-5.5";
 
 const InsightsSchema = z.object({
   insights: z.array(AIInsightSchema).length(3),
@@ -17,7 +17,7 @@ export async function generateInsights(scored: ScoredPullRequest[]): Promise<AII
       model: INSIGHTS_MODEL,
       instructions:
         "You are a senior engineering manager. Return three concise, concrete repository recommendations grounded only in the PR scores provided.",
-      reasoning: { effort: "minimal" },
+      reasoning: { effort: "low" },
       input: JSON.stringify(
         scored.map((pr) => ({
           number: pr.number,
