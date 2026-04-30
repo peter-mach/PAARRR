@@ -2,10 +2,15 @@
 
 import { useEffect, useState } from "react";
 import { CheckIcon, CompassIcon } from "@/components/icons";
+import type { AnalysisErrorResponse, RepoAnalysis } from "@/types";
+
+type AnalysisError = AnalysisErrorResponse["error"];
 
 type LoadingStateProps = {
   url: string;
-  onDone: () => void;
+  promise: Promise<RepoAnalysis>;
+  onDone: (analysis: RepoAnalysis) => void;
+  onError: (error: AnalysisError) => void;
 };
 
 const STAGES = [
@@ -15,7 +20,7 @@ const STAGES = [
   { label: "Charting results", sub: "Compiling the manifest" },
 ] as const;
 
-export function LoadingState({ url, onDone }: LoadingStateProps) {
+export function LoadingState({ url, promise, onDone, onError }: LoadingStateProps) {
   const [stage, setStage] = useState(0);
   const [progress, setProgress] = useState(0);
 
@@ -24,25 +29,43 @@ export function LoadingState({ url, onDone }: LoadingStateProps) {
     const total = 4200;
     let raf = 0;
     let doneTimer: ReturnType<typeof setTimeout> | undefined;
+    let settled = false;
+    let cancelled = false;
 
     const tick = (now: number) => {
-      const p = Math.min(1, (now - start) / total);
+      const p = Math.min(0.82, ((now - start) / total) * 0.82);
       setProgress(p);
       const idx = Math.min(STAGES.length - 1, Math.max(0, Math.floor(p * STAGES.length)));
       setStage(idx);
-      if (p < 1) {
+      if (!settled) {
         raf = requestAnimationFrame(tick);
-      } else {
-        doneTimer = setTimeout(onDone, 200);
       }
     };
     raf = requestAnimationFrame(tick);
 
+    promise
+      .then((analysis) => {
+        if (cancelled) return undefined;
+        settled = true;
+        cancelAnimationFrame(raf);
+        setProgress(1);
+        setStage(STAGES.length - 1);
+        doneTimer = setTimeout(() => onDone(analysis), 200);
+        return undefined;
+      })
+      .catch((error: unknown) => {
+        if (cancelled) return;
+        settled = true;
+        cancelAnimationFrame(raf);
+        onError(normalizeError(error));
+      });
+
     return () => {
+      cancelled = true;
       cancelAnimationFrame(raf);
       if (doneTimer) clearTimeout(doneTimer);
     };
-  }, [onDone]);
+  }, [onDone, onError, promise]);
 
   const safeStage = STAGES[stage] ?? STAGES[STAGES.length - 1];
 
@@ -178,4 +201,16 @@ export function LoadingState({ url, onDone }: LoadingStateProps) {
       </div>
     </div>
   );
+}
+
+function normalizeError(error: unknown): AnalysisError {
+  if (typeof error === "object" && error !== null && "code" in error && "message" in error) {
+    return error as AnalysisError;
+  }
+
+  return {
+    code: "internal",
+    message: "The analysis could not be completed.",
+    hint: "Retry in a moment, or try a different public repository.",
+  };
 }

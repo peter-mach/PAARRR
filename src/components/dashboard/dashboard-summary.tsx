@@ -2,7 +2,8 @@ import { CountUp } from "@/components/charts/count-up";
 import { RadarChart } from "@/components/charts/radar-chart";
 import { ScoreBar } from "@/components/charts/score-bar";
 import { GithubIcon } from "@/components/icons";
-import { SAMPLE_AGGREGATE, type RepoAggregate } from "@/lib/mock-data";
+import { SAMPLE_AGGREGATE } from "@/lib/mock-data";
+import type { RepoAggregate } from "@/types";
 
 type DashboardSummaryProps = {
   mini?: boolean;

@@ -1,4 +1,5 @@
 import { SCORING_WEIGHTS } from "@/lib/scoring/weights";
+import type { RepoAnalysis } from "@/types";
 
 export type MockPR = {
   num: number;
@@ -277,3 +278,39 @@ export function filterAndSort(prs: MockPR[], filters: Filters, sort: SortKey): M
   });
   return withTotal.map((x) => x.pr);
 }
+
+const MOCK_NOW = Date.now();
+
+export const MOCK_ANALYSIS: RepoAnalysis = {
+  owner: "vercel",
+  repo: "next.js",
+  url: "https://github.com/vercel/next.js",
+  analyzedAt: new Date(MOCK_NOW).toISOString(),
+  pullRequests: SAMPLE_PRS.slice(0, 5).map((pr, index) => ({
+    number: pr.num,
+    title: pr.title,
+    body: `Mock pull request used for local dashboard iteration. ${pr.title}`,
+    author: pr.author,
+    url: `https://github.com/vercel/next.js/pull/${pr.num}`,
+    diffUrl: `https://github.com/vercel/next.js/pull/${pr.num}/files`,
+    mergedAt: new Date(MOCK_NOW - (index + 2) * 24 * 60 * 60 * 1000).toISOString(),
+    mergeCommitSha: `mock-merge-${pr.num}`,
+    changedFiles: pr.files,
+    additions: pr.add,
+    deletions: pr.del,
+    score: {
+      impact: pr.impact,
+      aiLeverage: pr.ai,
+      quality: pr.quality,
+      total: totalScore(pr),
+      rationale: {
+        impact: "Mock impact rationale for the landing preview dataset.",
+        aiLeverage: "Mock AI-leverage rationale for the landing preview dataset.",
+        quality: "Mock quality rationale for the landing preview dataset.",
+      },
+    },
+  })),
+  aggregate: SAMPLE_AGGREGATE,
+  authors: aggregateAuthors(SAMPLE_PRS.slice(0, 5)),
+  insights: SAMPLE_INSIGHTS,
+};
