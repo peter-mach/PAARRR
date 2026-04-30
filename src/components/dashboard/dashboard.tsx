@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { CountUp } from "@/components/charts/count-up";
 import { RadarChart } from "@/components/charts/radar-chart";
 import { AIInsights } from "@/components/dashboard/ai-insights";
@@ -26,15 +26,24 @@ type DashboardProps = {
 
 type TabId = "prs" | "authors";
 
+const CONFETTI_THRESHOLD = 70;
+
 export function Dashboard({ analysis, onBack }: DashboardProps) {
   const [filters, setFilters] = useState<Filters>({ q: "", author: "" });
   const [sort, setSort] = useState<SortKey>("total-desc");
   const [tab, setTab] = useState<TabId>("prs");
 
+  // Fire confetti once per unique analysis, and only when the verdict actually
+  // earns the celebration (≥70). Re-renders, tab switches, and back-navigation
+  // to the same dashboard never re-trigger it.
+  const confettiFiredFor = useRef<string | null>(null);
   useEffect(() => {
+    if (analysis.aggregate.total < CONFETTI_THRESHOLD) return;
+    if (confettiFiredFor.current === analysis.analyzedAt) return;
+    confettiFiredFor.current = analysis.analyzedAt;
     const t = setTimeout(() => fireConfetti(), 600);
     return () => clearTimeout(t);
-  }, []);
+  }, [analysis.analyzedAt, analysis.aggregate.total]);
 
   const dashboardPRs = useMemo(
     () => toDashboardPRs(analysis.pullRequests),
