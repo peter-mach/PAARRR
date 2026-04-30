@@ -485,6 +485,42 @@ section {
   }
 }
 
+/* Loading progress bar — pure CSS so it cannot be defeated by React state
+ * updates getting batched/dropped during a long-running fetch. The bar
+ * fills 0 → 95% over 25s with a soft ease-out curve, then `forwards` holds
+ * at 95% until the .is-complete class swaps it to 100% with a fast tail. */
+@keyframes loading-progress {
+  from {
+    width: 0%;
+  }
+  to {
+    width: 95%;
+  }
+}
+
+.loading-bar-track {
+  height: 6px;
+  background: var(--ink-100);
+  border-radius: 999px;
+  overflow: hidden;
+  max-width: 360px;
+  margin: 0 auto;
+}
+.loading-bar-fill {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, var(--primary), var(--accent));
+  background-size: 200% 100%;
+  animation:
+    loading-progress 25s cubic-bezier(0.25, 1, 0.5, 1) forwards,
+    shimmer 2s linear infinite;
+}
+.loading-bar-fill.is-complete {
+  width: 100%;
+  animation: shimmer 2s linear infinite;
+  transition: width 0.3s ease;
+}
+
 /* Reduced-motion opt-out — kill the decorative looping keyframes and the
  * confetti, but preserve short transitions + the explicit progress indicators
  * so users still get feedback that the analysis is making progress. */
