@@ -6,7 +6,11 @@ import type { PullRequestScore, PullRequestSummary, ScoredPullRequest } from "@/
 import { PullRequestScoreSchema } from "@/types";
 
 const SCORE_MODEL = process.env.OPENAI_MODEL ?? "gpt-5-mini";
-const SCORE_CONCURRENCY = 3;
+const SCORE_CONCURRENCY = 2;
+
+type ScoreAttempt = ScoredPullRequest & {
+  scoringFailed: boolean;
+};
 
 export async function scorePR(pr: PullRequestSummary): Promise<PullRequestScore> {
   const client = getOpenAI();
@@ -14,12 +18,12 @@ export async function scorePR(pr: PullRequestSummary): Promise<PullRequestScore>
     model: SCORE_MODEL,
     instructions: SCORING_SYSTEM_PROMPT,
     input: prPrompt(pr),
+    reasoning: { effort: "minimal" },
     text: {
       format: zodTextFormat(PullRequestScoreSchema, "pull_request_score"),
     },
-    max_output_tokens: 900,
+    max_output_tokens: 1_500,
     store: false,
-    temperature: 0.2,
   });
 
   const parsed = response.output_parsed;
@@ -36,28 +40,53 @@ export async function scorePR(pr: PullRequestSummary): Promise<PullRequestScore>
 }
 
 export async function scorePRs(prs: PullRequestSummary[]): Promise<ScoredPullRequest[]> {
-  return runWithConcurrency(prs, SCORE_CONCURRENCY, async (pr) => ({
-    ...pr,
-    score: await scoreWithFallback(pr),
-  }));
+  const attempts = await runWithConcurrency(prs, SCORE_CONCURRENCY, scoreWithFallback);
+
+  if (attempts.length > 0 && attempts.every((attempt) => attempt.scoringFailed)) {
+    throw new Error("OpenAI scoring failed for every pull request.");
+  }
+
+  return attempts.map(({ scoringFailed: _scoringFailed, ...pr }) => pr);
 }
 
-async function scoreWithFallback(pr: PullRequestSummary): Promise<PullRequestScore> {
+async function scoreWithFallback(pr: PullRequestSummary): Promise<ScoreAttempt> {
+  try {
+    return {
+      ...pr,
+      score: await scoreWithRetry(pr),
+      scoringFailed: false,
+    };
+  } catch (error) {
+    if (isFatalScoringError(error)) throw error;
+    console.warn("[PAARRR] PR scoring failed", {
+      number: pr.number,
+      error: errorMessage(error),
+    });
+    return {
+      ...pr,
+      score: {
+        impact: 0,
+        aiLeverage: 0,
+        quality: 0,
+        total: 0,
+        rationale: {
+          impact: "Scoring failed for this PR, so it was excluded from positive impact credit.",
+          aiLeverage: "Scoring failed for this PR, so AI-leverage could not be evaluated.",
+          quality: "Scoring failed for this PR, so engineering quality could not be evaluated.",
+        },
+      },
+      scoringFailed: true,
+    };
+  }
+}
+
+async function scoreWithRetry(pr: PullRequestSummary): Promise<PullRequestScore> {
   try {
     return await scorePR(pr);
   } catch (error) {
     if (isFatalScoringError(error)) throw error;
-    return {
-      impact: 0,
-      aiLeverage: 0,
-      quality: 0,
-      total: 0,
-      rationale: {
-        impact: "Scoring failed for this PR, so it was excluded from positive impact credit.",
-        aiLeverage: "Scoring failed for this PR, so AI-leverage could not be evaluated.",
-        quality: "Scoring failed for this PR, so engineering quality could not be evaluated.",
-      },
-    };
+    await wait(700);
+    return scorePR(pr);
   }
 }
 
@@ -65,6 +94,15 @@ function isFatalScoringError(error: unknown): boolean {
   if (typeof error !== "object" || error === null || !("status" in error)) return false;
   const status = Number((error as { status?: unknown }).status);
   return status === 401 || status === 403 || status === 429;
+}
+
+function errorMessage(error: unknown): string {
+  if (error instanceof Error) return error.message;
+  return String(error);
+}
+
+function wait(ms: number): Promise<void> {
+  return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
 function prPrompt(pr: PullRequestSummary): string {

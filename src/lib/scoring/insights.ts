@@ -17,6 +17,7 @@ export async function generateInsights(scored: ScoredPullRequest[]): Promise<AII
       model: INSIGHTS_MODEL,
       instructions:
         "You are a senior engineering manager. Return three concise, concrete repository recommendations grounded only in the PR scores provided.",
+      reasoning: { effort: "minimal" },
       input: JSON.stringify(
         scored.map((pr) => ({
           number: pr.number,
@@ -31,13 +32,15 @@ export async function generateInsights(scored: ScoredPullRequest[]): Promise<AII
       text: {
         format: zodTextFormat(InsightsSchema, "repo_insights"),
       },
-      max_output_tokens: 800,
+      max_output_tokens: 1_000,
       store: false,
-      temperature: 0.2,
     });
 
     return response.output_parsed?.insights ?? [];
-  } catch {
+  } catch (error) {
+    console.warn("[PAARRR] Insight generation failed", {
+      error: error instanceof Error ? error.message : String(error),
+    });
     return [];
   }
 }
