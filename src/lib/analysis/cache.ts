@@ -2,6 +2,7 @@ import type { RepoAnalysis } from "@/types";
 
 const TTL_MS = 20 * 60 * 1000;
 const MAX_ENTRIES = 25;
+const CACHE_VERSION = "v4";
 
 type CacheEntry = {
   analysis: RepoAnalysis;
@@ -16,7 +17,7 @@ export function analysisCacheKey(input: {
   latestSha: string | null;
   limit: number;
 }): string {
-  return `${input.owner}/${input.repo}/${input.latestSha ?? "none"}/${input.limit}`;
+  return `${CACHE_VERSION}/${input.owner}/${input.repo}/${input.latestSha ?? "none"}/${input.limit}`;
 }
 
 export function getCachedAnalysis(key: string): RepoAnalysis | null {
