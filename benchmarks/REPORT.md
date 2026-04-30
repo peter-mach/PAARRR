@@ -8,16 +8,16 @@ chosen to span the AI-Leverage axis. Live data lives under
 
 ## Summary
 
-|                                | Iter 1 (baseline) | Iter 2 (post PR #11) | Iter 3 (after [bot] fix) | GT band |
-|--------------------------------|-------------------|----------------------|--------------------------|---------|
-| Code revision                  | `gpt-5-mini`, weights 0.40/0.35/0.25, original prompt, no `aiSignals` | `gpt-5.5`, weights 0.35/0.45/0.20, anchored prompt, `aiSignals` extracted from commits | iter 2 + tightened bot-author regex (no longer treats `dependabot[bot]` as AI) | — |
-| `chalk/chalk`                  | **25** (24/5/54)   | —                    | **20** (18/6/55)         | 0–25    |
-| `expressjs/express`            | **29** (23/9/65)   | —                    | **33** (10/42/54) ⚠      | 0–25    |
-| `vercel/swr`                   | **40** (43/25/58)  | —                    | **33** (32/23/56)        | 40–64   |
-| `withastro/astro`              | **46** (59/18/63)  | **36** (45/15/67)    | **36** (cache hit)       | 0–25    |
-| `anthropics/claude-code`       | **42** (51/18/63)  | **40** (31/38/60)    | **40** (cache hit)       | 0–25    |
-| `peter-mach/PAARRR`            | **43** (51/20/61)  | **52** (41/54/66)    | **52** (41/54/66)        | 85–100  |
-| `gastownhall/gastown`          | —                  | **55** (55/44/79)    | **55** (cache hit)       | 40–64   |
+|                          | Iter 1 (baseline)                                                     | Iter 2 (post PR #11)                                                                   | Iter 3 (after [bot] fix)                                                       | GT band |
+| ------------------------ | --------------------------------------------------------------------- | -------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------ | ------- |
+| Code revision            | `gpt-5-mini`, weights 0.40/0.35/0.25, original prompt, no `aiSignals` | `gpt-5.5`, weights 0.35/0.45/0.20, anchored prompt, `aiSignals` extracted from commits | iter 2 + tightened bot-author regex (no longer treats `dependabot[bot]` as AI) | —       |
+| `chalk/chalk`            | **25** (24/5/54)                                                      | —                                                                                      | **20** (18/6/55)                                                               | 0–25    |
+| `expressjs/express`      | **29** (23/9/65)                                                      | —                                                                                      | **33** (10/42/54) ⚠                                                            | 0–25    |
+| `vercel/swr`             | **40** (43/25/58)                                                     | —                                                                                      | **33** (32/23/56)                                                              | 40–64   |
+| `withastro/astro`        | **46** (59/18/63)                                                     | **36** (45/15/67)                                                                      | **36** (cache hit)                                                             | 0–25    |
+| `anthropics/claude-code` | **42** (51/18/63)                                                     | **40** (31/38/60)                                                                      | **40** (cache hit)                                                             | 0–25    |
+| `peter-mach/PAARRR`      | **43** (51/20/61)                                                     | **52** (41/54/66)                                                                      | **52** (41/54/66)                                                              | 85–100  |
+| `gastownhall/gastown`    | —                                                                     | **55** (55/44/79)                                                                      | **55** (cache hit)                                                             | 40–64   |
 
 Cells: `total (impact / AI-Leverage / quality)`. "GT band" is the AI-Leverage
 band the ground-truth audit assigns based purely on observed commit-level
@@ -31,7 +31,7 @@ signals (trailers / `[ai]` tags / known AI-bot author).
   PR #10 in particular went from low to **96** — it's the one PR with all
   three signals present (trailer on every commit, `[ai]` tag, body
   attribution).
-- **Gastown**: `—` → 44 AI-Leverage. The differentiation works *inside* a
+- **Gastown**: `—` → 44 AI-Leverage. The differentiation works _inside_ a
   repo: PR #3742 (Claude trailer) → 92, PR #3743 (no signal) → 10. The 44
   average reflects 1/5 PRs having a trailer.
 - **claude-code, astro**: AI-Leverage rose only modestly (18→38 and 18→15).
@@ -54,7 +54,7 @@ Yet AI-Leverage came out as 42, which sits in the "clear AI authorship"
 band per the prompt rubric.
 
 **Root cause**: `extractAISignals` was setting `authorIsKnownAIBot=true`
-for *any* `*[bot]` login, including `dependabot[bot]` and `renovate[bot]`.
+for _any_ `*[bot]` login, including `dependabot[bot]` and `renovate[bot]`.
 The prompt then maps `authorIsKnownAIBot` into the 65–84 band, so 3/5 PRs
 got an inflated AI-Leverage score and the average came out at 42.
 
@@ -65,7 +65,7 @@ release bots are explicitly excluded.
 
 ### Expected iter 3 changes
 
-Should *only* affect express (and any future repo dominated by non-AI
+Should _only_ affect express (and any future repo dominated by non-AI
 bots). The other six repos have no `[bot]`-suffix authors, so their
 scores stay put. Iter 3 cells will be filled in once the bug fix runs.
 
@@ -80,7 +80,7 @@ claude-code(40-42) < PAARRR(43-52) < gastown(55)`.
 Two things to note:
 
 1. **PAARRR scores below gastown on total**, even though PAARRR has more
-   AI signals (5/5 vs 1/5). This is correct: gastown's *Quality* (79) is
+   AI signals (5/5 vs 1/5). This is correct: gastown's _Quality_ (79) is
    far higher than PAARRR's (66) because gastown's commit messages are
    long, structured, and well-sourced. Total weighting (Q at 0.20) and
    per-dimension avg both contribute. If the user wants AI-Leverage to
