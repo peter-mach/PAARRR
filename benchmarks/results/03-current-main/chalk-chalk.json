@@ -1,0 +1,249 @@
+{
+  "owner": "chalk",
+  "repo": "chalk",
+  "url": "https://github.com/chalk/chalk",
+  "analyzedAt": "2026-04-30T16:08:35.122Z",
+  "pullRequests": [
+    {
+      "number": 664,
+      "title": "docs: fix spacing inconsistency in Modifiers section (#663)",
+      "body": "This PR fixes a minor formatting issue in `README.md` where two entries in the **Modifiers** section were missing a space between the inline code block and the description hyphen. \r\n\r\nThis ensures visual consistency with the rest of the modifier list (e.g., `bold`, `dim`, `italic`).\r\n\r\n### Changes\r\n- Updated line 181: Added space after `inverse`\r\n- Updated line 184: Added space after `visible`\r\n\r\n### Before\r\n- `inverse`- Invert background and foreground colors.\r\n- `visible`- Print the text only when Chalk has a color level above zero.\r\n\r\n### After\r\n- `inverse` - Invert background and foreground colors.\r\n- `visible` - Print the text only when Chalk has a color level above zero.\r\n\r\nFixes #663",
+      "author": "mdhamed238",
+      "url": "https://github.com/chalk/chalk/pull/664",
+      "diffUrl": "https://github.com/chalk/chalk/pull/664/files",
+      "mergedAt": "2026-01-27T06:30:36Z",
+      "mergeCommitSha": "aa06bb5ac3f14df9fda8cfb54274dfc165ddfdef",
+      "changedFiles": 1,
+      "additions": 2,
+      "deletions": 2,
+      "aiSignals": {
+        "coAuthoredByAI": false,
+        "detectedAgents": [],
+        "aiTagInTitle": false,
+        "aiTaggedCommitCount": 0,
+        "aiTrailerCommitRatio": 0,
+        "authorIsKnownAIBot": false,
+        "bodyHasAIAttribution": false,
+        "commitCount": 1
+      },
+      "score": {
+        "impact": 10,
+        "aiLeverage": 5,
+        "quality": 62,
+        "total": 18,
+        "rationale": {
+          "impact": "Formatting-only documentation fix: adds missing spaces in two README modifier entries. This is a visual consistency tweak with very small product/engineering impact, squarely in the 0-20 band.",
+          "aiLeverage": "No AI signals: coAuthoredByAI=false, no detected agents, no AI tag in title, aiTaggedCommitCount=0, aiTrailerCommitRatio=0, authorIsKnownAIBot=false, and no body AI attribution. The diff is tiny and handcrafted-looking, so it falls in the 0-25 band.",
+          "quality": "The PR is tightly scoped to one README spacing inconsistency, has a clear description with before/after examples, and references the issue. No tests are needed for this docs formatting change, but the change itself is trivial, so quality is solid rather than exemplary."
+        }
+      }
+    },
+    {
+      "number": 653,
+      "title": "Ghostty supports truecolor",
+      "body": "ghostty is a newer popular terminal emulator https://github.com/ghostty-org/ghostty/\r\n\r\nit uses `xterm-ghostty` for TERM\r\n\r\nit supports truecolor, and I see you already have a hack for kitty so might as well add one for ghostty",
+      "author": "rhodes-b",
+      "url": "https://github.com/chalk/chalk/pull/653",
+      "diffUrl": "https://github.com/chalk/chalk/pull/653/files",
+      "mergedAt": "2025-08-03T23:14:54Z",
+      "mergeCommitSha": "79ee2d386c58ae3863c28a01f5f86b04c78adfc1",
+      "changedFiles": 1,
+      "additions": 4,
+      "deletions": 0,
+      "aiSignals": {
+        "coAuthoredByAI": false,
+        "detectedAgents": [],
+        "aiTagInTitle": false,
+        "aiTaggedCommitCount": 0,
+        "aiTrailerCommitRatio": 0,
+        "authorIsKnownAIBot": false,
+        "bodyHasAIAttribution": false,
+        "commitCount": 1
+      },
+      "score": {
+        "impact": 28,
+        "aiLeverage": 8,
+        "quality": 58,
+        "total": 25,
+        "rationale": {
+          "impact": "Small compatibility bugfix/feature: adds truecolor support detection for Ghostty/xterm-ghostty in one file with only 4 additions. Useful for affected terminal users but very limited scope, fitting the small fix band.",
+          "aiLeverage": "No AI signals: aiTrailerCommitRatio is 0, no detectedAgents, no AI title tag, no AI-tagged commits, author is not a known AI bot, and no body AI attribution. The diff is tiny and handcrafted-looking, so this falls in the 0-25 band.",
+          "quality": "Focused PR with a clear explanation of the terminal, TERM value, and why the change is needed. Scope is tight with one changed file, but there is no indication of tests or documentation updates, so it remains in the focused/basic hygiene range."
+        }
+      }
+    },
+    {
+      "number": 642,
+      "title": "Fix `navigator` not defined `ReferenceError`",
+      "body": "This is a follow-up to #640 that will fix #639\r\n\r\nIn this PR, I applied the fix for the potentially `undefined` `navigator` in the same way [that was done in `supports-color`](https://github.com/chalk/supports-color/commit/c214314a14bcb174b12b3014b2b0a8de375029ae)\r\n\r\n- Related to https://github.com/chalk/supports-color/pull/151\r\n- `supports-color`'s v10.0.0 diff: https://github.com/chalk/supports-color/compare/v9.4.0...v10.0.0\r\n\r\n",
+      "author": "hyperupcall",
+      "url": "https://github.com/chalk/chalk/pull/642",
+      "diffUrl": "https://github.com/chalk/chalk/pull/642/files",
+      "mergedAt": "2024-12-21T17:01:49Z",
+      "mergeCommitSha": "4ebb62d1ca70c122674558a88932ddf6545fe9ef",
+      "changedFiles": 1,
+      "additions": 6,
+      "deletions": 2,
+      "aiSignals": {
+        "coAuthoredByAI": false,
+        "detectedAgents": [],
+        "aiTagInTitle": false,
+        "aiTaggedCommitCount": 0,
+        "aiTrailerCommitRatio": 0,
+        "authorIsKnownAIBot": false,
+        "bodyHasAIAttribution": false,
+        "commitCount": 1
+      },
+      "score": {
+        "impact": 38,
+        "aiLeverage": 8,
+        "quality": 70,
+        "total": 31,
+        "rationale": {
+          "impact": "Small targeted bugfix: fixes a `ReferenceError` when `navigator` may be undefined, touching only 1 file with 6 additions and 2 deletions. Useful compatibility/runtime fix but narrow in scope.",
+          "aiLeverage": "No AI signals: `coAuthoredByAI=false`, no detected agents, no AI tag in title, 0 AI-tagged commits, `aiTrailerCommitRatio=0`, author is not a known AI bot, and no body AI attribution. Small handcrafted-looking diff, so this falls in the 0-25 band.",
+          "quality": "Focused PR with a clear purpose, references the issue it fixes and prior related implementation in `supports-color`. Scope is tight at 1 file, though there is no indication of tests or broader validation in the provided metadata."
+        }
+      }
+    },
+    {
+      "number": 629,
+      "title": "Update dependents number in readme",
+      "body": "I'm back from #521 xd",
+      "author": "r4h33q",
+      "url": "https://github.com/chalk/chalk/pull/629",
+      "diffUrl": "https://github.com/chalk/chalk/pull/629/files",
+      "mergedAt": "2024-07-05T10:41:35Z",
+      "mergeCommitSha": "795273f17a94329c7a46247d8277f9afc2f0a6d9",
+      "changedFiles": 1,
+      "additions": 1,
+      "deletions": 1,
+      "aiSignals": {
+        "coAuthoredByAI": false,
+        "detectedAgents": [],
+        "aiTagInTitle": false,
+        "aiTaggedCommitCount": 0,
+        "aiTrailerCommitRatio": 0,
+        "authorIsKnownAIBot": false,
+        "bodyHasAIAttribution": false,
+        "commitCount": 1
+      },
+      "score": {
+        "impact": 5,
+        "aiLeverage": 2,
+        "quality": 42,
+        "total": 11,
+        "rationale": {
+          "impact": "One-file README numeric update with +1/-1 is a very small documentation/copy maintenance change, squarely in the 0-20 band.",
+          "aiLeverage": "No AI signals: coAuthoredByAI=false, no detected agents, no AI title tag, no AI-tagged commits, aiTrailerCommitRatio=0, author is not a known AI bot, and no body attribution. The tiny handcrafted-looking diff supports a near-zero score.",
+          "quality": "The PR is focused and minimal, but the description is thin and only states a casual reference rather than explaining the update. Normal hygiene for a trivial doc change, but no tests or substantive rationale are relevant."
+        }
+      }
+    },
+    {
+      "number": 623,
+      "title": "Tweak example",
+      "body": null,
+      "author": "Richienb",
+      "url": "https://github.com/chalk/chalk/pull/623",
+      "diffUrl": "https://github.com/chalk/chalk/pull/623/files",
+      "mergedAt": "2024-01-19T14:36:11Z",
+      "mergeCommitSha": "386909ee0bfe4346d04e3eeba712f0db597c038d",
+      "changedFiles": 1,
+      "additions": 1,
+      "deletions": 1,
+      "aiSignals": {
+        "coAuthoredByAI": false,
+        "detectedAgents": [],
+        "aiTagInTitle": false,
+        "aiTaggedCommitCount": 0,
+        "aiTrailerCommitRatio": 0,
+        "authorIsKnownAIBot": false,
+        "bodyHasAIAttribution": false,
+        "commitCount": 2
+      },
+      "score": {
+        "impact": 8,
+        "aiLeverage": 5,
+        "quality": 42,
+        "total": 13,
+        "rationale": {
+          "impact": "One changed file with only +1/-1 and title 'Tweak example' indicates a very small example tweak, fitting the 0-20 band for typo/copy/formatting-scale changes.",
+          "aiLeverage": "No AI signals: coAuthoredByAI=false, no detected agents, no AI tag in title, aiTrailerCommitRatio=0, author is not a known AI bot, and no body attribution. The diff is also very small/handcrafted-looking, so this falls in the 0-25 band.",
+          "quality": "Focused, tiny PR with a clear basic title, but no body/description and no evidence of tests or rationale. Normal hygiene for a small tweak, placing it in the lower focused/basic-description range."
+        }
+      }
+    }
+  ],
+  "aggregate": {
+    "url": "https://github.com/chalk/chalk",
+    "mergedPRs": 5,
+    "authorsCount": 5,
+    "analysisSeconds": 25,
+    "total": 20,
+    "impact": 18,
+    "aiLeverage": 6,
+    "quality": 55
+  },
+  "authors": [
+    {
+      "name": "hyperupcall",
+      "avatar": "#2563d9",
+      "count": 1,
+      "impact": 38,
+      "ai": 8,
+      "quality": 70,
+      "total": 31
+    },
+    {
+      "name": "rhodes-b",
+      "avatar": "#ee6c3d",
+      "count": 1,
+      "impact": 28,
+      "ai": 8,
+      "quality": 58,
+      "total": 25
+    },
+    {
+      "name": "mdhamed238",
+      "avatar": "#2c9c6a",
+      "count": 1,
+      "impact": 10,
+      "ai": 5,
+      "quality": 62,
+      "total": 18
+    },
+    {
+      "name": "Richienb",
+      "avatar": "#c89c3a",
+      "count": 1,
+      "impact": 8,
+      "ai": 5,
+      "quality": 42,
+      "total": 13
+    },
+    {
+      "name": "r4h33q",
+      "avatar": "#8b5cf6",
+      "count": 1,
+      "impact": 5,
+      "ai": 2,
+      "quality": 42,
+      "total": 11
+    }
+  ],
+  "insights": [
+    {
+      "tag": "Impact",
+      "body": "Prioritize reviewing and bundling small runtime/compatibility fixes like #642 and #653: they have the highest impact scores in this set (38 and 28) despite tiny diffs, while most recent activity is low-impact docs/example maintenance."
+    },
+    {
+      "tag": "Quality",
+      "body": "Raise the contribution bar for trivial README/example updates: #629 and #623 scored only 42 on quality due to thin or missing rationale, so require a short explanation of what changed and why even for one-line PRs."
+    },
+    {
+      "tag": "AI",
+      "body": "Do not invest in AI-specific workflow changes based on this sample: all PRs show minimal AI leverage signals, with aiLeverage scores between 2 and 8 and no detected agents or AI attribution."
+    }
+  ]
+}

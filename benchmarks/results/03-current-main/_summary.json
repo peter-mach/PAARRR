@@ -1,0 +1,100 @@
+[
+  {
+    "slug": "chalk/chalk",
+    "ok": true,
+    "total": 20,
+    "impact": 18,
+    "aiLeverage": 6,
+    "quality": 55,
+    "signals": {
+      "trailer": 0,
+      "tag": 0,
+      "bot": 0
+    },
+    "elapsed": 25
+  },
+  {
+    "slug": "expressjs/express",
+    "ok": true,
+    "total": 33,
+    "impact": 10,
+    "aiLeverage": 42,
+    "quality": 54,
+    "signals": {
+      "trailer": 0,
+      "tag": 0,
+      "bot": 3
+    },
+    "elapsed": 24
+  },
+  {
+    "slug": "vercel/swr",
+    "ok": true,
+    "total": 33,
+    "impact": 32,
+    "aiLeverage": 23,
+    "quality": 56,
+    "signals": {
+      "trailer": 0,
+      "tag": 0,
+      "bot": 1
+    },
+    "elapsed": 25
+  },
+  {
+    "slug": "withastro/astro",
+    "ok": true,
+    "total": 36,
+    "impact": 45,
+    "aiLeverage": 15,
+    "quality": 67,
+    "signals": {
+      "trailer": 0,
+      "tag": 0,
+      "bot": 0
+    },
+    "elapsed": 4
+  },
+  {
+    "slug": "anthropics/claude-code",
+    "ok": true,
+    "total": 40,
+    "impact": 31,
+    "aiLeverage": 38,
+    "quality": 60,
+    "signals": {
+      "trailer": 0,
+      "tag": 0,
+      "bot": 0
+    },
+    "elapsed": 1
+  },
+  {
+    "slug": "peter-mach/PAARRR",
+    "ok": true,
+    "total": 52,
+    "impact": 41,
+    "aiLeverage": 54,
+    "quality": 66,
+    "signals": {
+      "trailer": 1,
+      "tag": 1,
+      "bot": 0
+    },
+    "elapsed": 1
+  },
+  {
+    "slug": "gastownhall/gastown",
+    "ok": true,
+    "total": 55,
+    "impact": 55,
+    "aiLeverage": 44,
+    "quality": 79,
+    "signals": {
+      "trailer": 1,
+      "tag": 0,
+      "bot": 0
+    },
+    "elapsed": 2
+  }
+]

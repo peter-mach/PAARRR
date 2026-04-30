@@ -1,5 +1,6 @@
 import { getOctokit } from "@/lib/github/client";
 import type { RepoCoords } from "@/lib/github/parse-url";
+import { extractAISignals } from "@/lib/scoring/ai-signals";
 import type { PullRequestSummary } from "@/types";
 
 const DEFAULT_LIMIT = 5;
@@ -61,12 +62,21 @@ export async function fetchMergedPRs(
 
     const detailed = await Promise.all(
       candidates.slice(0, limit).map(async (pr) => {
-        const response = await octokit.rest.pulls.get({
-          owner: coords.owner,
-          repo: coords.repo,
-          pull_number: pr.number,
-        });
-        return toSummary(response.data);
+        const [detail, commits] = await Promise.all([
+          octokit.rest.pulls.get({
+            owner: coords.owner,
+            repo: coords.repo,
+            pull_number: pr.number,
+          }),
+          octokit.rest.pulls.listCommits({
+            owner: coords.owner,
+            repo: coords.repo,
+            pull_number: pr.number,
+            per_page: 100,
+          }),
+        ]);
+        const commitMessages = commits.data.map((c) => c.commit.message);
+        return toSummary(detail.data, commitMessages);
       }),
     );
 
@@ -81,12 +91,14 @@ export async function fetchMergedPRs(
 
 function toSummary(
   pr: Awaited<ReturnType<ReturnType<typeof getOctokit>["rest"]["pulls"]["get"]>>["data"],
+  commitMessages: string[],
 ): PullRequestSummary {
+  const authorLogin = pr.user?.login ?? "unknown";
   return {
     number: pr.number,
     title: pr.title,
     body: pr.body ?? null,
-    author: pr.user?.login ?? "unknown",
+    author: authorLogin,
     url: pr.html_url,
     diffUrl: `${pr.html_url}/files`,
     mergedAt: pr.merged_at ?? pr.closed_at ?? pr.updated_at,
@@ -94,6 +106,12 @@ function toSummary(
     changedFiles: pr.changed_files,
     additions: pr.additions,
     deletions: pr.deletions,
+    aiSignals: extractAISignals({
+      title: pr.title,
+      body: pr.body ?? null,
+      authorLogin,
+      commitMessages,
+    }),
   };
 }
 

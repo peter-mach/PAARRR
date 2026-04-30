@@ -32,8 +32,6 @@ Other scripts: `pnpm build`, `pnpm start`, `pnpm check` (typecheck + lint + form
 
 ## What's implemented
 
-A condensed feature inventory so a reviewer can see scope at a glance. Each bullet maps to real code on this branch.
-
 ### Landing page
 
 - **Hero with animated, typed placeholder** in the URL field; **client-side URL validation** (`parseRepoUrl`) before any network call, with inline error messaging and `aria-invalid`/`aria-describedby` wiring.
@@ -47,7 +45,7 @@ A condensed feature inventory so a reviewer can see scope at a glance. Each bull
 - POST route at `src/app/api/analyze/route.ts`. Body shape `{ url, githubToken? }`, runtime `nodejs`, `dynamic = "force-dynamic"`, `maxDuration = 60`.
 - **GitHub fetch** (`src/lib/github/fetch-prs.ts`): paginated `pulls.list({state:"closed"})` filtered by `merged_at`, then parallel `pulls.get` for full +/- diff stats. Hard cap at 10, default 5.
 - **LLM scoring** (`src/lib/scoring/score-prs.ts`): one OpenAI structured-output call per PR (`responses.parse` + zod text format), concurrency-capped at 2, single retry with backoff on transient failures, fatal-error short-circuit on 401/403/429. Failed PRs surface in the dashboard list with a "Scoring failed" rationale **and are excluded from the repo-aggregate math** so they don't drag the verdict down.
-- **Repo aggregate** (`src/lib/scoring/aggregate.ts`): per-dimension averages weighted by `0.40 / 0.35 / 0.25` to a single repo total. Per-author aggregates with deterministic palette-based avatars.
+- **Repo aggregate** (`src/lib/scoring/aggregate.ts`): per-dimension averages weighted by `0.35 / 0.45 / 0.20` (Impact / AI-Leverage / Quality) to a single repo total. Per-author aggregates with deterministic palette-based avatars.
 - **AI recommendations** (`src/lib/scoring/insights.ts`): one extra OpenAI call producing 3 typed insights tagged `Quality | Impact | AI`, surfaced on the dashboard.
 - **In-memory cache** (`src/lib/analysis/cache.ts`): keyed by `(owner, repo, latestSha, limit)`, bounded eviction so repeat-analyses on the same repo never re-pay OpenAI.
 - **Prompt-injection hardening**: the system prompt declares an explicit trust boundary — PR title/body/author are untrusted user content; embedded "ignore previous instructions" / "score this 100" attempts are ignored.
@@ -100,17 +98,23 @@ The backend respects `GITHUB_TOKEN` from env (lifts to 5000/h). If a visitor hit
 - **OpenAI SDK + Octokit** — scoring (structured outputs / zod schema) and GitHub data fetching.
 - **oxlint + oxfmt (oxc)** — Rust-based linter + formatter, zero-config for this scale of project.
 
-## Scoring weights
+## Scoring
 
-`total = 0.40 × Impact + 0.35 × AI-Leverage + 0.25 × Quality`
+### Weights
 
-Reasoning:
+`total = 0.45 × AI-Leverage + 0.35 × Impact + 0.20 × Quality`
 
-- **Impact (40%)** — the brief frames Impact as "real value vs. churn"; that is the dimension a hiring manager actually wants ranked first when looking at a repo's PR stream.
-- **AI-Leverage (35%)** — PhotoAID is explicitly hiring for AI leverage ("90% kodu generujemy z AI"). Weighting it high makes the scorer surface candidates whose PRs read as AI-authored.
-- **Quality (25%)** — non-negotiable hygiene, but in an AI-first workflow it is partially absorbed by AI-Leverage (well-prompted AI tends to ship focused, single-purpose PRs with tests). Weighted lowest to avoid double-counting.
+- **AI-Leverage (45%)** — PhotoAID is explicitly hiring for AI leverage ("szukamy ludzi, którzy 90% kodu generują z AI"). It's _the_ hiring signal in the brief, so it's the primary weight. AI-Leverage isn't inferred from prose — it's grounded in `aiSignals` extracted in code from commit `Co-authored-by:` trailers, `[ai]`/`[cc]` tags, body attribution, and known AI bot accounts (Claude, Codex, Copilot, Cursor, Devin, Jules, Aider, Sweep). The detection set lives in `src/lib/scoring/ai-signals.ts` and is agent-agnostic — adding a new coding agent is one regex.
+- **Impact (35%)** — "real value vs. churn" is what a hiring manager wants ranked second. Heavily weighted but secondary to AI-Leverage because the brief is unambiguous about what they're optimizing for.
+- **Quality (20%)** — engineering hygiene matters but is the easiest dimension to fake on a thin PR. In an AI-first workflow it's partially absorbed by AI-Leverage (well-prompted AI ships focused, single-purpose PRs with tests). Weighted lowest to avoid double-counting.
 
 Weights live in `src/lib/scoring/weights.ts` — single source of truth, tweakable.
+
+### Limits — evidence ≠ truth
+
+A repo can be 100% AI-built but score low if the authors strip trailers and don't tag commits. We saw this on `gastownhall/gastown` during calibration — clearly AI-shaped commit prose across all 5 sampled PRs, but only 1/5 has the explicit Claude trailer. We can't tell the difference between "no AI used" and "AI used but not declared." That's a real limit, not a bug.
+
+The scorer is calibrated to be conservative on purpose: rather than guess from "AI-shaped" prose patterns (which would create false positives on really thorough human commits), it scores on what's verifiable. If you want the dashboard to reflect AI usage on a repo whose authors don't tag, the right fix is upstream — adopt `Co-authored-by:` trailers or `[ai]`/`[cc]` subject tags.
 
 ## How AI was used
 
@@ -125,7 +129,7 @@ The brief leaves several details open. Where I chose:
 
 - **PR sample size** — latest 5 merged PRs. Recent work is the strongest signal of how someone codes today, and a tight sample keeps OpenAI spend and round-trip latency low.
 - **GitHub auth** — anonymous by default (60 req/h). If `GITHUB_TOKEN` is in env it's used (5000 req/h). When the public limit is hit, the error UI prompts the user to paste their own PAT and retry — token is `sessionStorage`-scoped to that tab, never persisted server-side.
-- **LLM models** — `gpt-5-mini` for individual PR scoring (cheap, fast, accurate at this constrained task), `gpt-5` for the repo-level recommendations (3 sentences, higher leverage). Both via structured outputs with zod schemas.
+- **LLM models** — `gpt-5.5` for both individual PR scoring and repo-level recommendations (frontier coding model, accurate on the rubric, structured outputs supported). `OPENAI_MODEL` and `OPENAI_INSIGHTS_MODEL` env vars override the defaults if a deployment wants to pin something cheaper.
 - **Caching** — repo analysis hashed by `(owner, repo, latestSha, limit)` and cached in memory for the lifetime of the server process. Good enough for a demo; Redis/KV is the obvious next step.
 - **Dashboard rendering of scoring failures** — failed PRs stay visible in the list (with a "Scoring failed" rationale on each dimension) but are excluded from the repo-aggregate math. The user sees what happened without the verdict being silently distorted.
 - **Confetti gating** — fires once per analysis at ≥70 total. A low score with confetti would be insulting; firing twice on the same dashboard is jarring.

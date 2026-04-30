@@ -1,0 +1,240 @@
+{
+  "owner": "vercel",
+  "repo": "swr",
+  "url": "https://github.com/vercel/swr",
+  "analyzedAt": "2026-04-30T16:09:23.621Z",
+  "pullRequests": [
+    {
+      "number": 4243,
+      "title": "Security: Update axios versions in the examples",
+      "body": "Bump the versions of axios.  I confirmed that each example still ran and the test sites worked\r\n\r\nFixes: VULN-7906\r\nFixes: VULN-7907\r\nFixes: VULN-7902\r\nFixes: VULN-7901\r\n",
+      "author": "lukesandberg",
+      "url": "https://github.com/vercel/swr/pull/4243",
+      "diffUrl": "https://github.com/vercel/swr/pull/4243/files",
+      "mergedAt": "2026-04-17T23:30:10Z",
+      "mergeCommitSha": "46f3954a35c39771ba3dcc00af774e4002062418",
+      "changedFiles": 2,
+      "additions": 2,
+      "deletions": 2,
+      "aiSignals": {
+        "coAuthoredByAI": false,
+        "detectedAgents": [],
+        "aiTagInTitle": false,
+        "aiTaggedCommitCount": 0,
+        "aiTrailerCommitRatio": 0,
+        "authorIsKnownAIBot": false,
+        "bodyHasAIAttribution": false,
+        "commitCount": 1
+      },
+      "score": {
+        "impact": 26,
+        "aiLeverage": 5,
+        "quality": 60,
+        "total": 23,
+        "rationale": {
+          "impact": "Small dependency/security update: only 2 files changed with 2 additions and 2 deletions to bump axios versions in examples, addressing listed vulnerabilities. Security relevance raises it above a trivial dependency bump, but the scope is very small and limited to examples.",
+          "aiLeverage": "No AI signals: coAuthoredByAI=false, no detected agents, no AI tag in title, aiTrailerCommitRatio=0, author is not a known AI bot, and no body AI attribution. The tiny dependency-bump diff looks handcrafted.",
+          "quality": "Focused PR with a clear purpose, concise description, linked vulnerability fixes, and manual verification noted that examples and test sites still ran. No indication of added automated tests, but normal hygiene for a small version bump."
+        }
+      }
+    },
+    {
+      "number": 4223,
+      "title": "fix: Fix #4221",
+      "body": null,
+      "author": "promer94",
+      "url": "https://github.com/vercel/swr/pull/4223",
+      "diffUrl": "https://github.com/vercel/swr/pull/4223/files",
+      "mergedAt": "2026-02-27T16:35:08Z",
+      "mergeCommitSha": "825092b60283b6c697390d475905b08de3b76d4a",
+      "changedFiles": 2,
+      "additions": 37,
+      "deletions": 2,
+      "aiSignals": {
+        "coAuthoredByAI": false,
+        "detectedAgents": [],
+        "aiTagInTitle": false,
+        "aiTaggedCommitCount": 0,
+        "aiTrailerCommitRatio": 0,
+        "authorIsKnownAIBot": false,
+        "bodyHasAIAttribution": false,
+        "commitCount": 1
+      },
+      "score": {
+        "impact": 34,
+        "aiLeverage": 8,
+        "quality": 42,
+        "total": 24,
+        "rationale": {
+          "impact": "Small focused bugfix referencing issue #4221, with only 2 files changed and a modest 37 additions / 2 deletions. This fits the small-bugfix band rather than a substantial feature or architectural change.",
+          "aiLeverage": "No AI signals: aiTrailerCommitRatio is 0, no detectedAgents, no AI tag in title, no AI-tagged commits, author is not a known AI bot, and no body attribution. The small diff looks handcrafted, so this falls in the 0-25 band.",
+          "quality": "The PR appears focused and minimal, but the body is null and provides no explanation of the bug, fix, or validation. Normal hygiene for a small fix, but the lack of description keeps it in the basic focused-PR range."
+        }
+      }
+    },
+    {
+      "number": 4216,
+      "title": "Remove deprecated downlevelIteration option",
+      "body": "This option is deprecated in TypeScript 6.0. It doesn't do anything when target is es2018, so can be safely removed from this config file.",
+      "author": "RyanCavanaugh",
+      "url": "https://github.com/vercel/swr/pull/4216",
+      "diffUrl": "https://github.com/vercel/swr/pull/4216/files",
+      "mergedAt": "2026-02-04T01:57:36Z",
+      "mergeCommitSha": "acd241eb66d2a4381afe1d51a977809079f4c67a",
+      "changedFiles": 1,
+      "additions": 0,
+      "deletions": 1,
+      "aiSignals": {
+        "coAuthoredByAI": false,
+        "detectedAgents": [],
+        "aiTagInTitle": false,
+        "aiTaggedCommitCount": 0,
+        "aiTrailerCommitRatio": 0,
+        "authorIsKnownAIBot": false,
+        "bodyHasAIAttribution": false,
+        "commitCount": 1
+      },
+      "score": {
+        "impact": 12,
+        "aiLeverage": 5,
+        "quality": 62,
+        "total": 19,
+        "rationale": {
+          "impact": "Single-file configuration cleanup removing one deprecated TypeScript option with no functional effect for the current ES2018 target. This is a very small maintenance change in the typo/config-cleanup band.",
+          "aiLeverage": "No AI signals: no co-authored-by AI trailers, no AI tag in title, no AI-attributed body text, no known AI bot author, and 0/1 commits with AI trailers. The tiny one-line diff also looks handcrafted, so this falls in the 0-25 band.",
+          "quality": "Clear, focused PR with a concise explanation of why the option can be removed: it is deprecated in TypeScript 6.0 and has no effect for the configured target. No tests are needed for this config-only deletion, but the scope is very small rather than exemplary."
+        }
+      }
+    },
+    {
+      "number": 4212,
+      "title": "fix: isHydration will cause unnecessary rerender ",
+      "body": "close #4210 \r\n\r\nThe current solution is inspired by seb's previous tweet (The original tweet was deleted) \r\n<img width=\"1234\" height=\"974\" alt=\"Screenshot 2026-01-25 at 16 36 39\" src=\"https://github.com/user-attachments/assets/f54e6055-d35a-4714-b8fc-aeaa339c8c97\" />\r\n",
+      "author": "promer94",
+      "url": "https://github.com/vercel/swr/pull/4212",
+      "diffUrl": "https://github.com/vercel/swr/pull/4212/files",
+      "mergedAt": "2026-01-30T17:55:26Z",
+      "mergeCommitSha": "1f93cc2c44adfc33a49b05715bf3bc2aedecbb22",
+      "changedFiles": 6,
+      "additions": 115,
+      "deletions": 11,
+      "aiSignals": {
+        "coAuthoredByAI": false,
+        "detectedAgents": [],
+        "aiTagInTitle": false,
+        "aiTaggedCommitCount": 0,
+        "aiTrailerCommitRatio": 0,
+        "authorIsKnownAIBot": false,
+        "bodyHasAIAttribution": false,
+        "commitCount": 2
+      },
+      "score": {
+        "impact": 52,
+        "aiLeverage": 18,
+        "quality": 58,
+        "total": 38,
+        "rationale": {
+          "impact": "Non-trivial focused bugfix for unnecessary rerenders during hydration in a core SWR behavior area. The diff size is moderate (6 files, +115/-11), suggesting more than a tiny patch but still a scoped fix rather than a substantial feature or architecture change.",
+          "aiLeverage": "No AI signals are present: aiTrailerCommitRatio is 0, no detected agents, no AI tag in the title, no AI-tagged commits, author is not a known AI bot, and the body has no AI attribution. The diff is relatively small/focused, so this fits the zero-signal handcrafted-looking band.",
+          "quality": "Focused PR with a clear bugfix title and linked issue, and the moderate additions likely include validation around the behavior. However, the description is thin and mostly points to an external deleted tweet/screenshot rather than explaining the root cause, tradeoffs, or test coverage in detail."
+        }
+      }
+    },
+    {
+      "number": 4213,
+      "title": "fix: Ensure preload runs only on client",
+      "body": "Thanks for asking me to work on this. I will get started on it and keep this PR's description up to date as I form a plan and make progress.\n\n\n<!-- START COPILOT ORIGINAL PROMPT -->\n\n\n\n<details>\n\n<summary>Original prompt</summary>\n\n> Make sure preload() run only on the client (typeof window !== 'undefined'), and make it noop in other cases\n\n\n</details>\n\n\n\n<!-- START COPILOT CODING AGENT TIPS -->\n---\n\n💬 We'd love your input! Share your thoughts on Copilot coding agent in our [2 minute survey](https://gh.io/copilot-coding-agent-survey).\n",
+      "author": "Copilot",
+      "url": "https://github.com/vercel/swr/pull/4213",
+      "diffUrl": "https://github.com/vercel/swr/pull/4213/files",
+      "mergedAt": "2026-01-30T17:55:58Z",
+      "mergeCommitSha": "f8647706663abca2ad7e9670076bddc993d0ea93",
+      "changedFiles": 2,
+      "additions": 32,
+      "deletions": 0,
+      "aiSignals": {
+        "coAuthoredByAI": false,
+        "detectedAgents": ["Copilot"],
+        "aiTagInTitle": false,
+        "aiTaggedCommitCount": 0,
+        "aiTrailerCommitRatio": 0,
+        "authorIsKnownAIBot": true,
+        "bodyHasAIAttribution": true,
+        "commitCount": 3
+      },
+      "score": {
+        "impact": 34,
+        "aiLeverage": 78,
+        "quality": 58,
+        "total": 59,
+        "rationale": {
+          "impact": "Small targeted bugfix: ensures preload() is a no-op outside the browser/client environment. The diff is very small (2 files, 32 additions) and fixes an SSR/client-environment correctness issue, but it is not a substantial feature or architecture change.",
+          "aiLeverage": "Clear AI authorship signals: the PR author is the known AI bot Copilot, detectedAgents includes Copilot, and the body contains Copilot coding agent attribution/original prompt. No AI co-author trailers were detected, so this falls in the clear multi-signal AI authorship band rather than dominant trailer-based authorship.",
+          "quality": "Focused PR with a clear purpose stated in the title and prompt. Scope is tight with only 2 changed files, but the PR description is mostly autogenerated boilerplate and there is no visible evidence in the provided metadata of tests or deeper explanation, keeping it in the solid/basic hygiene range."
+        }
+      }
+    }
+  ],
+  "aggregate": {
+    "url": "https://github.com/vercel/swr",
+    "mergedPRs": 5,
+    "authorsCount": 4,
+    "analysisSeconds": 25,
+    "total": 33,
+    "impact": 32,
+    "aiLeverage": 23,
+    "quality": 56
+  },
+  "authors": [
+    {
+      "name": "Copilot",
+      "avatar": "#c89c3a",
+      "count": 1,
+      "impact": 34,
+      "ai": 78,
+      "quality": 58,
+      "total": 59
+    },
+    {
+      "name": "promer94",
+      "avatar": "#c89c3a",
+      "count": 2,
+      "impact": 43,
+      "ai": 13,
+      "quality": 50,
+      "total": 31
+    },
+    {
+      "name": "lukesandberg",
+      "avatar": "#8b5cf6",
+      "count": 1,
+      "impact": 26,
+      "ai": 5,
+      "quality": 60,
+      "total": 23
+    },
+    {
+      "name": "RyanCavanaugh",
+      "avatar": "#ee6c3d",
+      "count": 1,
+      "impact": 12,
+      "ai": 5,
+      "quality": 62,
+      "total": 19
+    }
+  ],
+  "insights": [
+    {
+      "tag": "Quality",
+      "body": "Improve PR descriptions for small bug fixes: #4223 and #4212 lost quality points due to missing or thin explanations. Require a short template covering root cause, fix summary, and validation/test evidence."
+    },
+    {
+      "tag": "Impact",
+      "body": "Most merged work is low-to-moderate impact, with 4 of 5 PRs scoring impact ≤34. Consider batching tiny config/dependency updates and prioritizing more core behavior fixes like #4212 when planning reviewer time."
+    },
+    {
+      "tag": "AI",
+      "body": "AI-authored work appears useful but narrow: Copilot PR #4213 had high AI leverage and acceptable quality, yet only small impact. Use AI agents for scoped SSR/client safety fixes and dependency/config chores, with human review focused on tests and edge cases."
+    }
+  ]
+}

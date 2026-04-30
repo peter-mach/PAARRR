@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { AISignalsSchema } from "@/lib/scoring/ai-signals";
 
 export const ScoreDimensionSchema = z.number().int().min(0).max(100);
 
@@ -28,6 +29,7 @@ export const PullRequestSummarySchema = z.object({
   changedFiles: z.number().int(),
   additions: z.number().int(),
   deletions: z.number().int(),
+  aiSignals: AISignalsSchema,
 });
 
 export type PullRequestSummary = z.infer<typeof PullRequestSummarySchema>;

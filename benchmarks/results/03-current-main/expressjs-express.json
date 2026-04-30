@@ -1,0 +1,231 @@
+{
+  "owner": "expressjs",
+  "repo": "express",
+  "url": "https://github.com/expressjs/express",
+  "analyzedAt": "2026-04-30T16:08:58.975Z",
+  "pullRequests": [
+    {
+      "number": 7150,
+      "title": "build(deps): bump github/codeql-action from 4.32.4 to 4.35.1",
+      "body": "Bumps [github/codeql-action](https://github.com/github/codeql-action) from 4.32.4 to 4.35.1.\n<details>\n<summary>Release notes</summary>\n<p><em>Sourced from <a href=\"https://github.com/github/codeql-action/releases\">github/codeql-action's releases</a>.</em></p>\n<blockquote>\n<h2>v4.35.1</h2>\n<ul>\n<li>Fix incorrect minimum required Git version for <a href=\"https://redirect.github.com/github/roadmap/issues/1158\">improved incremental analysis</a>: it should have been 2.36.0, not 2.11.0. <a href=\"https://redirect.github.com/github/codeql-action/pull/3781\">#3781</a></li>\n</ul>\n<h2>v4.35.0</h2>\n<ul>\n<li>Reduced the minimum Git version required for <a href=\"https://redirect.github.com/github/roadmap/issues/1158\">improved incremental analysis</a> from 2.38.0 to 2.11.0. <a href=\"https://redirect.github.com/github/codeql-action/pull/3767\">#3767</a></li>\n<li>Update default CodeQL bundle version to <a href=\"https://github.com/github/codeql-action/releases/tag/codeql-bundle-v2.25.1\">2.25.1</a>. <a href=\"https://redirect.github.com/github/codeql-action/pull/3773\">#3773</a></li>\n</ul>\n<h2>v4.34.1</h2>\n<ul>\n<li>Downgrade default CodeQL bundle version to <a href=\"https://github.com/github/codeql-action/releases/tag/codeql-bundle-v2.24.3\">2.24.3</a> due to issues with a small percentage of Actions and JavaScript analyses. <a href=\"https://redirect.github.com/github/codeql-action/pull/3762\">#3762</a></li>\n</ul>\n<h2>v4.34.0</h2>\n<ul>\n<li>Added an experimental change which disables TRAP caching when <a href=\"https://redirect.github.com/github/roadmap/issues/1158\">improved incremental analysis</a> is enabled, since improved incremental analysis supersedes TRAP caching. This will improve performance and reduce Actions cache usage. We expect to roll this change out to everyone in March. <a href=\"https://redirect.github.com/github/codeql-action/pull/3569\">#3569</a></li>\n<li>We are rolling out improved incremental analysis to C/C++ analyses that use build mode <code>none</code>. We expect this rollout to be complete by the end of April 2026. <a href=\"https://redirect.github.com/github/codeql-action/pull/3584\">#3584</a></li>\n<li>Update default CodeQL bundle version to <a href=\"https://github.com/github/codeql-action/releases/tag/codeql-bundle-v2.25.0\">2.25.0</a>. <a href=\"https://redirect.github.com/github/codeql-action/pull/3585\">#3585</a></li>\n</ul>\n<h2>v4.33.0</h2>\n<ul>\n<li>\n<p>Upcoming change: Starting April 2026, the CodeQL Action will skip collecting file coverage information on pull requests to improve analysis performance. File coverage information will still be computed on non-PR analyses. Pull request analyses will log a warning about this upcoming change. <a href=\"https://redirect.github.com/github/codeql-action/pull/3562\">#3562</a></p>\n<p>To opt out of this change:</p>\n<ul>\n<li><strong>Repositories owned by an organization:</strong> Create a custom repository property with the name <code>github-codeql-file-coverage-on-prs</code> and the type &quot;True/false&quot;, then set this property to <code>true</code> in the repository's settings. For more information, see <a href=\"https://docs.github.com/en/organizations/managing-organization-settings/managing-custom-properties-for-repositories-in-your-organization\">Managing custom properties for repositories in your organization</a>. Alternatively, if you are using an advanced setup workflow, you can set the <code>CODEQL_ACTION_FILE_COVERAGE_ON_PRS</code> environment variable to <code>true</code> in your workflow.</li>\n<li><strong>User-owned repositories using default setup:</strong> Switch to an advanced setup workflow and set the <code>CODEQL_ACTION_FILE_COVERAGE_ON_PRS</code> environment variable to <code>true</code> in your workflow.</li>\n<li><strong>User-owned repositories using advanced setup:</strong> Set the <code>CODEQL_ACTION_FILE_COVERAGE_ON_PRS</code> environment variable to <code>true</code> in your workflow.</li>\n</ul>\n</li>\n<li>\n<p>Fixed <a href=\"https://redirect.github.com/github/codeql-action/issues/3555\">a bug</a> which caused the CodeQL Action to fail loading repository properties if a &quot;Multi select&quot; repository property was configured for the repository. <a href=\"https://redirect.github.com/github/codeql-action/pull/3557\">#3557</a></p>\n</li>\n<li>\n<p>The CodeQL Action now loads <a href=\"https://docs.github.com/en/organizations/managing-organization-settings/managing-custom-properties-for-repositories-in-your-organization\">custom repository properties</a> on GitHub Enterprise Server, enabling the customization of features such as <code>github-codeql-disable-overlay</code> that was previously only available on GitHub.com. <a href=\"https://redirect.github.com/github/codeql-action/pull/3559\">#3559</a></p>\n</li>\n<li>\n<p>Once <a href=\"https://docs.github.com/en/code-security/how-tos/secure-at-scale/configure-organization-security/manage-usage-and-access/giving-org-access-private-registries\">private package registries</a> can be configured with OIDC-based authentication for organizations, the CodeQL Action will now be able to accept such configurations. <a href=\"https://redirect.github.com/github/codeql-action/pull/3563\">#3563</a></p>\n</li>\n<li>\n<p>Fixed the retry mechanism for database uploads. Previously this would fail with the error &quot;Response body object should not be disturbed or locked&quot;. <a href=\"https://redirect.github.com/github/codeql-action/pull/3564\">#3564</a></p>\n</li>\n<li>\n<p>A warning is now emitted if the CodeQL Action detects a repository property whose name suggests that it relates to the CodeQL Action, but which is not one of the properties recognised by the current version of the CodeQL Action. <a href=\"https://redirect.github.com/github/codeql-action/pull/3570\">#3570</a></p>\n</li>\n</ul>\n<h2>v4.32.6</h2>\n<ul>\n<li>Update default CodeQL bundle version to <a href=\"https://github.com/github/codeql-action/releases/tag/codeql-bundle-v2.24.3\">2.24.3</a>. <a href=\"https://redirect.github.com/github/codeql-action/pull/3548\">#3548</a></li>\n</ul>\n<h2>v4.32.5</h2>\n<ul>\n<li>Repositories owned by an organization can now set up the <code>github-codeql-disable-overlay</code> custom repository property to disable <a href=\"https://redirect.github.com/github/roadmap/issues/1158\">improved incremental analysis for CodeQL</a>. First, create a custom repository property with the name <code>github-codeql-disable-overlay</code> and the type &quot;True/false&quot; in the organization's settings. Then in the repository's settings, set this property to <code>true</code> to disable improved incremental analysis. For more information, see <a href=\"https://docs.github.com/en/organizations/managing-organization-settings/managing-custom-properties-for-repositories-in-your-organization\">Managing custom properties for repositories in your organization</a>. This feature is not yet available on GitHub Enterprise Server. <a href=\"https://redirect.github.com/github/codeql-action/pull/3507\">#3507</a></li>\n<li>Added an experimental change so that when <a href=\"https://redirect.github.com/github/roadmap/issues/1158\">improved incremental analysis</a> fails on a runner — potentially due to insufficient disk space — the failure is recorded in the Actions cache so that subsequent runs will automatically skip improved incremental analysis until something changes (e.g. a larger runner is provisioned or a new CodeQL version is released). We expect to roll this change out to everyone in March. <a href=\"https://redirect.github.com/github/codeql-action/pull/3487\">#3487</a></li>\n<li>The minimum memory check for improved incremental analysis is now skipped for CodeQL 2.24.3 and later, which has reduced peak RAM usage. <a href=\"https://redirect.github.com/github/codeql-action/pull/3515\">#3515</a></li>\n<li>Reduced log levels for best-effort private package registry connection check failures to reduce noise from workflow annotations. <a href=\"https://redirect.github.com/github/codeql-action/pull/3516\">#3516</a></li>\n<li>Added an experimental change which lowers the minimum disk space requirement for <a href=\"https://redirect.github.com/github/roadmap/issues/1158\">improved incremental analysis</a>, enabling it to run on standard GitHub Actions runners. We expect to roll this change out to everyone in March. <a href=\"https://redirect.github.com/github/codeql-action/pull/3498\">#3498</a></li>\n<li>Added an experimental change which allows the <code>start-proxy</code> action to resolve the CodeQL CLI version from feature flags instead of using the linked CLI bundle version. We expect to roll this change out to everyone in March. <a href=\"https://redirect.github.com/github/codeql-action/pull/3512\">#3512</a></li>\n<li>The previously experimental changes from versions 4.32.3, 4.32.4, 3.32.3 and 3.32.4 are now enabled by default. <a href=\"https://redirect.github.com/github/codeql-action/pull/3503\">#3503</a>, <a href=\"https://redirect.github.com/github/codeql-action/pull/3504\">#3504</a></li>\n</ul>\n</blockquote>\n</details>\n<details>\n<summary>Changelog</summary>\n<p><em>Sourced from <a href=\"https://github.com/github/codeql-action/blob/main/CHANGELOG.md\">github/codeql-action's changelog</a>.</em></p>\n<blockquote>\n<h1>CodeQL Action Changelog</h1>\n<p>See the <a href=\"https://github.com/github/codeql-action/releases\">releases page</a> for the relevant changes to the CodeQL CLI and language packs.</p>\n<h2>[UNRELEASED]</h2>\n<ul>\n<li>The Git version 2.36.0 requirement for improved incremental analysis now only applies to repositories that contain submodules. <a href=\"https://redirect.github.com/github/codeql-action/pull/3789\">#3789</a></li>\n</ul>\n<h2>4.35.1 - 27 Mar 2026</h2>\n<ul>\n<li>Fix incorrect minimum required Git version for <a href=\"https://redirect.github.com/github/roadmap/issues/1158\">improved incremental analysis</a>: it should have been 2.36.0, not 2.11.0. <a href=\"https://redirect.github.com/github/codeql-action/pull/3781\">#3781</a></li>\n</ul>\n<h2>4.35.0 - 27 Mar 2026</h2>\n<ul>\n<li>Reduced the minimum Git version required for <a href=\"https://redirect.github.com/github/roadmap/issues/1158\">improved incremental analysis</a> from 2.38.0 to 2.11.0. <a href=\"https://redirect.github.com/github/codeql-action/pull/3767\">#3767</a></li>\n<li>Update default CodeQL bundle version to <a href=\"https://github.com/github/codeql-action/releases/tag/codeql-bundle-v2.25.1\">2.25.1</a>. <a href=\"https://redirect.github.com/github/codeql-action/pull/3773\">#3773</a></li>\n</ul>\n<h2>4.34.1 - 20 Mar 2026</h2>\n<ul>\n<li>Downgrade default CodeQL bundle version to <a href=\"https://github.com/github/codeql-action/releases/tag/codeql-bundle-v2.24.3\">2.24.3</a> due to issues with a small percentage of Actions and JavaScript analyses. <a href=\"https://redirect.github.com/github/codeql-action/pull/3762\">#3762</a></li>\n</ul>\n<h2>4.34.0 - 20 Mar 2026</h2>\n<ul>\n<li>Added an experimental change which disables TRAP caching when <a href=\"https://redirect.github.com/github/roadmap/issues/1158\">improved incremental analysis</a> is enabled, since improved incremental analysis supersedes TRAP caching. This will improve performance and reduce Actions cache usage. We expect to roll this change out to everyone in March. <a href=\"https://redirect.github.com/github/codeql-action/pull/3569\">#3569</a></li>\n<li>We are rolling out improved incremental analysis to C/C++ analyses that use build mode <code>none</code>. We expect this rollout to be complete by the end of April 2026. <a href=\"https://redirect.github.com/github/codeql-action/pull/3584\">#3584</a></li>\n<li>Update default CodeQL bundle version to <a href=\"https://github.com/github/codeql-action/releases/tag/codeql-bundle-v2.25.0\">2.25.0</a>. <a href=\"https://redirect.github.com/github/codeql-action/pull/3585\">#3585</a></li>\n</ul>\n<h2>4.33.0 - 16 Mar 2026</h2>\n<ul>\n<li>\n<p>Upcoming change: Starting April 2026, the CodeQL Action will skip collecting file coverage information on pull requests to improve analysis performance. File coverage information will still be computed on non-PR analyses. Pull request analyses will log a warning about this upcoming change. <a href=\"https://redirect.github.com/github/codeql-action/pull/3562\">#3562</a></p>\n<p>To opt out of this change:</p>\n<ul>\n<li><strong>Repositories owned by an organization:</strong> Create a custom repository property with the name <code>github-codeql-file-coverage-on-prs</code> and the type &quot;True/false&quot;, then set this property to <code>true</code> in the repository's settings. For more information, see <a href=\"https://docs.github.com/en/organizations/managing-organization-settings/managing-custom-properties-for-repositories-in-your-organization\">Managing custom properties for repositories in your organization</a>. Alternatively, if you are using an advanced setup workflow, you can set the <code>CODEQL_ACTION_FILE_COVERAGE_ON_PRS</code> environment variable to <code>true</code> in your workflow.</li>\n<li><strong>User-owned repositories using default setup:</strong> Switch to an advanced setup workflow and set the <code>CODEQL_ACTION_FILE_COVERAGE_ON_PRS</code> environment variable to <code>true</code> in your workflow.</li>\n<li><strong>User-owned repositories using advanced setup:</strong> Set the <code>CODEQL_ACTION_FILE_COVERAGE_ON_PRS</code> environment variable to <code>true</code> in your workflow.</li>\n</ul>\n</li>\n<li>\n<p>Fixed <a href=\"https://redirect.github.com/github/codeql-action/issues/3555\">a bug</a> which caused the CodeQL Action to fail loading repository properties if a &quot;Multi select&quot; repository property was configured for the repository. <a href=\"https://redirect.github.com/github/codeql-action/pull/3557\">#3557</a></p>\n</li>\n<li>\n<p>The CodeQL Action now loads <a href=\"https://docs.github.com/en/organizations/managing-organization-settings/managing-custom-properties-for-repositories-in-your-organization\">custom repository properties</a> on GitHub Enterprise Server, enabling the customization of features such as <code>github-codeql-disable-overlay</code> that was previously only available on GitHub.com. <a href=\"https://redirect.github.com/github/codeql-action/pull/3559\">#3559</a></p>\n</li>\n<li>\n<p>Once <a href=\"https://docs.github.com/en/code-security/how-tos/secure-at-scale/configure-organization-security/manage-usage-and-access/giving-org-access-private-registries\">private package registries</a> can be configured with OIDC-based authentication for organizations, the CodeQL Action will now be able to accept such configurations. <a href=\"https://redirect.github.com/github/codeql-action/pull/3563\">#3563</a></p>\n</li>\n<li>\n<p>Fixed the retry mechanism for database uploads. Previously this would fail with the error &quot;Response body object should not be disturbed or locked&quot;. <a href=\"https://redirect.github.com/github/codeql-action/pull/3564\">#3564</a></p>\n</li>\n<li>\n<p>A warning is now emitted if the CodeQL Action detects a repository property whose name suggests that it relates to the CodeQL Action, but which is not one of the properties recognised by the current version of the CodeQL Action. <a href=\"https://redirect.github.com/github/codeql-action/pull/3570\">#3570</a></p>\n</li>\n</ul>\n<h2>4.32.6 - 05 Mar 2026</h2>\n<ul>\n<li>Update default CodeQL bundle version to <a href=\"https://github.com/github/codeql-action/releases/tag/codeql-bundle-v2.24.3\">2.24.3</a>. <a href=\"https://redirect.github.com/github/codeql-action/pull/3548\">#3548</a></li>\n</ul>\n<h2>4.32.5 - 02 Mar 2026</h2>\n<ul>\n<li>Repositories owned by an organization can now set up the <code>github-codeql-disable-overlay</code> custom repository property to disable <a href=\"https://redirect.github.com/github/roadmap/issues/1158\">improved incremental analysis for CodeQL</a>. First, create a custom repository property with the name <code>github-codeql-disable-overlay</code> and the type &quot;True/false&quot; in the organization's settings. Then in the repository's settings, set this property to <code>true</code> to disable improved incremental analysis. For more information, see <a href=\"https://docs.github.com/en/organizations/managing-organization-settings/managing-custom-properties-for-repositories-in-your-organization\">Managing custom properties for repositories in your organization</a>. This feature is not yet available on GitHub Enterprise Server. <a href=\"https://redirect.github.com/github/codeql-action/pull/3507\">#3507</a></li>\n<li>Added an experimental change so that when <a href=\"https://redirect.github.com/github/roadmap/issues/1158\">improved incremental analysis</a> fails on a runner — potentially due to insufficient disk space — the failure is recorded in the Actions cache so that subsequent runs will automatically skip improved incremental analysis until something changes (e.g. a larger runner is provisioned or a new CodeQL version is released). We expect to roll this change out to everyone in March. <a href=\"https://redirect.github.com/github/codeql-action/pull/3487\">#3487</a></li>\n<li>The minimum memory check for improved incremental analysis is now skipped for CodeQL 2.24.3 and later, which has reduced peak RAM usage. <a href=\"https://redirect.github.com/github/codeql-action/pull/3515\">#3515</a></li>\n</ul>\n<!-- raw HTML omitted -->\n</blockquote>\n<p>... (truncated)</p>\n</details>\n<details>\n<summary>Commits</summary>\n<ul>\n<li><a href=\"https://github.com/github/codeql-action/commit/c10b8064de6f491fea524254123dbe5e09572f13\"><code>c10b806</code></a> Merge pull request <a href=\"https://redirect.github.com/github/codeql-action/issues/3782\">#3782</a> from github/update-v4.35.1-d6d1743b8</li>\n<li><a href=\"https://github.com/github/codeql-action/commit/c5ffd0683786820677d054e3505e1c5bb4b8c227\"><code>c5ffd06</code></a> Update changelog for v4.35.1</li>\n<li><a href=\"https://github.com/github/codeql-action/commit/d6d1743b8ec7ecd94f78ad1ce4cb3d8d2ba58001\"><code>d6d1743</code></a> Merge pull request <a href=\"https://redirect.github.com/github/codeql-action/issues/3781\">#3781</a> from github/henrymercer/update-git-minimum-version</li>\n<li><a href=\"https://github.com/github/codeql-action/commit/65d2efa7333ad65f97cc54be40f4cd18630f884c\"><code>65d2efa</code></a> Add changelog note</li>\n<li><a href=\"https://github.com/github/codeql-action/commit/2437b20ab31021229573a66717323dd5c6ce9319\"><code>2437b20</code></a> Update minimum git version for overlay to 2.36.0</li>\n<li><a href=\"https://github.com/github/codeql-action/commit/ea5f71947c021286c99f61cc426a10d715fe4434\"><code>ea5f719</code></a> Merge pull request <a href=\"https://redirect.github.com/github/codeql-action/issues/3775\">#3775</a> from github/dependabot/npm_and_yarn/node-forge-1.4.0</li>\n<li><a href=\"https://github.com/github/codeql-action/commit/45ceeea896ba2293e10982f871198d1950ee13d6\"><code>45ceeea</code></a> Merge pull request <a href=\"https://redirect.github.com/github/codeql-action/issues/3777\">#3777</a> from github/mergeback/v4.35.0-to-main-b8bb9f28</li>\n<li><a href=\"https://github.com/github/codeql-action/commit/24448c98434f429f901d27db7ddae55eec5cc1c4\"><code>24448c9</code></a> Rebuild</li>\n<li><a href=\"https://github.com/github/codeql-action/commit/7c510606312e5c68ac8b27c009e5254f226f5dfa\"><code>7c51060</code></a> Update changelog and version after v4.35.0</li>\n<li><a href=\"https://github.com/github/codeql-action/commit/b8bb9f28b8d3f992092362369c57161b755dea45\"><code>b8bb9f2</code></a> Merge pull request <a href=\"https://redirect.github.com/github/codeql-action/issues/3776\">#3776</a> from github/update-v4.35.0-0078ad667</li>\n<li>Additional commits viewable in <a href=\"https://github.com/github/codeql-action/compare/89a39a4e59826350b863aa6b6252a07ad50cf83e...c10b8064de6f491fea524254123dbe5e09572f13\">compare view</a></li>\n</ul>\n</details>\n<br />\n\n\n[![Dependabot compatibility score](https://dependabot-badges.githubapp.com/badges/compatibility_score?dependency-name=github/codeql-action&package-manager=github_actions&previous-version=4.32.4&new-version=4.35.1)](https://docs.github.com/en/github/managing-security-vulnerabilities/about-dependabot-security-updates#about-compatibility-scores)\n\nDependabot will resolve any conflicts with this PR as long as you don't alter it yourself. You can also trigger a rebase manually by commenting `@dependabot rebase`.\n\n[//]: # (dependabot-automerge-start)\n[//]: # (dependabot-automerge-end)\n\n---\n\n<details>\n<summary>Dependabot commands and options</summary>\n<br />\n\nYou can trigger Dependabot actions by commenting on this PR:\n- `@dependabot rebase` will rebase this PR\n- `@dependabot recreate` will recreate this PR, overwriting any edits that have been made to it\n- `@dependabot show <dependency name> ignore conditions` will show all of the ignore conditions of the specified dependency\n- `@dependabot ignore this major version` will close this PR and stop Dependabot creating any more for this major version (unless you reopen the PR or upgrade to it yourself)\n- `@dependabot ignore this minor version` will close this PR and stop Dependabot creating any more for this minor version (unless you reopen the PR or upgrade to it yourself)\n- `@dependabot ignore this dependency` will close this PR and stop Dependabot creating any more for this dependency (unless you reopen the PR or upgrade to it yourself)\n\n\n</details>",
+      "author": "dependabot[bot]",
+      "url": "https://github.com/expressjs/express/pull/7150",
+      "diffUrl": "https://github.com/expressjs/express/pull/7150/files",
+      "mergedAt": "2026-04-23T17:50:02Z",
+      "mergeCommitSha": "6340c1eaaedc0ddcae8be8df2cdb1d2e961cbf2f",
+      "changedFiles": 2,
+      "additions": 3,
+      "deletions": 3,
+      "aiSignals": {
+        "coAuthoredByAI": false,
+        "detectedAgents": [],
+        "aiTagInTitle": false,
+        "aiTaggedCommitCount": 0,
+        "aiTrailerCommitRatio": 0,
+        "authorIsKnownAIBot": true,
+        "bodyHasAIAttribution": false,
+        "commitCount": 1
+      },
+      "score": {
+        "impact": 12,
+        "aiLeverage": 66,
+        "quality": 52,
+        "total": 44,
+        "rationale": {
+          "impact": "Routine dependency bump of github/codeql-action from 4.32.4 to 4.35.1 with only 2 files and 3 additions/3 deletions. This is maintenance/security-tooling hygiene rather than product or architectural work, so it fits the 0-20 dependency-bump band.",
+          "aiLeverage": "The author is dependabot[bot], and aiSignals marks authorIsKnownAIBot=true. Per rubric, a known AI/bot author alone is clear AI authorship in the 65-84 band, though there are no AI co-author trailers or detected coding agents.",
+          "quality": "Focused automated dependency update with generated release notes and very small, coherent scope. However, it is a standard Dependabot PR with no project-specific explanation, tests, or deeper validation, placing it in the focused/basic hygiene range."
+        }
+      }
+    },
+    {
+      "number": 7149,
+      "title": "build(deps): bump actions/setup-node from 6.2.0 to 6.3.0",
+      "body": "Bumps [actions/setup-node](https://github.com/actions/setup-node) from 6.2.0 to 6.3.0.\n<details>\n<summary>Release notes</summary>\n<p><em>Sourced from <a href=\"https://github.com/actions/setup-node/releases\">actions/setup-node's releases</a>.</em></p>\n<blockquote>\n<h2>v6.3.0</h2>\n<h2>What's Changed</h2>\n<h3>Enhancements:</h3>\n<ul>\n<li>Support parsing <code>devEngines</code> field by <a href=\"https://github.com/susnux\"><code>@​susnux</code></a> in <a href=\"https://redirect.github.com/actions/setup-node/pull/1283\">actions/setup-node#1283</a></li>\n</ul>\n<blockquote>\n<p>When using node-version-file: package.json, setup-node now prefers devEngines.runtime over engines.node.</p>\n</blockquote>\n<h3>Dependency updates:</h3>\n<ul>\n<li>Fix npm audit issues by <a href=\"https://github.com/gowridurgad\"><code>@​gowridurgad</code></a> in <a href=\"https://redirect.github.com/actions/setup-node/pull/1491\">actions/setup-node#1491</a></li>\n<li>Replace uuid with crypto.randomUUID() by <a href=\"https://github.com/trivikr\"><code>@​trivikr</code></a> in <a href=\"https://redirect.github.com/actions/setup-node/pull/1378\">actions/setup-node#1378</a></li>\n<li>Upgrade minimatch from 3.1.2 to 3.1.5 by <a href=\"https://github.com/dependabot\"><code>@​dependabot</code></a> in <a href=\"https://redirect.github.com/actions/setup-node/pull/1498\">actions/setup-node#1498</a></li>\n</ul>\n<h3>Bug fixes:</h3>\n<ul>\n<li>Remove hardcoded bearer for mirror-url <a href=\"https://github.com/marco-ippolito\"><code>@​marco-ippolito</code></a> in <a href=\"https://redirect.github.com/actions/setup-node/pull/1467\">actions/setup-node#1467</a></li>\n<li>Scope test lockfiles by package manager and update cache tests by <a href=\"https://github.com/gowridurgad\"><code>@​gowridurgad</code></a> in <a href=\"https://redirect.github.com/actions/setup-node/pull/1495\">actions/setup-node#1495</a></li>\n</ul>\n<h2>New Contributors</h2>\n<ul>\n<li><a href=\"https://github.com/susnux\"><code>@​susnux</code></a> made their first contribution in <a href=\"https://redirect.github.com/actions/setup-node/pull/1283\">actions/setup-node#1283</a></li>\n</ul>\n<p><strong>Full Changelog</strong>: <a href=\"https://github.com/actions/setup-node/compare/v6...v6.3.0\">https://github.com/actions/setup-node/compare/v6...v6.3.0</a></p>\n</blockquote>\n</details>\n<details>\n<summary>Commits</summary>\n<ul>\n<li><a href=\"https://github.com/actions/setup-node/commit/53b83947a5a98c8d113130e565377fae1a50d02f\"><code>53b8394</code></a> Bump minimatch from 3.1.2 to 3.1.5 (<a href=\"https://redirect.github.com/actions/setup-node/issues/1498\">#1498</a>)</li>\n<li><a href=\"https://github.com/actions/setup-node/commit/54045abd5dcd3b0fee9ca02fa24c57545834c9cc\"><code>54045ab</code></a> Scope test lockfiles by package manager and update cache tests (<a href=\"https://redirect.github.com/actions/setup-node/issues/1495\">#1495</a>)</li>\n<li><a href=\"https://github.com/actions/setup-node/commit/c882bffdbd4df51ace6b940023952e8669c9932a\"><code>c882bff</code></a> Replace uuid with crypto.randomUUID() (<a href=\"https://redirect.github.com/actions/setup-node/issues/1378\">#1378</a>)</li>\n<li><a href=\"https://github.com/actions/setup-node/commit/774c1d62961e73038a114d59c8847023c003194d\"><code>774c1d6</code></a> feat(node-version-file): support parsing <code>devEngines</code> field (<a href=\"https://redirect.github.com/actions/setup-node/issues/1283\">#1283</a>)</li>\n<li><a href=\"https://github.com/actions/setup-node/commit/efcb663fc60e97218a2b2d6d827f7830f164739e\"><code>efcb663</code></a> fix: remove hardcoded bearer (<a href=\"https://redirect.github.com/actions/setup-node/issues/1467\">#1467</a>)</li>\n<li><a href=\"https://github.com/actions/setup-node/commit/d02c89dce7e1ba9ef629ce0680989b3a1cc72edb\"><code>d02c89d</code></a> Fix npm audit issues (<a href=\"https://redirect.github.com/actions/setup-node/issues/1491\">#1491</a>)</li>\n<li>See full diff in <a href=\"https://github.com/actions/setup-node/compare/6044e13b5dc448c55e2357c09f80417699197238...53b83947a5a98c8d113130e565377fae1a50d02f\">compare view</a></li>\n</ul>\n</details>\n<br />\n\n\n[![Dependabot compatibility score](https://dependabot-badges.githubapp.com/badges/compatibility_score?dependency-name=actions/setup-node&package-manager=github_actions&previous-version=6.2.0&new-version=6.3.0)](https://docs.github.com/en/github/managing-security-vulnerabilities/about-dependabot-security-updates#about-compatibility-scores)\n\nDependabot will resolve any conflicts with this PR as long as you don't alter it yourself. You can also trigger a rebase manually by commenting `@dependabot rebase`.\n\n[//]: # (dependabot-automerge-start)\n[//]: # (dependabot-automerge-end)\n\n---\n\n<details>\n<summary>Dependabot commands and options</summary>\n<br />\n\nYou can trigger Dependabot actions by commenting on this PR:\n- `@dependabot rebase` will rebase this PR\n- `@dependabot recreate` will recreate this PR, overwriting any edits that have been made to it\n- `@dependabot show <dependency name> ignore conditions` will show all of the ignore conditions of the specified dependency\n- `@dependabot ignore this major version` will close this PR and stop Dependabot creating any more for this major version (unless you reopen the PR or upgrade to it yourself)\n- `@dependabot ignore this minor version` will close this PR and stop Dependabot creating any more for this minor version (unless you reopen the PR or upgrade to it yourself)\n- `@dependabot ignore this dependency` will close this PR and stop Dependabot creating any more for this dependency (unless you reopen the PR or upgrade to it yourself)\n\n\n</details>",
+      "author": "dependabot[bot]",
+      "url": "https://github.com/expressjs/express/pull/7149",
+      "diffUrl": "https://github.com/expressjs/express/pull/7149/files",
+      "mergedAt": "2026-04-23T17:49:19Z",
+      "mergeCommitSha": "8cc3afa8e35e1a62ccf48276d456278455eb784d",
+      "changedFiles": 2,
+      "additions": 3,
+      "deletions": 3,
+      "aiSignals": {
+        "coAuthoredByAI": false,
+        "detectedAgents": [],
+        "aiTagInTitle": false,
+        "aiTaggedCommitCount": 0,
+        "aiTrailerCommitRatio": 0,
+        "authorIsKnownAIBot": true,
+        "bodyHasAIAttribution": false,
+        "commitCount": 1
+      },
+      "score": {
+        "impact": 12,
+        "aiLeverage": 70,
+        "quality": 55,
+        "total": 47,
+        "rationale": {
+          "impact": "Routine dependency bump of a GitHub Action (actions/setup-node 6.2.0 to 6.3.0) with only 2 files changed and +3/-3 lines; this is low product/engineering impact despite including upstream fixes.",
+          "aiLeverage": "authorIsKnownAIBot is true: the PR was authored by dependabot[bot]. Per rubric, known AI/bot author is a clear AI-authorship signal, even with 0/1 commits carrying AI trailers and no detectedAgents.",
+          "quality": "Focused, mechanically generated dependency update with release notes and a very small diff. Hygiene is normal, but there is no bespoke explanation, testing detail, or broader engineering rigor beyond the standard Dependabot PR."
+        }
+      }
+    },
+    {
+      "number": 7148,
+      "title": "build(deps): bump actions/download-artifact from 8.0.0 to 8.0.1",
+      "body": "Bumps [actions/download-artifact](https://github.com/actions/download-artifact) from 8.0.0 to 8.0.1.\n<details>\n<summary>Release notes</summary>\n<p><em>Sourced from <a href=\"https://github.com/actions/download-artifact/releases\">actions/download-artifact's releases</a>.</em></p>\n<blockquote>\n<h2>v8.0.1</h2>\n<h2>What's Changed</h2>\n<ul>\n<li>Support for CJK characters in the artifact name by <a href=\"https://github.com/danwkennedy\"><code>@​danwkennedy</code></a> in <a href=\"https://redirect.github.com/actions/download-artifact/pull/471\">actions/download-artifact#471</a></li>\n<li>Add a regression test for artifact name + content-type mismatches by <a href=\"https://github.com/danwkennedy\"><code>@​danwkennedy</code></a> in <a href=\"https://redirect.github.com/actions/download-artifact/pull/472\">actions/download-artifact#472</a></li>\n</ul>\n<p><strong>Full Changelog</strong>: <a href=\"https://github.com/actions/download-artifact/compare/v8...v8.0.1\">https://github.com/actions/download-artifact/compare/v8...v8.0.1</a></p>\n</blockquote>\n</details>\n<details>\n<summary>Commits</summary>\n<ul>\n<li><a href=\"https://github.com/actions/download-artifact/commit/3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c\"><code>3e5f45b</code></a> Add regression tests for CJK characters (<a href=\"https://redirect.github.com/actions/download-artifact/issues/471\">#471</a>)</li>\n<li><a href=\"https://github.com/actions/download-artifact/commit/e6d03f67377d4412c7aa56a8e2e4988e6ec479dd\"><code>e6d03f6</code></a> Add a regression test for artifact name + content-type mismatches (<a href=\"https://redirect.github.com/actions/download-artifact/issues/472\">#472</a>)</li>\n<li>See full diff in <a href=\"https://github.com/actions/download-artifact/compare/70fc10c6e5e1ce46ad2ea6f2b72d43f7d47b13c3...3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c\">compare view</a></li>\n</ul>\n</details>\n<br />\n\n\n[![Dependabot compatibility score](https://dependabot-badges.githubapp.com/badges/compatibility_score?dependency-name=actions/download-artifact&package-manager=github_actions&previous-version=8.0.0&new-version=8.0.1)](https://docs.github.com/en/github/managing-security-vulnerabilities/about-dependabot-security-updates#about-compatibility-scores)\n\nDependabot will resolve any conflicts with this PR as long as you don't alter it yourself. You can also trigger a rebase manually by commenting `@dependabot rebase`.\n\n[//]: # (dependabot-automerge-start)\n[//]: # (dependabot-automerge-end)\n\n---\n\n<details>\n<summary>Dependabot commands and options</summary>\n<br />\n\nYou can trigger Dependabot actions by commenting on this PR:\n- `@dependabot rebase` will rebase this PR\n- `@dependabot recreate` will recreate this PR, overwriting any edits that have been made to it\n- `@dependabot show <dependency name> ignore conditions` will show all of the ignore conditions of the specified dependency\n- `@dependabot ignore this major version` will close this PR and stop Dependabot creating any more for this major version (unless you reopen the PR or upgrade to it yourself)\n- `@dependabot ignore this minor version` will close this PR and stop Dependabot creating any more for this minor version (unless you reopen the PR or upgrade to it yourself)\n- `@dependabot ignore this dependency` will close this PR and stop Dependabot creating any more for this dependency (unless you reopen the PR or upgrade to it yourself)\n\n\n</details>",
+      "author": "dependabot[bot]",
+      "url": "https://github.com/expressjs/express/pull/7148",
+      "diffUrl": "https://github.com/expressjs/express/pull/7148/files",
+      "mergedAt": "2026-04-23T17:48:35Z",
+      "mergeCommitSha": "e7fd63a3878596154dd0693e92a8e5e41a45647c",
+      "changedFiles": 2,
+      "additions": 2,
+      "deletions": 2,
+      "aiSignals": {
+        "coAuthoredByAI": false,
+        "detectedAgents": [],
+        "aiTagInTitle": false,
+        "aiTaggedCommitCount": 0,
+        "aiTrailerCommitRatio": 0,
+        "authorIsKnownAIBot": true,
+        "bodyHasAIAttribution": false,
+        "commitCount": 1
+      },
+      "score": {
+        "impact": 12,
+        "aiLeverage": 65,
+        "quality": 58,
+        "total": 45,
+        "rationale": {
+          "impact": "This is a routine dependency bump of actions/download-artifact from 8.0.0 to 8.0.1 with only 2 additions and 2 deletions across 2 files. Per the rubric, dependency bumps fall in the 0-20 impact band despite possible upstream fixes.",
+          "aiLeverage": "The PR author is dependabot[bot], and aiSignals marks authorIsKnownAIBot=true. Although there are no AI trailers or detected coding agents, the rubric places known AI bot authorship in the 65-84 band.",
+          "quality": "Focused automated dependency update with a clear generated description, release notes, and commit links. Scope is tight and hygiene is normal, but there is no project-specific testing or deeper explanation beyond the standard Dependabot template."
+        }
+      }
+    },
+    {
+      "number": 7159,
+      "title": "fix: update deprecated npm install docs URL in Readme.md",
+      "body": "The link for the npm install command pointed to the old/broken URL path (/getting-started/installing-npm-packages-locally). Updated to the current correct URL (/downloading-and-installing-packages-locally).\r\n\r\n<!--\r\nThank you for your pull request. Please provide a description and \r\nnote the Certificate of Origin below. \r\n\r\n-->\r\n\r\n<!--\r\nDeveloper's Certificate of Origin 1.1\r\n\r\nBy making a contribution to this project, I certify that:\r\n\r\n(a) The contribution was created in whole or in part by me and I\r\n    have the right to submit it under the open source license\r\n    indicated in the file; or\r\n\r\n(b) The contribution is based upon previous work that, to the best\r\n    of my knowledge, is covered under an appropriate open source\r\n    license and I have the right under that license to submit that\r\n    work with modifications, whether created in whole or in part\r\n    by me, under the same open source license (unless I am\r\n    permitted to submit under a different license), as indicated\r\n    in the file; or\r\n\r\n(c) The contribution was provided directly to me by some other\r\n    person who certified (a), (b) or (c) and I have not modified\r\n    it.\r\n\r\n(d) I understand and agree that this project and the contribution\r\n    are public and that a record of the contribution (including all\r\n    personal information I submit with it, including my sign-off) is\r\n    maintained indefinitely and may be redistributed consistent with\r\n    this project or the open source license(s) involved.\r\n-->\r\n",
+      "author": "Vansh1811",
+      "url": "https://github.com/expressjs/express/pull/7159",
+      "diffUrl": "https://github.com/expressjs/express/pull/7159/files",
+      "mergedAt": "2026-04-06T20:58:04Z",
+      "mergeCommitSha": "8e022edc9185f540a3fcecaf5e56b850d919cdac",
+      "changedFiles": 1,
+      "additions": 1,
+      "deletions": 1,
+      "aiSignals": {
+        "coAuthoredByAI": false,
+        "detectedAgents": [],
+        "aiTagInTitle": false,
+        "aiTaggedCommitCount": 0,
+        "aiTrailerCommitRatio": 0,
+        "authorIsKnownAIBot": false,
+        "bodyHasAIAttribution": false,
+        "commitCount": 1
+      },
+      "score": {
+        "impact": 8,
+        "aiLeverage": 3,
+        "quality": 52,
+        "total": 15,
+        "rationale": {
+          "impact": "One-line documentation URL update in README (1 addition, 1 deletion, 1 file). This is a useful broken/deprecated link fix but fits the typo/copy/link tweak band with minimal product or engineering impact.",
+          "aiLeverage": "No AI signals: coAuthoredByAI=false, no detected agents, no AI title tag, no AI-tagged commits, aiTrailerCommitRatio=0, author is not a known AI bot, and no body attribution. The tiny handcrafted-looking diff supports a very low AI-leverage score.",
+          "quality": "Focused PR with a clear basic description of what changed and why the old URL was broken. Scope is tight and hygiene is normal, but there are no tests/docs beyond the single link correction and no deeper engineering rigor needed."
+        }
+      }
+    },
+    {
+      "number": 7136,
+      "title": "docs: remove dead link from Readme",
+      "body": "The GitHub account for import-brain appears to be deleted/renamed resulting in a 404 in the README. Removed the hyperlink while retaining the name.",
+      "author": "ayushshukla1807",
+      "url": "https://github.com/expressjs/express/pull/7136",
+      "diffUrl": "https://github.com/expressjs/express/pull/7136/files",
+      "mergedAt": "2026-03-31T04:39:23Z",
+      "mergeCommitSha": "e5099198b292a565f8583d70caf12d7afed3607f",
+      "changedFiles": 1,
+      "additions": 1,
+      "deletions": 1,
+      "aiSignals": {
+        "coAuthoredByAI": false,
+        "detectedAgents": [],
+        "aiTagInTitle": false,
+        "aiTaggedCommitCount": 0,
+        "aiTrailerCommitRatio": 0,
+        "authorIsKnownAIBot": false,
+        "bodyHasAIAttribution": false,
+        "commitCount": 2
+      },
+      "score": {
+        "impact": 5,
+        "aiLeverage": 5,
+        "quality": 55,
+        "total": 15,
+        "rationale": {
+          "impact": "Very small documentation maintenance change: removes a dead README hyperlink with only 1 addition and 1 deletion in 1 file. This fits the 0-20 band for typo/copy/link tweaks.",
+          "aiLeverage": "No AI signals: coAuthoredByAI=false, no detected agents, no AI title tag, no AI-tagged commits, aiTrailerCommitRatio=0, author is not a known AI bot, and no body attribution. The diff is tiny and handcrafted-looking, so it falls in the 0-25 band.",
+          "quality": "Focused PR with a clear explanation of what changed and why: the linked GitHub account 404s, so the hyperlink was removed while retaining the name. No tests are relevant for this docs-only one-line change; overall normal hygiene but not substantial enough for a higher rigor score."
+        }
+      }
+    }
+  ],
+  "aggregate": {
+    "url": "https://github.com/expressjs/express",
+    "mergedPRs": 5,
+    "authorsCount": 3,
+    "analysisSeconds": 24,
+    "total": 33,
+    "impact": 10,
+    "aiLeverage": 42,
+    "quality": 54
+  },
+  "authors": [
+    {
+      "name": "dependabot[bot]",
+      "avatar": "#2c9c6a",
+      "count": 3,
+      "impact": 12,
+      "ai": 67,
+      "quality": 55,
+      "total": 45
+    },
+    {
+      "name": "Vansh1811",
+      "avatar": "#2c9c6a",
+      "count": 1,
+      "impact": 8,
+      "ai": 3,
+      "quality": 52,
+      "total": 15
+    },
+    {
+      "name": "ayushshukla1807",
+      "avatar": "#7d93b8",
+      "count": 1,
+      "impact": 5,
+      "ai": 5,
+      "quality": 55,
+      "total": 15
+    }
+  ],
+  "insights": [
+    {
+      "tag": "Impact",
+      "body": "Recent merged work is almost entirely low-impact maintenance: all five PRs score 12 or below on impact, with three dependency bumps and two one-line README link fixes. Prioritize sourcing or planning higher-impact product, reliability, or architectural work to balance the queue."
+    },
+    {
+      "tag": "Quality",
+      "body": "Quality is consistently mid-range but not high: scores cluster from 52 to 58. For routine dependency and docs PRs, add lightweight validation notes or checklist evidence so even small changes demonstrate clear reviewability and confidence."
+    },
+    {
+      "tag": "AI",
+      "body": "AI leverage is concentrated in Dependabot only, with scores 65–70 on automated dependency bumps, while human-authored docs fixes score 3–5. Consider expanding safe automation beyond dependency updates, such as automated docs link checking or generated maintenance PRs."
+    }
+  ]
+}

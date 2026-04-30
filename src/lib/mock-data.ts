@@ -298,6 +298,16 @@ export const MOCK_ANALYSIS: RepoAnalysis = {
     changedFiles: pr.files,
     additions: pr.add,
     deletions: pr.del,
+    aiSignals: {
+      coAuthoredByAI: pr.ai >= 60,
+      detectedAgents: pr.ai >= 60 ? ["Claude"] : [],
+      aiTagInTitle: pr.ai >= 70,
+      aiTaggedCommitCount: pr.ai >= 60 ? 2 : 0,
+      aiTrailerCommitRatio: pr.ai >= 60 ? 0.8 : 0,
+      authorIsKnownAIBot: false,
+      bodyHasAIAttribution: pr.ai >= 50,
+      commitCount: 3,
+    },
     score: {
       impact: pr.impact,
       aiLeverage: pr.ai,

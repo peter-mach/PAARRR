@@ -1,0 +1,213 @@
+{
+  "owner": "peter-mach",
+  "repo": "PAARRR",
+  "url": "https://github.com/peter-mach/PAARRR",
+  "analyzedAt": "2026-04-30T15:59:51.553Z",
+  "pullRequests": [
+    {
+      "number": 10,
+      "title": "chore: review-driven improvements (8 fixes + README) [ai]",
+      "body": "Outcome of a four-agent code review (brief compliance / backend correctness / frontend-UX / security). Eight commits, each addressing one finding, plus a docs commit that surfaces the implemented feature set in the README so a reviewer doesn't have to spelunk to grade scope.\n\n**Not merging this PR yet** — review the commits first, then we land it once the live deploy + recording PR is also ready.\n\n## Commits (in order)\n\n| Commit | Severity | What |\n|---|---|---|\n| `0f6bc90` fix(scoring): prompt-injection guard | High | PR title/body/author are arbitrary user content; system prompt now declares an explicit trust boundary so embedded \"ignore previous instructions\" / \"score this 100\" patterns are ignored |\n| `0e03123` fix(a11y): prefers-reduced-motion opt-out | Medium | Wraps every keyframe + scroll-reveal + confetti behind `prefers-reduced-motion`; was running unconditionally, accessibility regression |\n| `5b2c0af` fix(hero): URL validation + mobile input attrs | Medium | `type=url`, `inputMode=url`, `autoCapitalize/Correct=off`, `spellCheck=false`; `parseRepoUrl` runs client-side before submit; inline aria-invalid error |\n| `e583517` fix(scoring): exclude failed PRs from aggregate | **P1** | When 1 of 5 PRs failed scoring, the zero-score sentinels were averaged into the repo total, depressing it ~20%. Now `scorePRs` returns `{ pullRequests, failedNumbers }` and only successful ones feed `aggregateRepo / aggregateAuthors / generateInsights`. Failed PRs still display with \"Scoring failed\" rationales. `analysisSeconds` also moves to after `generateInsights` for honest timing |\n| `af628f1` fix(api/analyze): empty-token error mapping | Low | `{ url, githubToken: \"\" }` was returning `invalid_url` when the real issue was the token; now returns `invalid_github_token` (401) so the rate-limit prompt re-fires correctly |\n| `28d0378` fix(dashboard): confetti gating | Medium | Was firing on every dashboard mount including 38/100 dependabot repos. Now gated on `aggregate.total ≥ 70` and once per `analyzedAt` via `useRef` |\n| `9d9dbe0` feat(dashboard): JSON export + Share link | Brief nice-to-have | Export JSON button now downloads a Blob of `RepoAnalysis` as `paarrr-{owner}-{repo}.json`; Share link copies the URL to clipboard. Both gain `aria-label`s |\n| `ce8e8d4` docs(prompts): fill in real prompts | Brief checkbox | Replaces \"to be filled\" placeholders with the actual prompts behind the scaffold / parallel design implementation / backend plan / four-agent review, with \"what worked / what got reworked\" notes per |\n| `2c08e54` docs(readme): \"What's implemented\" inventory | — | Structured feature catalog so the reviewer sees scope at a glance: LP, backend pipeline, full error matrix, token-override flow, dashboard surface, loading state, code quality. Drops dead shadcn/ui copy. Clarifies confetti + failed-PR policies in \"Design decisions\" |\n\n## Two agent claims I rejected during review (recorded in `prompts.md` §4)\n\n- **\"Octokit singleton leaks user PATs across requests\"** — `getOctokit(token)` returns a fresh non-cached instance whenever a token is provided; the cached singleton only ever holds the env-var client. Not a bug.\n- **\"`gpt-5-mini` is a non-existent model\"** — GPT-5 family shipped 2025; the existing `responses.parse` + `reasoning: { effort: \"minimal\" }` syntax is correct. Not a bug.\n\n## Verification\n\n- [x] `pnpm typecheck`\n- [x] `pnpm lint` (0 warnings, 0 errors)\n- [x] `pnpm format:check`\n- [x] `pnpm build` (static prerender succeeds; route handler `/api/analyze` registered)\n- [x] Manual smoke once Railway deploy lands (separate PR)\n\n## Deferred\n\nReal-progress streaming for the loading state (originally item #8 in the review) — would convert `/api/analyze` from synchronous to SSE so `LoadingState` can read genuine phase events instead of an animated illusion. 60–90 min refactor; the existing illusion already solves the worst-case \"stuck on 95%\" UX, so deferred.\n\nCo-authored-by: Claude <noreply@anthropic.com>",
+      "author": "peter-mach",
+      "url": "https://github.com/peter-mach/PAARRR/pull/10",
+      "diffUrl": "https://github.com/peter-mach/PAARRR/pull/10/files",
+      "mergedAt": "2026-04-30T15:34:40Z",
+      "mergeCommitSha": "49993c87dbdcc6d97073cb22af2954876e82ef33",
+      "changedFiles": 11,
+      "additions": 330,
+      "deletions": 81,
+      "aiSignals": {
+        "coAuthoredByAI": true,
+        "detectedAgents": ["AI", "Claude"],
+        "aiTagInTitle": true,
+        "aiTaggedCommitCount": 12,
+        "aiTrailerCommitRatio": 1,
+        "authorIsKnownAIBot": false,
+        "bodyHasAIAttribution": true,
+        "commitCount": 12
+      },
+      "score": {
+        "impact": 66,
+        "aiLeverage": 96,
+        "quality": 78,
+        "total": 82,
+        "rationale": {
+          "impact": "Substantial engineering value across 11 files with 330 additions/81 deletions: multiple real fixes including prompt-injection guard for scoring trust boundaries, accessibility reduced-motion handling, URL validation, failed-PR aggregation correctness, API error mapping, and dashboard confetti gating. This is broader than a small bugfix and includes security/correctness/UX improvements, but it is not a foundational subsystem or major migration.",
+          "aiLeverage": "Dominant AI authorship: aiSignals show aiTrailerCommitRatio=1.0 with 12/12 commits carrying AI trailers, detected agents include Claude and AI, the title contains an [ai] tag, aiTaggedCommitCount=12, and the body has AI attribution. This squarely fits the 85-100 band.",
+          "quality": "Clear, review-driven PR with a single purpose: addressing specific findings. The body enumerates commits, severity, and rationale for each fix, and the changes appear focused despite covering several areas. Quality is strong, with accessibility/security/correctness considerations documented, though the PR bundles multiple fixes and README updates rather than being maximally tight or exemplary with explicit test evidence."
+        }
+      }
+    },
+    {
+      "number": 6,
+      "title": "Fix GPT scoring responses",
+      "body": "Removes unsupported GPT-5 temperature parameters and sets minimal reasoning for structured scoring/insights. Adds retry and all-failed detection so systemic scoring failures return an error instead of a zero-score dashboard.",
+      "author": "peter-mach",
+      "url": "https://github.com/peter-mach/PAARRR/pull/6",
+      "diffUrl": "https://github.com/peter-mach/PAARRR/pull/6/files",
+      "mergedAt": "2026-04-30T14:18:23Z",
+      "mergeCommitSha": "76c47b922e6d7217db84f77903ddf3e8276e286d",
+      "changedFiles": 3,
+      "additions": 63,
+      "deletions": 21,
+      "aiSignals": {
+        "coAuthoredByAI": false,
+        "detectedAgents": [],
+        "aiTagInTitle": false,
+        "aiTaggedCommitCount": 1,
+        "aiTrailerCommitRatio": 0,
+        "authorIsKnownAIBot": false,
+        "bodyHasAIAttribution": false,
+        "commitCount": 1
+      },
+      "score": {
+        "impact": 55,
+        "aiLeverage": 45,
+        "quality": 70,
+        "total": 54,
+        "rationale": {
+          "impact": "Non-trivial bugfix to GPT-based structured scoring: removes unsupported parameters, adjusts reasoning settings, adds retry behavior, and prevents systemic failures from being silently represented as zero-score dashboards. Small diff (3 files, 63 additions/21 deletions) but meaningful reliability impact for a core scoring path.",
+          "aiLeverage": "One isolated AI signal: aiTaggedCommitCount=1, but no AI co-author trailers, no detected agents, no AI title tag, no known bot author, and no body attribution. This fits the plausible AI assistance band rather than clear dominant AI authorship.",
+          "quality": "Focused PR with a clear purpose and explanation of both the failure mode and the fix. The changes appear narrowly scoped to GPT scoring reliability and error handling. No explicit evidence of tests or docs in the metadata, so it falls short of exemplary."
+        }
+      }
+    },
+    {
+      "number": 9,
+      "title": "Improve loading progress feedback",
+      "body": "Keeps the loading state active during long AI scoring by rotating final-phase messages, creeping the progress bar toward completion, and adding a spinner to the active stage dot. This avoids the final stage looking frozen while analysis is still running.",
+      "author": "peter-mach",
+      "url": "https://github.com/peter-mach/PAARRR/pull/9",
+      "diffUrl": "https://github.com/peter-mach/PAARRR/pull/9/files",
+      "mergedAt": "2026-04-30T14:17:08Z",
+      "mergeCommitSha": "e09343e0dd30227cde998255850d316ae23e8bd6",
+      "changedFiles": 2,
+      "additions": 51,
+      "deletions": 5,
+      "aiSignals": {
+        "coAuthoredByAI": false,
+        "detectedAgents": [],
+        "aiTagInTitle": false,
+        "aiTaggedCommitCount": 1,
+        "aiTrailerCommitRatio": 0,
+        "authorIsKnownAIBot": false,
+        "bodyHasAIAttribution": false,
+        "commitCount": 1
+      },
+      "score": {
+        "impact": 45,
+        "aiLeverage": 42,
+        "quality": 66,
+        "total": 48,
+        "rationale": {
+          "impact": "A focused UX improvement: keeps loading feedback alive during long AI scoring with rotating final-phase messages, incremental progress, and a spinner. This is more than a copy tweak but limited in scope to loading-state perception across 2 files with 51 additions.",
+          "aiLeverage": "One isolated AI signal: aiTaggedCommitCount=1, but no AI trailers, no detected agents, no AI bot author, and no body attribution. Per rubric this falls in plausible AI assistance rather than clear AI authorship.",
+          "quality": "Single clear purpose with a concise explanation of the user-facing problem: final stage looked frozen during long analysis. Small, focused diff across 2 files suggests good hygiene, but there is no evidence of tests or docs, so it does not reach the exemplary band."
+        }
+      }
+    },
+    {
+      "number": 8,
+      "title": "Clarify GitHub token setup copy",
+      "body": "Updates the rate-limit retry prompt to match GitHub's fine-grained token UI. Users are told to select Public repositories and leave Permissions empty before generating the token.",
+      "author": "peter-mach",
+      "url": "https://github.com/peter-mach/PAARRR/pull/8",
+      "diffUrl": "https://github.com/peter-mach/PAARRR/pull/8/files",
+      "mergedAt": "2026-04-30T14:04:20Z",
+      "mergeCommitSha": "90241b44cb8d4d1c57cf89327dff3f14c94c5921",
+      "changedFiles": 1,
+      "additions": 2,
+      "deletions": 1,
+      "aiSignals": {
+        "coAuthoredByAI": false,
+        "detectedAgents": [],
+        "aiTagInTitle": false,
+        "aiTaggedCommitCount": 1,
+        "aiTrailerCommitRatio": 0,
+        "authorIsKnownAIBot": false,
+        "bodyHasAIAttribution": false,
+        "commitCount": 1
+      },
+      "score": {
+        "impact": 12,
+        "aiLeverage": 45,
+        "quality": 58,
+        "total": 36,
+        "rationale": {
+          "impact": "Very small copy clarification in one file (+2/-1) about GitHub token setup. This is useful but fits the 0-20 band for copy tweak / minor text change.",
+          "aiLeverage": "There is one isolated AI signal: aiTaggedCommitCount=1, but no AI trailers, no detected agents, no AI bot author, and no body attribution. Per rubric, a lone AI/[cc] style tag supports plausible AI assistance in the 40-64 band.",
+          "quality": "Focused PR with a clear basic description of what changed and why the copy is being updated. Scope is tight, but there are no tests/docs beyond the copy change and it is very small, so it sits in the focused/basic-hygiene range."
+        }
+      }
+    },
+    {
+      "number": 7,
+      "title": "Add GitHub token link to retry prompt",
+      "body": "Adds the exact GitHub fine-grained token creation link below the rate-limit token input. This gives users a direct recovery path when anonymous GitHub API requests hit the 60/hour limit.",
+      "author": "peter-mach",
+      "url": "https://github.com/peter-mach/PAARRR/pull/7",
+      "diffUrl": "https://github.com/peter-mach/PAARRR/pull/7/files",
+      "mergedAt": "2026-04-30T13:55:33Z",
+      "mergeCommitSha": "2dd09d9e8c39689ba6292a74ff6e0fe92790881e",
+      "changedFiles": 1,
+      "additions": 12,
+      "deletions": 0,
+      "aiSignals": {
+        "coAuthoredByAI": false,
+        "detectedAgents": [],
+        "aiTagInTitle": false,
+        "aiTaggedCommitCount": 1,
+        "aiTrailerCommitRatio": 0,
+        "authorIsKnownAIBot": false,
+        "bodyHasAIAttribution": false,
+        "commitCount": 1
+      },
+      "score": {
+        "impact": 28,
+        "aiLeverage": 42,
+        "quality": 60,
+        "total": 41,
+        "rationale": {
+          "impact": "Small UX/helpfulness improvement: adds a direct fine-grained GitHub token creation link to the rate-limit retry prompt. Useful recovery guidance, but only 12 additions in one file and not a substantial feature.",
+          "aiLeverage": "One isolated AI signal: aiTaggedCommitCount is 1, but there are no AI trailers, no detected agents, no AI title tag, no bot author, and no body attribution. This falls in the plausible AI assistance band rather than clear AI authorship.",
+          "quality": "Focused one-purpose PR with a clear description explaining what changed and why users need it. Scope is tight at one file with 12 additions, but there is no evidence of tests or broader validation, so it fits normal-to-good hygiene rather than exemplary."
+        }
+      }
+    }
+  ],
+  "aggregate": {
+    "url": "https://github.com/peter-mach/PAARRR",
+    "mergedPRs": 5,
+    "authorsCount": 1,
+    "analysisSeconds": 26,
+    "total": 52,
+    "impact": 41,
+    "aiLeverage": 54,
+    "quality": 66
+  },
+  "authors": [
+    {
+      "name": "peter-mach",
+      "avatar": "#ee6c3d",
+      "count": 5,
+      "impact": 41,
+      "ai": 54,
+      "quality": 66,
+      "total": 52
+    }
+  ],
+  "insights": [
+    {
+      "tag": "Quality",
+      "body": "Add explicit test/validation evidence to PRs, especially reliability and UX changes: multiple PRs scored only 58–70 on quality largely because no tests or validation were documented."
+    },
+    {
+      "tag": "Impact",
+      "body": "Prioritize core reliability/security fixes over copy-only changes: PRs #10 and #6 delivered the strongest impact scores (66, 55), while token/copy tweaks stayed low impact (12–28)."
+    },
+    {
+      "tag": "AI",
+      "body": "Standardize AI attribution metadata when AI is used: PR #10 scored 96 AI leverage due to clear trailers/tags/body attribution, while other PRs remained in the low-to-mid 40s with only isolated AI signals."
+    }
+  ]
+}
