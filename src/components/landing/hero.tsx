@@ -3,6 +3,7 @@
 import { useEffect, useState, type FormEvent } from "react";
 import { ArrowIcon, CheckIcon, GithubIcon, SparkIcon, StarIcon } from "@/components/icons";
 import { HeroIllustration } from "@/components/landing/hero-illustration";
+import { parseRepoUrl } from "@/lib/github/parse-url";
 
 type HeroProps = {
   onSubmit: (url: string) => void;
@@ -14,6 +15,7 @@ const AVATAR_COLORS = ["#ee6c3d", "#2563d9", "#c89c3a", "#2c9c6a"];
 export function Hero({ onSubmit }: HeroProps) {
   const [url, setUrl] = useState("");
   const [typed, setTyped] = useState("");
+  const [validationError, setValidationError] = useState<string | null>(null);
 
   // Typed-placeholder animation — 60ms per char, matches prototype.
   useEffect(() => {
@@ -30,7 +32,15 @@ export function Hero({ onSubmit }: HeroProps) {
 
   const submit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    onSubmit(url || PLACEHOLDER);
+    const candidate = url.trim() || PLACEHOLDER;
+    if (!parseRepoUrl(candidate)) {
+      setValidationError(
+        "That does not look like a GitHub repo. Use github.com/owner/repo or owner/repo.",
+      );
+      return;
+    }
+    setValidationError(null);
+    onSubmit(candidate);
   };
 
   const accent = "var(--accent)";
@@ -145,6 +155,7 @@ export function Hero({ onSubmit }: HeroProps) {
                 <GithubIcon size={18} />
               </div>
               <input
+                id="hero-repo-url"
                 className="input"
                 style={{
                   border: 0,
@@ -153,15 +164,39 @@ export function Hero({ onSubmit }: HeroProps) {
                   padding: "0 8px",
                   flex: 1,
                 }}
+                type="url"
+                inputMode="url"
+                autoCapitalize="off"
+                autoCorrect="off"
+                spellCheck={false}
                 placeholder={typed || PLACEHOLDER}
                 value={url}
-                onChange={(e) => setUrl(e.target.value)}
+                onChange={(e) => {
+                  setUrl(e.target.value);
+                  if (validationError) setValidationError(null);
+                }}
                 aria-label="GitHub repository URL"
+                aria-invalid={validationError ? "true" : undefined}
+                aria-describedby={validationError ? "hero-repo-url-error" : undefined}
               />
               <button type="submit" className="btn btn-accent" style={{ height: 44, fontSize: 15 }}>
                 Analyze repo <ArrowIcon size={16} />
               </button>
             </div>
+            {validationError && (
+              <div
+                id="hero-repo-url-error"
+                role="alert"
+                style={{
+                  marginTop: 10,
+                  paddingLeft: 14,
+                  fontSize: 13,
+                  color: "var(--red)",
+                }}
+              >
+                {validationError}
+              </div>
+            )}
             <div
               style={{
                 display: "flex",
