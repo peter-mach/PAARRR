@@ -25,7 +25,20 @@ export async function POST(request: Request): Promise<Response> {
 
   try {
     body = AnalyzeBodySchema.parse(await request.json());
-  } catch {
+  } catch (error) {
+    if (error instanceof z.ZodError) {
+      const tokenIssue = error.issues.some((issue) => issue.path[0] === "githubToken");
+      if (tokenIssue) {
+        return errorResponse(
+          "invalid_github_token",
+          "GitHub token is empty or malformed.",
+          401,
+          "Paste a non-empty classic or fine-grained personal access token.",
+          undefined,
+          true,
+        );
+      }
+    }
     return errorResponse("invalid_url", "Enter a GitHub repository URL.", 400);
   }
 
