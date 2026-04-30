@@ -485,20 +485,20 @@ section {
   }
 }
 
-/* Reduced-motion opt-out — strip every keyframed animation, scroll-reveal
- * transition, and confetti flight for users who prefer reduced motion. */
+/* Reduced-motion opt-out — kill the decorative looping keyframes and the
+ * confetti, but preserve short transitions + the explicit progress indicators
+ * so users still get feedback that the analysis is making progress. */
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
   *::after {
-    animation-duration: 0.001ms !important;
     animation-iteration-count: 1 !important;
-    transition-duration: 0.001ms !important;
     scroll-behavior: auto !important;
   }
   .reveal {
     opacity: 1 !important;
     transform: none !important;
+    transition: none !important;
   }
   .fade-in {
     animation: none !important;

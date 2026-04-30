@@ -28,8 +28,12 @@ const FINAL_MESSAGES = [
   { label: "Preparing dashboard", sub: "Packing the report for the results view" },
 ] as const;
 
-const INITIAL_PROGRESS_MS = 4200;
-const LONG_WAIT_PROGRESS_MS = 30000;
+const INITIAL_PROGRESS_MS = 2500;
+// The long-tail creep approaches LONG_WAIT_CAP asymptotically (1 - e^(-t/τ))
+// instead of plateauing at a fixed time — so the bar keeps advancing visibly
+// throughout a 30–90s scoring run and never reads as "stopped".
+const LONG_WAIT_TAU_MS = 22000;
+const LONG_WAIT_CAP = 0.17;
 const FINAL_MESSAGE_MS = 4500;
 
 export function LoadingState({ url, promise, onDone, onError }: LoadingStateProps) {
@@ -51,7 +55,10 @@ export function LoadingState({ url, promise, onDone, onError }: LoadingStateProp
       const elapsed = now - start;
       const initial = Math.min(1, elapsed / INITIAL_PROGRESS_MS);
       const waiting = Math.max(0, elapsed - INITIAL_PROGRESS_MS);
-      const finalCreep = Math.min(0.13, (waiting / LONG_WAIT_PROGRESS_MS) * 0.13);
+      // Asymptotic creep: starts moving immediately past the initial sweep,
+      // approaches LONG_WAIT_CAP without ever hitting it, so the bar never
+      // visually plateaus during long analyses.
+      const finalCreep = LONG_WAIT_CAP * (1 - Math.exp(-waiting / LONG_WAIT_TAU_MS));
       const p = initial < 1 ? initial * 0.82 : 0.82 + finalCreep;
       setProgress(p);
       const idx = Math.min(STAGES.length - 1, Math.max(0, Math.floor(p * STAGES.length)));
