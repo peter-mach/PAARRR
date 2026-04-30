@@ -73,6 +73,18 @@ export function RateLimitPrompt({ onSubmit, onCancel }: RateLimitPromptProps) {
         </button>
       </div>
       <p className="muted" style={{ marginTop: 10, fontSize: 12, lineHeight: 1.5 }}>
+        Need a token? Create a fine-grained GitHub token at{" "}
+        <a
+          href="https://github.com/settings/personal-access-tokens/new"
+          target="_blank"
+          rel="noreferrer"
+          style={{ color: "var(--primary-700)", fontWeight: 700 }}
+        >
+          https://github.com/settings/personal-access-tokens/new
+        </a>
+        . Choose public repositories with read-only access, then paste it above.
+      </p>
+      <p className="muted" style={{ marginTop: 8, fontSize: 12, lineHeight: 1.5 }}>
         Used once for this analysis session. It is never stored on the server or returned in a
         response.
       </p>
