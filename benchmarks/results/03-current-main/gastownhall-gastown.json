@@ -1,0 +1,222 @@
+{
+  "owner": "gastownhall",
+  "repo": "gastown",
+  "url": "https://github.com/gastownhall/gastown",
+  "analyzedAt": "2026-04-30T16:05:14.883Z",
+  "pullRequests": [
+    {
+      "number": 3754,
+      "title": "fix(doltserver): clamp Dolt idle wait_timeout to prevent connection exhaustion (gh-3623)",
+      "body": "Closes #3623 (the connection-exhaustion half).\n\n## Summary\n\nDolt inherits MySQL's \\`wait_timeout\\` default of 28800s (8 hours). Under sustained Gas Town load, short-lived \\`bd\\` processes leak connections faster than the 8-hour timeout reclaims them; once the 1000-connection cap is hit every subsequent \\`bd\\` hangs and the only recovery is \\`pkill bd && gt dolt stop && gt dolt start\\`. The issue documents \\`SET GLOBAL wait_timeout = 30\\` as the working manual workaround.\n\nThis applies that workaround automatically: after \\`Start()\\` verifies the server is up and serving its expected databases, it issues \\`SET GLOBAL wait_timeout = N\\`. Default is 30s, override via \\`GT_DOLT_WAIT_TIMEOUT\\` (negative disables the override entirely). The application is best-effort — if the SQL fails we log a warning instead of failing the start, since the server is already serving traffic and the operator just keeps Dolt's long default.\n\n## Out of scope\n\nIssue #3623 also calls out a second problem: \\`gt mail inbox\\` taking 23–58s for 5 messages because the command fans out to multiple sequential \\`bd\\` subprocesses (Go cold-start overhead). That's a separate change in a different package; this PR addresses the connection-exhaustion death spiral specifically.\n\n## Test plan\n\n- [x] \\`go build ./...\\` clean\n- [x] \\`go test ./internal/doltserver/\\` passes (incl. new \\`wait_timeout_test.go\\` covering default, env override, negative-disables, and invalid-input cases)\n- [x] \\`go test ./... -short\\` passes across all packages\n- [x] \\`golangci-lint run --new-from-rev=origin/main ./...\\` reports 0 new issues\n\n🤖 Generated with [Claude Code](https://claude.com/claude-code)",
+      "author": "mmlac",
+      "url": "https://github.com/gastownhall/gastown/pull/3754",
+      "diffUrl": "https://github.com/gastownhall/gastown/pull/3754/files",
+      "mergedAt": "2026-04-30T13:02:39Z",
+      "mergeCommitSha": "a8bd79bf86683d49c558a30e826fcfff1fbd6ced",
+      "changedFiles": 2,
+      "additions": 190,
+      "deletions": 2,
+      "aiSignals": {
+        "coAuthoredByAI": false,
+        "detectedAgents": [],
+        "aiTagInTitle": false,
+        "aiTaggedCommitCount": 0,
+        "aiTrailerCommitRatio": 0,
+        "authorIsKnownAIBot": false,
+        "bodyHasAIAttribution": true,
+        "commitCount": 2
+      },
+      "score": {
+        "impact": 58,
+        "aiLeverage": 52,
+        "quality": 82,
+        "total": 60,
+        "rationale": {
+          "impact": "Non-trivial production bugfix for Dolt connection exhaustion under sustained load by automatically clamping wait_timeout with an env override and safe disable path. The diff is small in file count but addresses an operational failure mode that could hang all subsequent bd commands; this fits the high end of the meaningful bugfix band rather than a foundational change.",
+          "aiLeverage": "Single isolated AI signal: the PR body contains explicit attribution, “Generated with Claude Code,” but aiSignals shows no AI co-authored commits, no AI title tag, no detectedAgents, and author is not a known AI bot. Per rubric, body attribution only indicates plausible AI assistance in the 40-64 band.",
+          "quality": "Clear, well-scoped PR with strong problem statement, explicit out-of-scope note, configuration semantics, and a concrete test plan. It adds targeted tests covering default, env override, negative-disable, and invalid-input cases, plus reports full build/test/lint results. This is exemplary hygiene for a focused bugfix."
+        }
+      }
+    },
+    {
+      "number": 3753,
+      "title": "fix(hooks): atomic settings.json write prevents concurrent-spawn corruption (gh-3500)",
+      "body": "Closes #3500.\n\n## Summary\n\nPolecats in a rig share \\`<rig>/polecats/.claude/settings.json\\`. The previous code path (\\`os.WriteFile\\` → \\`open(O_TRUNC|O_WRONLY)\\` → \\`write\\`) had a window between truncate and write where concurrent starts could observe partial JSON. Claude rejects an invalid settings file at startup, so 3+ simultaneous polecat spawns reliably crashed before committing any work; staggering by ~8s was the documented workaround.\n\nThis switches both write call sites in \\`internal/hooks/installer.go\\` (\\`syncFile\\` and \\`writeTemplate\\`) to \\`atomicfile.WriteFile\\`, which writes to a uniquely-named temp file in the same directory and then renames over the target. \\`os.Rename\\` is atomic on POSIX, so concurrent writers each produce a self-consistent temp file and the final \\`settings.json\\` is always exactly one writer's complete output.\n\n## Test plan\n\n- [x] \\`go build ./...\\` clean\n- [x] \\`go test ./internal/hooks/\\` passes\n- [x] \\`go test ./... -short\\` passes across all packages\n- [x] \\`golangci-lint run --new-from-rev=origin/main ./...\\` reports 0 new issues\n- [x] New regression test \\`TestInstallForRole_ConcurrentSpawnsProduceValidJSON\\` exercises 64 concurrent writers with a barrier and asserts the final file is valid JSON matching the template (the test docstring notes that the OS-level race window is timing-sensitive on tmpfs; the test asserts the post-condition contract that atomic-via-rename guarantees)\n\n🤖 Generated with [Claude Code](https://claude.com/claude-code)",
+      "author": "mmlac",
+      "url": "https://github.com/gastownhall/gastown/pull/3753",
+      "diffUrl": "https://github.com/gastownhall/gastown/pull/3753/files",
+      "mergedAt": "2026-04-30T13:02:35Z",
+      "mergeCommitSha": "0f6c7addd9ad06f16a4ebc55c22e1c297dad3712",
+      "changedFiles": 2,
+      "additions": 174,
+      "deletions": 2,
+      "aiSignals": {
+        "coAuthoredByAI": false,
+        "detectedAgents": [],
+        "aiTagInTitle": false,
+        "aiTaggedCommitCount": 0,
+        "aiTrailerCommitRatio": 0,
+        "authorIsKnownAIBot": false,
+        "bodyHasAIAttribution": true,
+        "commitCount": 2
+      },
+      "score": {
+        "impact": 55,
+        "aiLeverage": 48,
+        "quality": 78,
+        "total": 56,
+        "rationale": {
+          "impact": "Non-trivial concurrency bugfix: replacing truncating writes with atomic temp-file-plus-rename for shared settings.json prevents corruption during simultaneous spawns, addressing a real startup crash scenario. The diff is focused and small, so it fits the meaningful bugfix band rather than a broader architectural change.",
+          "aiLeverage": "One isolated AI signal: the PR body includes attribution, 'Generated with Claude Code', but aiSignals show no AI co-authored commits, no AI title tag, no known AI bot author, and aiTrailerCommitRatio is 0/2. Per rubric this is plausible AI assistance in the 40-64 band.",
+          "quality": "Clear single-purpose PR with strong explanation of the race condition, rationale for atomic rename semantics, and a detailed test plan. It adds a regression test for concurrent writers and reports build/test/lint results. Quality is high, though not quite exemplary without evidence of docs or broader validation beyond the focused fix."
+        }
+      }
+    },
+    {
+      "number": 3743,
+      "title": "fix(sling): accept dog pool targets in deferred mode (aa-4yf2)",
+      "body": "## Summary\n\nFixes bead **aa-4yf2** — `dispatchFeedDog` is broken under the normal operating mode where the capacity scheduler is active (`scheduler.max_polecats > 0`).\n\n### The bug\n\nWhen a scheduler is active, `gt sling` routes to the deferred capacity scheduler and validates that the 2-arg target is a rig. This rejected `deacon/dogs` (the canonical pool target the Deacon uses to feed stranded convoys):\n\n```\ngt sling mol-convoy-feed deacon/dogs --var convoy=<id>\n```\n\nThe deferred path bailed with *\"deferred dispatch requires a rig target: 'deacon/dogs' is not a known rig\"* before `sling_dog.go`'s pool-target resolution could run.\n\n### Symptom\n\nEvery stranded-convoy feed attempt failed with `failed to dispatch feed dog: exit status 1` whenever the scheduler was active — which is normal operation. On our fork this produced **6+ hours of continuous errors across hq convoys** before triage. Stranded-convoy auto-feeding was completely broken; convoys only advanced when a human manually slung work.\n\nSource location: `internal/deacon/feed_stranded.go`'s `dispatchFeedDog` (lines ~346–355) calls `exec.Command(\"gt\", \"sling\", constants.MolConvoyFeed, \"deacon/dogs\", …)`. In `internal/cmd/sling.go` around line 449, the deferred path rejected it.\n\n### Fix direction\n\nDirection **1** (recognize pool targets in the deferred path). Rejected direction 2 (switch to `gt dog dispatch`) because `gt dog dispatch` is plugin-specific (requires `--plugin <name>`) and isn't a drop-in replacement for `gt sling <formula> deacon/dogs`.\n\nIn the deferred 2-arg dispatch path, fall through to direct dispatch when the target is a dog pool/name target (`deacon/dogs`, `deacon/dogs/<name>`, `dog:`, `dog:<name>`). Dogs are a self-managed Deacon-owned pool, not rig polecat slots, so they don't participate in the capacity scheduler regardless of `max_polecats`.\n\nNon-rig, non-dog targets continue to be rejected so callers can't accidentally bypass capacity control with arbitrary strings. The rig-rejection behavior for epic/convoy IDs and plain non-rig beads is unchanged.\n\n### Why dogs shouldn't go through the capacity scheduler\n\n- The capacity scheduler manages **rig polecat slots** (one work-in-flight per polecat identity).\n- Dogs are a **pool** owned by the Deacon, with their own pool-size limit (`maxDogPoolSize = 4`) and their own idle-dog / auto-create logic in `sling_dog.go`'s `DispatchToDog`.\n- `resolveTarget` already dispatches to dogs directly (see `internal/cmd/sling_target.go` line 149). The deferred rig gate was blocking callers from ever reaching that path.\n\n## Tests\n\n- **`TestDogTargetsAreNotMistakenForRigs`** (unit, `internal/cmd/sling_dog_test.go`) — locks in the classification invariant that every dog pool target satisfies `IsDogTarget` so the deferred sling path can fall through to direct dispatch.\n- **`TestSchedulerDeferredAcceptsDogTarget`** (integration, `internal/cmd/scheduler_integration_test.go`) — end-to-end regression guard. With `max_polecats > 0`, runs `gt sling <bead> <dog-target> --hook-raw-bead --dry-run` for each of `deacon/dogs`, `deacon/dogs/alpha`, `dog:`, `dog:alpha`, and asserts the output does **not** contain `\"deferred dispatch requires a rig target\"` or `\"is not a known rig\"`. Both are the literal error strings the bug was emitting.\n\nEither test fails against `main` before this fix.\n\n## Test plan\n\n- [x] `go build -o /tmp/gt-test ./cmd/gt` — passes\n- [x] `go vet ./internal/deacon/... ./internal/cmd/...` — clean\n- [x] `go test ./internal/deacon/... ./internal/cmd/...` — all passing (`ok github.com/steveyegge/gastown/internal/deacon 1.781s`, `ok github.com/steveyegge/gastown/internal/cmd 82.958s`)\n- [x] New `TestDogTargetsAreNotMistakenForRigs` passes\n- [ ] Upstream CI green\n- [ ] After merge, verify on hq that `gt sling mol-convoy-feed deacon/dogs --var convoy=<id>` dispatches successfully under `max_polecats > 0`",
+      "author": "certivpaul",
+      "url": "https://github.com/gastownhall/gastown/pull/3743",
+      "diffUrl": "https://github.com/gastownhall/gastown/pull/3743/files",
+      "mergedAt": "2026-04-30T12:47:47Z",
+      "mergeCommitSha": "7e4db6039282c1d715ce34d9feb40085e652bfc1",
+      "changedFiles": 3,
+      "additions": 91,
+      "deletions": 2,
+      "aiSignals": {
+        "coAuthoredByAI": false,
+        "detectedAgents": [],
+        "aiTagInTitle": false,
+        "aiTaggedCommitCount": 0,
+        "aiTrailerCommitRatio": 0,
+        "authorIsKnownAIBot": false,
+        "bodyHasAIAttribution": false,
+        "commitCount": 1
+      },
+      "score": {
+        "impact": 55,
+        "aiLeverage": 10,
+        "quality": 78,
+        "total": 39,
+        "rationale": {
+          "impact": "Meaningful non-trivial bugfix: it fixes deferred `gt sling` rejecting canonical dog pool targets when the capacity scheduler is active, which reportedly broke stranded-convoy auto-feeding in normal operation. The diff is focused and modest in size (3 files, +91/-2), so it fits the 41-60 band rather than a broader architectural change.",
+          "aiLeverage": "No AI signals are present in the trusted `aiSignals` data: `coAuthoredByAI=false`, no detected agents, no AI title tag, no AI-tagged commits, `aiTrailerCommitRatio=0`, author is not a known AI bot, and no body attribution. With a small focused diff and zero signals, this falls in the 0-25 band.",
+          "quality": "Focused PR with a clear single purpose, strong explanation of the bug, normal operating conditions, failure mode, affected call path, and rationale for the chosen fix direction. The description also notes preserving rejection for non-rig/non-dog targets, indicating attention to safety. Changed-file count is small; likely includes validation/tests given the +91 lines, but without explicit test evidence in the provided data it stays below exemplary."
+        }
+      }
+    },
+    {
+      "number": 3742,
+      "title": "fix(polecat): check-recovery treats CLOSED bead as terminal (aa-55d8)",
+      "body": "## Symptom\n\n`alleago_api/witness` patrols kept detecting `alleago_api/obsidian` as `session-dead-active` and auto-restarting it. The restarted session found no work (its assigned bead was already closed), ran `gt done`, went idle, and died. The next patrol detected the zombie again and restarted. Loop forever, burning tokens every cycle.\n\n## Root cause (diagnosed in bead aa-55d8)\n\n`gt polecat check-recovery` would return **`NEEDS_MQ_SUBMIT`** for a polecat whose assigned bead was already **CLOSED**.\n\nIn `runPolecatCheckRecovery` (`internal/cmd/polecat.go`), the MQ-submit guard fires whenever the verdict is `SAFE_TO_NUKE` and the polecat has a branch — without ever asking whether the bead itself is still open. But `NEEDS_MQ_SUBMIT` only makes sense while the bead is open and work is actively landing. Once the bead is closed, there is nothing to submit.\n\n### Concrete case\n\n- `alleago_api/obsidian` was assigned `aa-xtee` — a \"no-op audit\" bead.\n- The polecat correctly closed `aa-xtee` with `no-changes: audit found zero callers`.\n- But `check-recovery` kept returning `NEEDS_MQ_SUBMIT`.\n- `git-state` simultaneously reported `CLEAN (safe to kill)`.\n- The two signals disagreed and the witness escalation loop won.\n\n## The fix\n\nExtract the MQ gate into `applyMQCheck` and short-circuit when the polecat's assigned bead is in a terminal `IssueStatus` (closed or tombstone, via `beads.IssueStatus.IsTerminal()`).\n\n- Terminal bead: verdict stays `SAFE_TO_NUKE`, `MQStatus` is reported as `submitted` (nothing to submit).\n- Open bead, no MR found: escalates to `NEEDS_MQ_SUBMIT` as before.\n- Open bead, MR found: stays `SAFE_TO_NUKE` as before.\n- Lookup failure: conservative `MQStatus=unknown`, no escalation — unchanged from existing behavior.\n\n`isAssignedBeadTerminal` deliberately returns `false` on any lookup failure so a transient bd/routing error can never be used to *suppress* escalation — false negatives here are safe, false positives would not be.\n\nSmall, surgical fix. No changes to data shapes, flags, or existing verdicts outside the documented case.\n\n## Test added\n\n`TestApplyMQCheck` in `internal/cmd/polecat_check_recovery_test.go` covers four scenarios:\n\n1. **Closed bead skips MQ submit check** — the regression this fixes. `beadTerminal=true` with no MR found must stay `SAFE_TO_NUKE`, not escalate.\n2. Open bead with no MR escalates to `NEEDS_MQ_SUBMIT` (pre-existing behavior preserved).\n3. Open bead with MR stays `SAFE_TO_NUKE` with `MQStatus=submitted`.\n4. MR lookup error stays conservative (`unknown`, no escalation).\n\nUses a small `mrFinder` interface and `fakeMRFinder` stub so the logic is pure-function testable without a real `bd` binary.\n\n## Test plan\n\n- [x] `go build -o /tmp/gt-test ./cmd/gt` — succeeds.\n- [x] `go test ./internal/cmd/...` — passes (75s).\n- [x] `go test ./internal/polecat/...` — passes (74s).\n- [x] `go vet ./internal/cmd/...` — clean.\n- [ ] In a live rig with a polecat whose assigned bead is closed: `gt polecat check-recovery rig/polecat` returns `SAFE_TO_NUKE`, not `NEEDS_MQ_SUBMIT`.\n\nCo-Authored-By: Claude <noreply@anthropic.com>",
+      "author": "certivpaul",
+      "url": "https://github.com/gastownhall/gastown/pull/3742",
+      "diffUrl": "https://github.com/gastownhall/gastown/pull/3742/files",
+      "mergedAt": "2026-04-30T12:47:43Z",
+      "mergeCommitSha": "536612612e151ea0d6cb8a217904ce62740f0ed3",
+      "changedFiles": 2,
+      "additions": 148,
+      "deletions": 12,
+      "aiSignals": {
+        "coAuthoredByAI": true,
+        "detectedAgents": ["Claude"],
+        "aiTagInTitle": false,
+        "aiTaggedCommitCount": 0,
+        "aiTrailerCommitRatio": 1,
+        "authorIsKnownAIBot": false,
+        "bodyHasAIAttribution": true,
+        "commitCount": 1
+      },
+      "score": {
+        "impact": 52,
+        "aiLeverage": 92,
+        "quality": 78,
+        "total": 75,
+        "rationale": {
+          "impact": "Non-trivial production bugfix: prevents an automated recovery/restart loop that was repeatedly burning tokens by treating terminal CLOSED/tombstone beads correctly in polecat check-recovery. The change is focused rather than foundational, with 2 files and ~148 additions, so it fits the meaningful bugfix band.",
+          "aiLeverage": "Dominant AI authorship signal: aiSignals reports 1/1 commits co-authored-by Claude, aiTrailerCommitRatio=1.0, plus bodyHasAIAttribution=true. Per rubric this is in the 85-100 range.",
+          "quality": "Clear single-purpose PR with strong symptom/root-cause/fix explanation and conservative edge-case reasoning around lookup failures. The diff is small and surgical; likely includes tests given the added lines across 2 files, but evidence is not enough for exemplary docs/tests breadth."
+        }
+      }
+    },
+    {
+      "number": 3739,
+      "title": "fix(witness): zombie-scan skips restart if polecat branch already merged",
+      "body": "## Problem\n\nWhen the witness zombie-scan restarts a stopped polecat whose work has already been squash-merged into `origin/main`, the polecat's `gt done` re-pushes the pre-squash HEAD and the refinery opens a duplicate MR.\n\nThe existing `verifyCommitOnMain` helper uses `git merge-base --is-ancestor`, which cannot detect squash merges (they rewrite commit SHAs). So a polecat whose work landed via squash gets restarted and re-submits the same work.\n\nObserved on 2026-04-22 with `scavenger/ma-poc.4`: polecat branch HEAD `e38d8ca` was patch-identical to squash-merge `d4189e7` on `origin/main`, but zombie-scan restart → `gt done` → duplicate MR `ma-wisp-jmm`.\n\n## Fix\n\nAdd a patch-id equivalence check using `git cherry <remote>/<default> HEAD` before restarting a zombie polecat:\n\n- `+` lines indicate patches not yet on the remote\n- `-` lines indicate patches already on the remote (including squash-merges)\n\nIf there are no `+` lines, the polecat's work has already landed — archive the polecat via `NukePolecat` instead of restarting it.\n\n## Changes\n\n- `internal/git/git.go` — thin `Cherry(upstream, head)` wrapper around `git cherry`.\n- `internal/witness/handlers.go` — new `verifyBranchAlreadyMerged` (pkg var for testability) combining the existing ancestor check with a patch-id equivalence check; early return + archive in `handleZombieRestart` when work is already merged.\n- `internal/witness/handlers_test.go` — 3 new tests, 6 sub-cases.\n\n## Tests\n\n- `TestHandleZombieRestart_SkipsWhenBranchAlreadyMerged`\n- `TestHandleZombieRestart_RestartsWhenBranchNotMerged`\n- `TestCherryHasUnmergedCommits`\n\nAll pass. Full `./internal/witness/...` and `./internal/daemon/...` suites pass.\n\nReported by `mobile_apps/witness` in thread-bf9901a065c2.",
+      "author": "certivpaul",
+      "url": "https://github.com/gastownhall/gastown/pull/3739",
+      "diffUrl": "https://github.com/gastownhall/gastown/pull/3739/files",
+      "mergedAt": "2026-04-30T12:47:39Z",
+      "mergeCommitSha": "d5661fa76a005c64ae420a2ef538b31b6a75e2d8",
+      "changedFiles": 3,
+      "additions": 191,
+      "deletions": 0,
+      "aiSignals": {
+        "coAuthoredByAI": false,
+        "detectedAgents": [],
+        "aiTagInTitle": false,
+        "aiTaggedCommitCount": 0,
+        "aiTrailerCommitRatio": 0,
+        "authorIsKnownAIBot": false,
+        "bodyHasAIAttribution": false,
+        "commitCount": 1
+      },
+      "score": {
+        "impact": 55,
+        "aiLeverage": 18,
+        "quality": 78,
+        "total": 43,
+        "rationale": {
+          "impact": "Non-trivial bugfix in witness zombie-scan behavior: it prevents duplicate MRs when branches were squash-merged by adding patch-id equivalence via git cherry and archiving instead of restarting already-merged polecats. Scope is focused but not foundational: 3 files, 191 additions, targeted workflow correctness fix.",
+          "aiLeverage": "No AI signals: aiTrailerCommitRatio is 0, no detectedAgents, no AI tag in title, no AI-tagged commits, author is not a known AI bot, and no body AI attribution. The diff is moderate and cohesive, but with zero computed signals, it falls in the low/no-evidence band.",
+          "quality": "Clear problem statement with concrete observed failure, explains why the existing merge-base check fails for squash merges, describes the chosen git cherry approach, and lists tests. Includes 3 new tests with 6 sub-cases and keeps changes focused across git wrapper, witness handler, and tests. Strong rigor, though not quite exemplary docs-level or broad validation beyond the targeted suites."
+        }
+      }
+    }
+  ],
+  "aggregate": {
+    "url": "https://github.com/gastownhall/gastown",
+    "mergedPRs": 5,
+    "authorsCount": 2,
+    "analysisSeconds": 27,
+    "total": 55,
+    "impact": 55,
+    "aiLeverage": 44,
+    "quality": 79
+  },
+  "authors": [
+    {
+      "name": "mmlac",
+      "avatar": "#ee6c3d",
+      "count": 2,
+      "impact": 57,
+      "ai": 50,
+      "quality": 80,
+      "total": 58
+    },
+    {
+      "name": "certivpaul",
+      "avatar": "#2c9c6a",
+      "count": 3,
+      "impact": 54,
+      "ai": 40,
+      "quality": 78,
+      "total": 53
+    }
+  ],
+  "insights": [
+    {
+      "tag": "Quality",
+      "body": "Use PRs #3754 and #3753 as the quality bar for production bugfixes: require clear problem/root-cause descriptions, explicit configuration or safety semantics, focused regression tests, and reported build/test/lint results."
+    },
+    {
+      "tag": "Impact",
+      "body": "Prioritize the current stream of operational reliability fixes—connection exhaustion, concurrent settings corruption, recovery loops, and duplicate restart/MR behavior all scored meaningful impact (52–58) despite small diffs."
+    },
+    {
+      "tag": "AI",
+      "body": "Standardize AI attribution practices: scores vary widely from no signal (#3743/#3739) to dominant Claude co-authorship (#3742), while #3754/#3753 only show body attribution; consistent trailers/metadata would make AI leverage auditable."
+    }
+  ]
+}

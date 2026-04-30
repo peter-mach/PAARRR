@@ -1,0 +1,14 @@
+# Iteration: 03-current-main
+# Server: http://localhost:3000
+# Token: yes
+# Repos: 7
+
+chalk/chalk                  total=20 imp=18 ai= 6 q=55 [trailer:0/5 tag:0 bot:0] (25s)
+expressjs/express            total=33 imp=10 ai=42 q=54 [trailer:0/5 tag:0 bot:3] (24s)
+vercel/swr                   total=33 imp=32 ai=23 q=56 [trailer:0/5 tag:0 bot:1] (25s)
+withastro/astro              total=36 imp=45 ai=15 q=67 [trailer:0/5 tag:0 bot:0] (4s)
+anthropics/claude-code       total=40 imp=31 ai=38 q=60 [trailer:0/5 tag:0 bot:0] (1s)
+peter-mach/PAARRR            total=52 imp=41 ai=54 q=66 [trailer:1/5 tag:1 bot:0] (1s)
+gastownhall/gastown          total=55 imp=55 ai=44 q=79 [trailer:1/5 tag:0 bot:0] (2s)
+
+Saved to /Users/piotr/Work/PAARRR/benchmarks/results/03-current-main

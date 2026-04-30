@@ -1,0 +1,249 @@
+{
+  "owner": "anthropics",
+  "repo": "claude-code",
+  "url": "https://github.com/anthropics/claude-code",
+  "analyzedAt": "2026-04-30T16:01:36.219Z",
+  "pullRequests": [
+    {
+      "number": 1,
+      "title": "Create SECURITY.md",
+      "body": null,
+      "author": "bcherny",
+      "url": "https://github.com/anthropics/claude-code/pull/1",
+      "diffUrl": "https://github.com/anthropics/claude-code/pull/1/files",
+      "mergedAt": "2025-02-24T18:18:37Z",
+      "mergeCommitSha": "b46a3eb29a6514de51142c542cbb31226bf29407",
+      "changedFiles": 1,
+      "additions": 12,
+      "deletions": 0,
+      "aiSignals": {
+        "coAuthoredByAI": false,
+        "detectedAgents": [],
+        "aiTagInTitle": false,
+        "aiTaggedCommitCount": 0,
+        "aiTrailerCommitRatio": 0,
+        "authorIsKnownAIBot": false,
+        "bodyHasAIAttribution": false,
+        "commitCount": 1
+      },
+      "score": {
+        "impact": 18,
+        "aiLeverage": 5,
+        "quality": 42,
+        "total": 17,
+        "rationale": {
+          "impact": "Adds a single SECURITY.md file with 12 lines. This is useful repository hygiene but fits the 0-20 band as a small documentation/policy addition with limited product or engineering impact.",
+          "aiLeverage": "No AI signals: coAuthoredByAI=false, no detected agents, no AI title tag, no AI-tagged commits, aiTrailerCommitRatio=0, author is not a known AI bot, and no body AI attribution. Small handcrafted-looking one-file diff, so this falls in the 0-25 band.",
+          "quality": "Focused one-file PR, but there is no PR body/description and no evidence of tests or broader documentation context. Basic repository hygiene with tight scope, placing it in the lower focused/basic quality band."
+        }
+      }
+    },
+    {
+      "number": 43824,
+      "title": "fix: using variable interpolation `${{ in claude-dedupe-issues.yml...",
+      "body": "## Summary\nFix high severity security issue in `.github/workflows/claude-dedupe-issues.yml`.\n\n## Vulnerability\n| Field | Value |\n|-------|-------|\n| **ID** | yaml.github-actions.security.run-shell-injection.run-shell-injection |\n| **Severity** | HIGH |\n| **Scanner** | semgrep |\n| **Rule** | `yaml.github-actions.security.run-shell-injection.run-shell-injection` |\n| **File** | `.github/workflows/claude-dedupe-issues.yml:41` |\n\n**Description**: Using variable interpolation `${{...}}` with `github` context data in a `run:` step could allow an attacker to inject their own code into the runner. This would allow them to steal secrets and code. `github` context data can have arbitrary user input and should be treated as untrusted. Instead, use an intermediate environment variable with `env:` to store the data and use the environment variable in the `run:` script. Be sure to use double-quotes the environment variable, like this: \"$ENVVAR\".\n\n## Changes\n- `.github/workflows/claude-dedupe-issues.yml`\n\n## Verification\n- [ ] Build not verified\n- [ ] Scanner re-scan not performed\n- [ ] LLM code review not performed\n\n---\n*Automated security fix by [OrbisAI Security](https://orbisappsec.com)*\n",
+      "author": "orbisai0security",
+      "url": "https://github.com/anthropics/claude-code/pull/43824",
+      "diffUrl": "https://github.com/anthropics/claude-code/pull/43824/files",
+      "mergedAt": "2026-04-27T13:33:16Z",
+      "mergeCommitSha": "c128568da0ecb75a5f17bbded2d558da5152ba8e",
+      "changedFiles": 1,
+      "additions": 7,
+      "deletions": 5,
+      "aiSignals": {
+        "coAuthoredByAI": false,
+        "detectedAgents": ["Claude"],
+        "aiTagInTitle": false,
+        "aiTaggedCommitCount": 0,
+        "aiTrailerCommitRatio": 0,
+        "authorIsKnownAIBot": false,
+        "bodyHasAIAttribution": true,
+        "commitCount": 1
+      },
+      "score": {
+        "impact": 50,
+        "aiLeverage": 48,
+        "quality": 58,
+        "total": 51,
+        "rationale": {
+          "impact": "Single-file GitHub Actions workflow fix addressing a reported high-severity shell-injection pattern involving untrusted github context interpolation in a run step. Although the diff is small, a security hardening fix has meaningful engineering value; limited scope keeps it in the non-trivial bugfix band rather than foundational.",
+          "aiLeverage": "One isolated AI signal: the PR body attributes the change to an automated security fix, and detectedAgents includes Claude, but aiTrailerCommitRatio is 0/1, there is no AI tag in the title or commits, and the author is not a known AI bot. This supports plausible AI assistance rather than dominant AI authorship.",
+          "quality": "Focused PR with a clear summary, vulnerability details, affected file, and concrete mitigation rationale. However, verification checkboxes explicitly state build, scanner re-scan, and LLM review were not performed, and the change is small with no tests, so it falls short of the higher quality bands."
+        }
+      }
+    },
+    {
+      "number": 52239,
+      "title": "fix: point $schema at schemastore.org (URL was 404)",
+      "body": "The previous `$schema` URL (`https://anthropic.com/claude-code/marketplace.schema.json`) never resolved — it 404s, which surfaces as an error in editors that fetch JSON Schemas (#9686).\n\nThis points it at SchemaStore instead, where the schema is being added in SchemaStore/schemastore#5603 (generated from the canonical Zod definitions in `claude-cli-internal`; generator landing in anthropics/claude-cli-internal#31465, validator fix already merged in anthropics/claude-cli-internal#31464).\n\nCommunity PR #23974 takes the deletion approach; this one points at the real schema instead so editors get autocomplete/validation once the SchemaStore PR lands.\n\nFixes #9686.\nLinear: CC-1723",
+      "author": "dhollman",
+      "url": "https://github.com/anthropics/claude-code/pull/52239",
+      "diffUrl": "https://github.com/anthropics/claude-code/pull/52239/files",
+      "mergedAt": "2026-04-23T18:27:08Z",
+      "mergeCommitSha": "a5fa36cac70f849daa48a0fc1aaa52af5d1c83b4",
+      "changedFiles": 1,
+      "additions": 1,
+      "deletions": 1,
+      "aiSignals": {
+        "coAuthoredByAI": false,
+        "detectedAgents": ["Claude"],
+        "aiTagInTitle": false,
+        "aiTaggedCommitCount": 0,
+        "aiTrailerCommitRatio": 0,
+        "authorIsKnownAIBot": false,
+        "bodyHasAIAttribution": true,
+        "commitCount": 1
+      },
+      "score": {
+        "impact": 24,
+        "aiLeverage": 45,
+        "quality": 68,
+        "total": 42,
+        "rationale": {
+          "impact": "A one-file, one-line schema URL fix that resolves editor 404 validation errors. This is a small bugfix/config correction rather than a substantial feature or architecture change, placing it in the 21-40 band.",
+          "aiLeverage": "One isolated AI signal: the computed aiSignals indicate bodyHasAIAttribution=true and detectedAgents includes Claude, but there are no AI co-author trailers, no AI title tag, no AI-tagged commits, and the author is not a known AI bot. Per rubric this is plausible AI assistance, not dominant AI authorship.",
+          "quality": "Tight single-purpose PR with a clear explanation of the broken URL, user-facing editor impact, linked issue, and rationale for pointing to SchemaStore instead of deleting the schema reference. No tests are expected for a one-line URL change, so quality is solid but not exemplary."
+        }
+      }
+    },
+    {
+      "number": 45866,
+      "title": "Add MDM deployment example templates",
+      "body": "Adds `examples/mdm/` with starter templates for deploying Claude Code managed settings via common MDM platforms:\n\n- `managed-settings.json` — bare JSON for any platform\n- **macOS:** `.plist` (Jamf / Iru Custom Settings payload) and `.mobileconfig` (full configuration profile)\n- **Windows:** PowerShell script (Intune Platform scripts) and ADMX/ADML (Group Policy / Intune Import ADMX)\n\nAll templates encode the same minimal `permissions.disableBypassPermissionsMode` example.\n\nAlso:\n- Cross-links `examples/settings/README.md` ↔ `examples/mdm/`\n- Fixes a typo in `examples/settings/README.md`",
+      "author": "ant-kurt",
+      "url": "https://github.com/anthropics/claude-code/pull/45866",
+      "diffUrl": "https://github.com/anthropics/claude-code/pull/45866/files",
+      "mergedAt": "2026-04-09T18:41:10Z",
+      "mergeCommitSha": "d2b22528dbe02b1120153a1320174e4456919680",
+      "changedFiles": 8,
+      "additions": 192,
+      "deletions": 1,
+      "aiSignals": {
+        "coAuthoredByAI": false,
+        "detectedAgents": ["Claude"],
+        "aiTagInTitle": false,
+        "aiTaggedCommitCount": 0,
+        "aiTrailerCommitRatio": 0,
+        "authorIsKnownAIBot": false,
+        "bodyHasAIAttribution": true,
+        "commitCount": 1
+      },
+      "score": {
+        "impact": 38,
+        "aiLeverage": 48,
+        "quality": 72,
+        "total": 49,
+        "rationale": {
+          "impact": "Adds example MDM deployment templates across macOS and Windows plus cross-links, which is useful documentation/sample infrastructure but not a product feature or subsystem change. The 8-file, 192-line diff is mainly starter templates and a typo fix, placing it in the higher end of minor doc/example additions.",
+          "aiLeverage": "One isolated AI signal: aiSignals reports bodyHasAIAttribution=true and detectedAgents includes Claude, but aiTrailerCommitRatio is 0/1, no AI tag in title, no AI-tagged commits, and author is not a known AI bot. This supports plausible AI assistance rather than dominant AI authorship.",
+          "quality": "Clear single-purpose PR with a concrete description of what templates are added and why they matter for common MDM platforms. Scope is focused, cross-links documentation, and keeps examples consistent around one minimal setting; no tests are expected for template docs, so quality is solid but not exemplary."
+        }
+      }
+    },
+    {
+      "number": 45798,
+      "title": "triage: tighten invalid rule, require category label",
+      "body": "- Step 4: check for Claude Code signals (CLI version, `claude` command, extensions, Cowork, etc.) before applying `invalid`; trust body text over form dropdowns.\n- Guidelines: new issues always get one of `bug`/`enhancement`/`question`/`invalid`/`duplicate`.",
+      "author": "bogini",
+      "url": "https://github.com/anthropics/claude-code/pull/45798",
+      "diffUrl": "https://github.com/anthropics/claude-code/pull/45798/files",
+      "mergedAt": "2026-04-09T15:43:13Z",
+      "mergeCommitSha": "3c72545dfc7ab84c4088736c35f6aa7ffbd756f5",
+      "changedFiles": 1,
+      "additions": 6,
+      "deletions": 2,
+      "aiSignals": {
+        "coAuthoredByAI": false,
+        "detectedAgents": ["Claude"],
+        "aiTagInTitle": false,
+        "aiTaggedCommitCount": 0,
+        "aiTrailerCommitRatio": 0,
+        "authorIsKnownAIBot": false,
+        "bodyHasAIAttribution": true,
+        "commitCount": 1
+      },
+      "score": {
+        "impact": 24,
+        "aiLeverage": 45,
+        "quality": 58,
+        "total": 40,
+        "rationale": {
+          "impact": "Very small triage/process documentation or rule tweak: 1 changed file with only +6/-2 lines, tightening invalid-rule guidance and requiring a category label. This is useful repository hygiene but limited product/engineering impact, fitting the small change band.",
+          "aiLeverage": "One isolated AI signal: aiSignals reports bodyHasAIAttribution=true and detectedAgents includes Claude, but there are no AI co-authored trailers, no AI title tag, and the author is not a known AI bot. This supports plausible AI assistance, not dominant AI authorship.",
+          "quality": "Focused PR with a concise description of the exact triage guideline changes and a tiny, coherent diff. No tests are expected for this kind of process-rule change, but the description is mostly a basic 'what' rather than a deeper rationale."
+        }
+      }
+    }
+  ],
+  "aggregate": {
+    "url": "https://github.com/anthropics/claude-code",
+    "mergedPRs": 5,
+    "authorsCount": 5,
+    "analysisSeconds": 34,
+    "total": 40,
+    "impact": 31,
+    "aiLeverage": 38,
+    "quality": 60
+  },
+  "authors": [
+    {
+      "name": "orbisai0security",
+      "avatar": "#8b5cf6",
+      "count": 1,
+      "impact": 50,
+      "ai": 48,
+      "quality": 58,
+      "total": 51
+    },
+    {
+      "name": "ant-kurt",
+      "avatar": "#7d93b8",
+      "count": 1,
+      "impact": 38,
+      "ai": 48,
+      "quality": 72,
+      "total": 49
+    },
+    {
+      "name": "dhollman",
+      "avatar": "#8b5cf6",
+      "count": 1,
+      "impact": 24,
+      "ai": 45,
+      "quality": 68,
+      "total": 42
+    },
+    {
+      "name": "bogini",
+      "avatar": "#c89c3a",
+      "count": 1,
+      "impact": 24,
+      "ai": 45,
+      "quality": 58,
+      "total": 40
+    },
+    {
+      "name": "bcherny",
+      "avatar": "#2563d9",
+      "count": 1,
+      "impact": 18,
+      "ai": 5,
+      "quality": 42,
+      "total": 17
+    }
+  ],
+  "insights": [
+    {
+      "tag": "Quality",
+      "body": "Improve PR descriptions and verification discipline: the lowest-quality PRs lacked rationale or explicit validation, while higher-scoring PRs clearly explained the problem, impact, and why the chosen fix was appropriate."
+    },
+    {
+      "tag": "Impact",
+      "body": "Prioritize small security and workflow hardening fixes: PR #43824 scored the highest total due to meaningful security impact despite a tiny diff, suggesting these focused risk-reduction changes are high-leverage."
+    },
+    {
+      "tag": "AI",
+      "body": "Standardize AI-assisted contribution disclosure and review expectations: several PRs show plausible Claude involvement, but verification was inconsistent; require clear AI attribution plus human validation notes for AI-assisted changes."
+    }
+  ]
+}
