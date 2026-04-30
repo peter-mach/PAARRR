@@ -30,6 +30,21 @@ App is at <http://localhost:3000>. Append `?mock=1` to skip the network and rend
 
 Other scripts: `pnpm build`, `pnpm start`, `pnpm check` (typecheck + lint + format check), `pnpm lint:fix`, `pnpm format`.
 
+## Deploy to Railway
+
+The repo ships with `railway.json` so a fresh Railway project picks up the right build/start commands automatically:
+
+1. **New Project → Deploy from GitHub repo** and pick this repository.
+2. Railway's Railpack builder auto-detects pnpm from `pnpm-lock.yaml` + the `packageManager` field in `package.json` and runs `pnpm install --frozen-lockfile && pnpm build`, then `pnpm start`.
+3. **Add environment variables** under the service's Variables tab:
+   - `OPENAI_API_KEY` — required. Without it, `/api/analyze` returns a 500 with `missing_openai_key`.
+   - `GITHUB_TOKEN` — optional. Lifts GitHub's anonymous 60 req/h limit to 5000 req/h. Without it the runtime token-override prompt still works for visitors.
+   - `OPENAI_MODEL` / `OPENAI_INSIGHTS_MODEL` — optional. Override the `gpt-5.5` defaults if a deployment wants to pin something cheaper.
+4. **Generate a public domain** under the service's Settings → Networking → Generate Domain. Railway sets `PORT` automatically; `next start` reads it.
+5. Healthcheck is `GET /` with a 60s timeout — if the LP renders, the service is live.
+
+The dashboard cache is in-memory and lifetime-of-process, so a redeploy effectively clears it. For shared persistent caching across replicas, swap `src/lib/analysis/cache.ts` for Redis / Vercel KV.
+
 ## What's implemented
 
 ### Landing page
