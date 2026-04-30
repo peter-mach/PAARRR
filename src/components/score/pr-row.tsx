@@ -4,11 +4,11 @@ import { useEffect, useState } from "react";
 import { ScoreBar } from "@/components/charts/score-bar";
 import { ScoreCell } from "@/components/score/score-cell";
 import { TotalBadge } from "@/components/score/total-badge";
-import type { MockPR } from "@/lib/mock-data";
-import { totalScore } from "@/lib/mock-data";
+import type { DashboardPullRequest } from "@/lib/scoring/dashboard-helpers";
+import { totalDashboardScore } from "@/lib/scoring/dashboard-helpers";
 
 type PRRowProps = {
-  pr: MockPR;
+  pr: DashboardPullRequest;
   index: number;
   animateIn: boolean;
 };
@@ -22,7 +22,7 @@ export function PRRow({ pr, index, animateIn }: PRRowProps) {
     return () => clearTimeout(t);
   }, [animateIn, index]);
 
-  const t = totalScore(pr);
+  const t = totalDashboardScore(pr);
 
   return (
     <div
@@ -75,7 +75,14 @@ export function PRRow({ pr, index, animateIn }: PRRowProps) {
             WebkitBoxOrient: "vertical",
           }}
         >
-          {pr.title}
+          <a
+            href={pr.url}
+            target="_blank"
+            rel="noreferrer"
+            style={{ color: "inherit", textDecoration: "none" }}
+          >
+            {pr.title}
+          </a>
         </div>
         <div
           style={{
@@ -107,6 +114,15 @@ export function PRRow({ pr, index, animateIn }: PRRowProps) {
           <span className="num-mono" style={{ color: "var(--red)" }}>
             −{pr.del}
           </span>
+          <a
+            href={pr.diffUrl}
+            target="_blank"
+            rel="noreferrer"
+            className="num-mono"
+            style={{ color: "var(--primary-700)", textDecoration: "none", fontWeight: 700 }}
+          >
+            Diff
+          </a>
         </div>
       </div>
       <div className="pr-impact-bar">

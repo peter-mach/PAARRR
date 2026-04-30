@@ -7,3 +7,4 @@ export { Scoring } from "./scoring";
 export { Preview } from "./preview";
 export { FinalCTA } from "./final-cta";
 export { Footer } from "./footer";
+export { RateLimitPrompt } from "./rate-limit-prompt";

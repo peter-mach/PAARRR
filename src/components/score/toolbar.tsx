@@ -2,7 +2,7 @@
 
 import type { CSSProperties } from "react";
 import { SearchIcon, SortIcon } from "@/components/icons";
-import type { Filters, SortKey } from "@/lib/mock-data";
+import type { Filters, SortKey } from "@/lib/scoring/dashboard-helpers";
 
 type ToolbarProps = {
   filters: Filters;

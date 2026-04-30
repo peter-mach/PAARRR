@@ -12,21 +12,21 @@ import { PRRow } from "@/components/score/pr-row";
 import { Toolbar } from "@/components/score/toolbar";
 import { fireConfetti } from "@/lib/animations";
 import {
-  aggregateAuthors,
   filterAndSort,
-  SAMPLE_PRS,
   type Filters,
   type SortKey,
-} from "@/lib/mock-data";
+  toDashboardPRs,
+} from "@/lib/scoring/dashboard-helpers";
+import type { RepoAnalysis } from "@/types";
 
 type DashboardProps = {
-  url: string;
+  analysis: RepoAnalysis;
   onBack: () => void;
 };
 
 type TabId = "prs" | "authors";
 
-export function Dashboard({ url, onBack }: DashboardProps) {
+export function Dashboard({ analysis, onBack }: DashboardProps) {
   const [filters, setFilters] = useState<Filters>({ q: "", author: "" });
   const [sort, setSort] = useState<SortKey>("total-desc");
   const [tab, setTab] = useState<TabId>("prs");
@@ -36,13 +36,25 @@ export function Dashboard({ url, onBack }: DashboardProps) {
     return () => clearTimeout(t);
   }, []);
 
-  const filtered = useMemo(() => filterAndSort(SAMPLE_PRS, filters, sort), [filters, sort]);
+  const dashboardPRs = useMemo(
+    () => toDashboardPRs(analysis.pullRequests),
+    [analysis.pullRequests],
+  );
 
-  const authors = useMemo(() => aggregateAuthors(SAMPLE_PRS), []);
+  const filtered = useMemo(
+    () => filterAndSort(dashboardPRs, filters, sort),
+    [dashboardPRs, filters, sort],
+  );
 
-  const authorNames = useMemo(() => Array.from(new Set(SAMPLE_PRS.map((p) => p.author))), []);
+  const authors = analysis.authors;
+
+  const authorNames = useMemo(
+    () => Array.from(new Set(dashboardPRs.map((p) => p.author))),
+    [dashboardPRs],
+  );
 
   const accent = "var(--accent)";
+  const { aggregate } = analysis;
 
   const tabs: { id: TabId; label: string }[] = [
     { id: "prs", label: `Pull requests (${filtered.length})` },
@@ -111,7 +123,7 @@ export function Dashboard({ url, onBack }: DashboardProps) {
                   color: "var(--ink-900)",
                 }}
               >
-                {url}
+                {analysis.url}
               </div>
             </div>
           </div>
@@ -190,7 +202,7 @@ export function Dashboard({ url, onBack }: DashboardProps) {
                 className="num-display dash-verdict-num"
                 style={{ fontSize: 140, color: "white", lineHeight: 1 }}
               >
-                <CountUp value={78} duration={1600} />
+                <CountUp value={aggregate.total} duration={1600} />
               </div>
               <div
                 style={{
@@ -223,9 +235,9 @@ export function Dashboard({ url, onBack }: DashboardProps) {
                 position: "relative",
               }}
             >
-              <Stat label="Merged PRs" value={142} />
-              <Stat label="Authors" value={8} />
-              <Stat label="Time analyzed" value={47} suffix="s" />
+              <Stat label="Merged PRs" value={aggregate.mergedPRs} />
+              <Stat label="Authors" value={aggregate.authorsCount} />
+              <Stat label="Time analyzed" value={aggregate.analysisSeconds} suffix="s" />
             </div>
           </div>
 
@@ -250,7 +262,13 @@ export function Dashboard({ url, onBack }: DashboardProps) {
                 marginTop: 12,
               }}
             >
-              <RadarChart impact={82} aiLeverage={86} quality={71} size={290} delay={400} />
+              <RadarChart
+                impact={aggregate.impact}
+                aiLeverage={aggregate.aiLeverage}
+                quality={aggregate.quality}
+                size={290}
+                delay={400}
+              />
             </div>
           </div>
         </div>
@@ -293,7 +311,7 @@ export function Dashboard({ url, onBack }: DashboardProps) {
               <h3 style={{ marginTop: 4 }}>AI recommendations</h3>
             </div>
           </div>
-          <AIInsights />
+          <AIInsights insights={analysis.insights} />
         </div>
 
         {/* Tabs */}

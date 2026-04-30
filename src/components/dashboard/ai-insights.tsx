@@ -1,8 +1,7 @@
-import type { AIInsight } from "@/lib/mock-data";
-import { SAMPLE_INSIGHTS } from "@/lib/mock-data";
+import type { AIInsight } from "@/types";
 
 type AIInsightsProps = {
-  insights?: AIInsight[];
+  insights: AIInsight[];
 };
 
 const TAG_COLORS: Record<AIInsight["tag"], string> = {
@@ -11,7 +10,9 @@ const TAG_COLORS: Record<AIInsight["tag"], string> = {
   AI: "var(--primary)",
 };
 
-export function AIInsights({ insights = SAMPLE_INSIGHTS }: AIInsightsProps) {
+export function AIInsights({ insights }: AIInsightsProps) {
+  if (!insights.length) return null;
+
   return (
     <div
       className="ai-insights"

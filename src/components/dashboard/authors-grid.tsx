@@ -1,11 +1,11 @@
 import { TotalBadge } from "@/components/score/total-badge";
-import { aggregateAuthors, SAMPLE_PRS, type AuthorAggregate } from "@/lib/mock-data";
+import type { AuthorAggregate } from "@/types";
 
 type AuthorsGridProps = {
-  authors?: AuthorAggregate[];
+  authors: AuthorAggregate[];
 };
 
-export function AuthorsGrid({ authors = aggregateAuthors(SAMPLE_PRS) }: AuthorsGridProps) {
+export function AuthorsGrid({ authors }: AuthorsGridProps) {
   return (
     <div
       className="authors-grid"
