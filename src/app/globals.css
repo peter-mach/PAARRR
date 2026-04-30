@@ -485,6 +485,29 @@ section {
   }
 }
 
+/* Reduced-motion opt-out — strip every keyframed animation, scroll-reveal
+ * transition, and confetti flight for users who prefer reduced motion. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+  .reveal {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+  .fade-in {
+    animation: none !important;
+  }
+  .confetti-piece {
+    display: none !important;
+  }
+}
+
 @media (max-width: 1024px) {
   :root {
     --max-w: 100%;
