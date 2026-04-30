@@ -82,7 +82,8 @@ export function RateLimitPrompt({ onSubmit, onCancel }: RateLimitPromptProps) {
         >
           https://github.com/settings/personal-access-tokens/new
         </a>
-        . Choose public repositories with read-only access, then paste it above.
+        . Select “Public repositories” under Repository access and leave Permissions empty, then
+        paste the generated token above.
       </p>
       <p className="muted" style={{ marginTop: 8, fontSize: 12, lineHeight: 1.5 }}>
         Used once for this analysis session. It is never stored on the server or returned in a
