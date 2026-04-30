@@ -20,23 +20,45 @@ const STAGES = [
   { label: "Charting results", sub: "Compiling the manifest" },
 ] as const;
 
+const FINAL_MESSAGES = [
+  { label: "Scoring pull requests", sub: "AI is grading Impact, AI-Leverage, and Quality" },
+  { label: "Checking the math", sub: "Recomputing weighted totals from the rubric" },
+  { label: "Ranking the crew", sub: "Grouping authors and sorting the PR leaderboard" },
+  { label: "Drafting recommendations", sub: "Turning score patterns into concrete next steps" },
+  { label: "Preparing dashboard", sub: "Packing the report for the results view" },
+] as const;
+
+const INITIAL_PROGRESS_MS = 4200;
+const LONG_WAIT_PROGRESS_MS = 30000;
+const FINAL_MESSAGE_MS = 4500;
+
 export function LoadingState({ url, promise, onDone, onError }: LoadingStateProps) {
   const [stage, setStage] = useState(0);
   const [progress, setProgress] = useState(0);
+  const [finalMessage, setFinalMessage] = useState(0);
+  const [complete, setComplete] = useState(false);
 
   useEffect(() => {
     const start = performance.now();
-    const total = 4200;
     let raf = 0;
     let doneTimer: ReturnType<typeof setTimeout> | undefined;
     let settled = false;
     let cancelled = false;
+    setComplete(false);
+    setFinalMessage(0);
 
     const tick = (now: number) => {
-      const p = Math.min(0.82, ((now - start) / total) * 0.82);
+      const elapsed = now - start;
+      const initial = Math.min(1, elapsed / INITIAL_PROGRESS_MS);
+      const waiting = Math.max(0, elapsed - INITIAL_PROGRESS_MS);
+      const finalCreep = Math.min(0.13, (waiting / LONG_WAIT_PROGRESS_MS) * 0.13);
+      const p = initial < 1 ? initial * 0.82 : 0.82 + finalCreep;
       setProgress(p);
       const idx = Math.min(STAGES.length - 1, Math.max(0, Math.floor(p * STAGES.length)));
       setStage(idx);
+      if (idx === STAGES.length - 1) {
+        setFinalMessage(Math.floor(waiting / FINAL_MESSAGE_MS) % FINAL_MESSAGES.length);
+      }
       if (!settled) {
         raf = requestAnimationFrame(tick);
       }
@@ -50,6 +72,7 @@ export function LoadingState({ url, promise, onDone, onError }: LoadingStateProp
         cancelAnimationFrame(raf);
         setProgress(1);
         setStage(STAGES.length - 1);
+        setComplete(true);
         doneTimer = setTimeout(() => onDone(analysis), 200);
         return undefined;
       })
@@ -68,6 +91,10 @@ export function LoadingState({ url, promise, onDone, onError }: LoadingStateProp
   }, [onDone, onError, promise]);
 
   const safeStage = STAGES[stage] ?? STAGES[STAGES.length - 1];
+  const displayStage =
+    stage === STAGES.length - 1 && !complete
+      ? (FINAL_MESSAGES[finalMessage] ?? FINAL_MESSAGES[0])
+      : safeStage;
 
   return (
     <div
@@ -133,9 +160,9 @@ export function LoadingState({ url, promise, onDone, onError }: LoadingStateProp
         >
           {url}
         </div>
-        <h2 style={{ marginBottom: 12 }}>{safeStage.label}…</h2>
+        <h2 style={{ marginBottom: 12 }}>{displayStage.label}…</h2>
         <p className="muted" style={{ fontSize: 16, marginBottom: 28 }}>
-          {safeStage.sub}
+          {displayStage.sub}
         </p>
         <div
           style={{
@@ -192,7 +219,20 @@ export function LoadingState({ url, promise, onDone, onError }: LoadingStateProp
                   color: "white",
                 }}
               >
-                {i < stage && <CheckIcon size={10} />}
+                {(i < stage || (complete && i === stage)) && <CheckIcon size={10} />}
+                {i === stage && !complete && (
+                  <span
+                    aria-hidden
+                    style={{
+                      width: 10,
+                      height: 10,
+                      borderRadius: "50%",
+                      border: "2px solid rgba(255,255,255,0.45)",
+                      borderTopColor: "white",
+                      animation: "loading-dot-spin .8s linear infinite",
+                    }}
+                  />
+                )}
               </span>
               {s.label}
             </div>
