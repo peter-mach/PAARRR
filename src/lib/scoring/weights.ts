@@ -3,9 +3,9 @@
  * Sum must equal 1.
  */
 export const SCORING_WEIGHTS = {
-  impact: 0.4,
-  aiLeverage: 0.35,
-  quality: 0.25,
+  impact: 0.35,
+  aiLeverage: 0.45,
+  quality: 0.2,
 } as const;
 
 export function weightedTotal(input: {
