@@ -161,6 +161,6 @@ The brief leaves several details open. Where I chose:
 
 ## Links
 
-- Live demo: _added before submission_
+- **Live demo: <https://paarrr.up.railway.app>** — Railway deployment. Try `peter-mach/PAARRR`, `gastownhall/gastown`, or any public repo with merged PRs. Append `?mock=1` to skip the network and see a fixture-backed dashboard.
 - Screen recording (30+ min, voice + webcam PiP): _added before submission_
 - Repo: _this one_
