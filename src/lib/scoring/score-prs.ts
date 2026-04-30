@@ -12,6 +12,11 @@ type ScoreAttempt = ScoredPullRequest & {
   scoringFailed: boolean;
 };
 
+export type ScoringResult = {
+  pullRequests: ScoredPullRequest[];
+  failedNumbers: Set<number>;
+};
+
 export async function scorePR(pr: PullRequestSummary): Promise<PullRequestScore> {
   const client = getOpenAI();
   const response = await client.responses.parse({
@@ -39,14 +44,19 @@ export async function scorePR(pr: PullRequestSummary): Promise<PullRequestScore>
   };
 }
 
-export async function scorePRs(prs: PullRequestSummary[]): Promise<ScoredPullRequest[]> {
+export async function scorePRs(prs: PullRequestSummary[]): Promise<ScoringResult> {
   const attempts = await runWithConcurrency(prs, SCORE_CONCURRENCY, scoreWithFallback);
 
   if (attempts.length > 0 && attempts.every((attempt) => attempt.scoringFailed)) {
     throw new Error("OpenAI scoring failed for every pull request.");
   }
 
-  return attempts.map(({ scoringFailed: _scoringFailed, ...pr }) => pr);
+  const failedNumbers = new Set(
+    attempts.filter((attempt) => attempt.scoringFailed).map((attempt) => attempt.number),
+  );
+  const pullRequests = attempts.map(({ scoringFailed: _scoringFailed, ...pr }) => pr);
+
+  return { pullRequests, failedNumbers };
 }
 
 async function scoreWithFallback(pr: PullRequestSummary): Promise<ScoreAttempt> {

@@ -72,9 +72,16 @@ export async function POST(request: Request): Promise<Response> {
     const cached = getCachedAnalysis(cacheKey);
     if (cached) return Response.json(cached);
 
-    const scored = await scorePRs(fetched.pullRequests);
+    const { pullRequests: scored, failedNumbers } = await scorePRs(fetched.pullRequests);
+    // Only feed successfully-scored PRs into the aggregate maths; failed ones
+    // stay in the displayed list (with a "Scoring failed" rationale) but their
+    // zero-scores must not drag the repo total down.
+    const successful = scored.filter((pr) => !failedNumbers.has(pr.number));
+    const insights = await generateInsights(successful);
+    // Time the entire analysis including insights — the LLM round-trip there
+    // is the largest single chunk of latency and the user deserves an honest
+    // number on the dashboard.
     const analysisSeconds = Math.max(1, Math.round((Date.now() - startedAt) / 1000));
-    const insights = await generateInsights(scored);
     const url = `https://github.com/${coords.owner}/${coords.repo}`;
     const analysis: RepoAnalysis = RepoAnalysisSchema.parse({
       owner: coords.owner,
@@ -82,8 +89,8 @@ export async function POST(request: Request): Promise<Response> {
       url,
       analyzedAt: new Date().toISOString(),
       pullRequests: scored,
-      aggregate: aggregateRepo(scored, analysisSeconds, url),
-      authors: aggregateAuthors(scored),
+      aggregate: aggregateRepo(successful, scored.length, analysisSeconds, url),
+      authors: aggregateAuthors(successful),
       insights,
     });
 

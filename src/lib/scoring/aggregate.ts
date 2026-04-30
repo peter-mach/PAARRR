@@ -3,19 +3,30 @@ import type { AuthorAggregate, RepoAggregate, ScoredPullRequest } from "@/types"
 
 const AVATAR_COLORS = ["#ee6c3d", "#2563d9", "#c89c3a", "#2c9c6a", "#7d93b8", "#8b5cf6"];
 
+/**
+ * Build a repo-level aggregate.
+ *
+ * `successful` is the set of PRs whose scores came back from the LLM cleanly;
+ * its score values feed the dimension averages. `totalAnalyzed` is how many
+ * PRs we *attempted* to score (≥ successful.length when some failed) — the
+ * dashboard renders this as "Pull requests analyzed" and the failing PRs
+ * are still shown in the list with a "Scoring failed" rationale, but their
+ * zero-scores no longer drag the repo total down.
+ */
 export function aggregateRepo(
-  scored: ScoredPullRequest[],
+  successful: ScoredPullRequest[],
+  totalAnalyzed: number,
   analysisSeconds: number,
   url: string,
 ): RepoAggregate {
-  const impact = average(scored.map((pr) => pr.score.impact));
-  const aiLeverage = average(scored.map((pr) => pr.score.aiLeverage));
-  const quality = average(scored.map((pr) => pr.score.quality));
+  const impact = average(successful.map((pr) => pr.score.impact));
+  const aiLeverage = average(successful.map((pr) => pr.score.aiLeverage));
+  const quality = average(successful.map((pr) => pr.score.quality));
 
   return {
     url,
-    mergedPRs: scored.length,
-    authorsCount: new Set(scored.map((pr) => pr.author)).size,
+    mergedPRs: totalAnalyzed,
+    authorsCount: new Set(successful.map((pr) => pr.author)).size,
     analysisSeconds,
     total: weightedTotal({ impact, aiLeverage, quality }),
     impact,
