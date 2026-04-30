@@ -1,0 +1,388 @@
+"use client";
+
+import { useEffect, useMemo, useState } from "react";
+import { CountUp } from "@/components/charts/count-up";
+import { RadarChart } from "@/components/charts/radar-chart";
+import { AIInsights } from "@/components/dashboard/ai-insights";
+import { AuthorsGrid } from "@/components/dashboard/authors-grid";
+import { Stat } from "@/components/dashboard/stat";
+import { CompassIcon, TelescopeIcon } from "@/components/icons";
+import { Logo } from "@/components/logo";
+import { PRRow } from "@/components/score/pr-row";
+import { Toolbar } from "@/components/score/toolbar";
+import { fireConfetti } from "@/lib/animations";
+import {
+  aggregateAuthors,
+  filterAndSort,
+  SAMPLE_PRS,
+  type Filters,
+  type SortKey,
+} from "@/lib/mock-data";
+
+type DashboardProps = {
+  url: string;
+  onBack: () => void;
+};
+
+type TabId = "prs" | "authors";
+
+export function Dashboard({ url, onBack }: DashboardProps) {
+  const [filters, setFilters] = useState<Filters>({ q: "", author: "" });
+  const [sort, setSort] = useState<SortKey>("total-desc");
+  const [tab, setTab] = useState<TabId>("prs");
+
+  useEffect(() => {
+    const t = setTimeout(() => fireConfetti(), 600);
+    return () => clearTimeout(t);
+  }, []);
+
+  const filtered = useMemo(() => filterAndSort(SAMPLE_PRS, filters, sort), [filters, sort]);
+
+  const authors = useMemo(() => aggregateAuthors(SAMPLE_PRS), []);
+
+  const authorNames = useMemo(() => Array.from(new Set(SAMPLE_PRS.map((p) => p.author))), []);
+
+  const accent = "var(--accent)";
+
+  const tabs: { id: TabId; label: string }[] = [
+    { id: "prs", label: `Pull requests (${filtered.length})` },
+    { id: "authors", label: `Crew (${authors.length})` },
+  ];
+
+  return (
+    <div style={{ minHeight: "100vh", background: "var(--paper)" }}>
+      {/* Sticky header */}
+      <div
+        style={{
+          background: "white",
+          borderBottom: "1px solid var(--ink-100)",
+          padding: "20px 0",
+          position: "sticky",
+          top: 0,
+          zIndex: 30,
+        }}
+      >
+        <div
+          className="container dash-header"
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+          }}
+        >
+          <div style={{ display: "flex", alignItems: "center", gap: 18 }}>
+            <button
+              type="button"
+              onClick={onBack}
+              style={{
+                background: "transparent",
+                border: "none",
+                padding: 0,
+                cursor: "pointer",
+              }}
+              aria-label="Back to landing"
+            >
+              <Logo size={28} />
+            </button>
+            <div
+              style={{
+                width: 1,
+                height: 24,
+                background: "var(--ink-200)",
+              }}
+            />
+            <div>
+              <div
+                style={{
+                  fontSize: 11,
+                  color: "var(--ink-500)",
+                  textTransform: "uppercase",
+                  letterSpacing: "0.08em",
+                  fontWeight: 700,
+                }}
+              >
+                Repository
+              </div>
+              <div
+                style={{
+                  fontFamily: "var(--font-mono-stack)",
+                  fontSize: 14,
+                  fontWeight: 600,
+                  color: "var(--ink-900)",
+                }}
+              >
+                {url}
+              </div>
+            </div>
+          </div>
+          <div className="dash-actions" style={{ display: "flex", gap: 10 }}>
+            <button
+              type="button"
+              className="btn btn-ghost btn-export"
+              style={{ height: 38, fontSize: 13 }}
+            >
+              Export JSON
+            </button>
+            <button
+              type="button"
+              className="btn btn-ghost btn-share"
+              style={{ height: 38, fontSize: 13 }}
+            >
+              Share link
+            </button>
+            <button
+              type="button"
+              className="btn btn-primary"
+              style={{ height: 38, fontSize: 13 }}
+              onClick={onBack}
+            >
+              New analysis
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div className="container" style={{ padding: "32px 18px 80px" }}>
+        {/* Hero metrics */}
+        <div
+          className="dash-hero"
+          style={{
+            display: "grid",
+            gridTemplateColumns: "1.1fr 1fr",
+            gap: 28,
+            marginBottom: 32,
+          }}
+        >
+          <div
+            className="card fade-in"
+            style={{
+              padding: 36,
+              background: "linear-gradient(135deg, var(--ink-900), var(--ink-800))",
+              color: "white",
+              position: "relative",
+              overflow: "hidden",
+            }}
+          >
+            <div
+              style={{
+                position: "absolute",
+                right: -30,
+                top: -30,
+                opacity: 0.06,
+                color: "white",
+              }}
+            >
+              <CompassIcon size={260} />
+            </div>
+            <div className="eyebrow" style={{ color: "var(--accent)", position: "relative" }}>
+              The verdict
+            </div>
+            <div
+              style={{
+                display: "flex",
+                alignItems: "baseline",
+                gap: 16,
+                marginTop: 14,
+                position: "relative",
+              }}
+            >
+              <div
+                className="num-display dash-verdict-num"
+                style={{ fontSize: 140, color: "white", lineHeight: 1 }}
+              >
+                <CountUp value={78} duration={1600} />
+              </div>
+              <div
+                style={{
+                  fontSize: 32,
+                  color: "rgba(255,255,255,0.5)",
+                  fontFamily: "var(--font-display-stack)",
+                  fontWeight: 600,
+                }}
+              >
+                /100
+              </div>
+            </div>
+            <div
+              style={{
+                fontSize: 18,
+                color: "rgba(255,255,255,0.85)",
+                fontWeight: 500,
+                marginTop: 6,
+                position: "relative",
+              }}
+            >
+              Worth its weight in gold ⛵
+            </div>
+            <div
+              className="dash-stats"
+              style={{
+                display: "flex",
+                gap: 16,
+                marginTop: 28,
+                position: "relative",
+              }}
+            >
+              <Stat label="Merged PRs" value={142} />
+              <Stat label="Authors" value={8} />
+              <Stat label="Time analyzed" value={47} suffix="s" />
+            </div>
+          </div>
+
+          <div className="card fade-in" style={{ padding: 28, animationDelay: ".15s" }}>
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+              }}
+            >
+              <div>
+                <div className="eyebrow">Score breakdown</div>
+                <h3 style={{ marginTop: 6 }}>3-axis radar</h3>
+              </div>
+              <span className="chip chip-gold">Top quartile</span>
+            </div>
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                marginTop: 12,
+              }}
+            >
+              <RadarChart impact={82} aiLeverage={86} quality={71} size={290} delay={400} />
+            </div>
+          </div>
+        </div>
+
+        {/* AI insights */}
+        <div
+          className="card fade-in"
+          style={{
+            padding: 28,
+            marginBottom: 32,
+            background: "linear-gradient(135deg, var(--parchment), var(--paper))",
+            borderLeft: `4px solid ${accent}`,
+            animationDelay: ".25s",
+          }}
+        >
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: 12,
+              marginBottom: 16,
+            }}
+          >
+            <div
+              style={{
+                width: 40,
+                height: 40,
+                borderRadius: 12,
+                background: "var(--ink-900)",
+                color: "var(--accent)",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              <TelescopeIcon size={22} />
+            </div>
+            <div>
+              <div className="eyebrow">From the crow&apos;s nest</div>
+              <h3 style={{ marginTop: 4 }}>AI recommendations</h3>
+            </div>
+          </div>
+          <AIInsights />
+        </div>
+
+        {/* Tabs */}
+        <div
+          style={{
+            display: "flex",
+            gap: 4,
+            marginBottom: 22,
+            borderBottom: "1px solid var(--ink-200)",
+          }}
+        >
+          {tabs.map((t) => (
+            <button
+              key={t.id}
+              type="button"
+              onClick={() => setTab(t.id)}
+              style={{
+                padding: "12px 18px",
+                fontSize: 14,
+                fontWeight: 600,
+                background: "transparent",
+                border: "none",
+                cursor: "pointer",
+                color: tab === t.id ? "var(--ink-900)" : "var(--ink-500)",
+                borderBottom: tab === t.id ? `3px solid ${accent}` : "3px solid transparent",
+                marginBottom: -1,
+              }}
+            >
+              {t.label}
+            </button>
+          ))}
+        </div>
+
+        {tab === "prs" && (
+          <div className="fade-in">
+            <Toolbar
+              filters={filters}
+              setFilters={setFilters}
+              sort={sort}
+              setSort={setSort}
+              authors={authorNames}
+            />
+            <div
+              className="pr-table-header"
+              style={{
+                display: "grid",
+                gridTemplateColumns: "1fr 140px 64px 64px 64px 80px",
+                gap: 16,
+                padding: "0 20px 10px",
+                fontSize: 11,
+                fontWeight: 700,
+                color: "var(--ink-500)",
+                textTransform: "uppercase",
+                letterSpacing: "0.08em",
+              }}
+            >
+              <div>Pull request</div>
+              <div>Impact</div>
+              <div style={{ textAlign: "center" }}>Imp.</div>
+              <div style={{ textAlign: "center" }}>AI</div>
+              <div style={{ textAlign: "center" }}>Qty.</div>
+              <div style={{ textAlign: "right" }}>Total</div>
+            </div>
+            <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+              {filtered.map((pr, i) => (
+                <PRRow key={pr.num} pr={pr} index={i} animateIn />
+              ))}
+              {filtered.length === 0 && (
+                <div
+                  className="card"
+                  style={{
+                    padding: 48,
+                    textAlign: "center",
+                    color: "var(--ink-500)",
+                  }}
+                >
+                  No PRs match your filters. Try clearing them.
+                </div>
+              )}
+            </div>
+          </div>
+        )}
+
+        {tab === "authors" && (
+          <div className="fade-in">
+            <AuthorsGrid authors={authors} />
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}

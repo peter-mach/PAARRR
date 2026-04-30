@@ -1,14 +1,77 @@
+"use client";
+
+import { useCallback, useEffect, useState } from "react";
+import {
+  FinalCTA,
+  Footer,
+  Hero,
+  HowItWorks,
+  Nav,
+  Preview,
+  Scoring,
+  SocialProof,
+} from "@/components/landing";
+import { Dashboard, LoadingState } from "@/components/dashboard";
+
+type Route = "landing" | "loading" | "dashboard";
+
+const DEFAULT_URL = "github.com/vercel/next.js";
+
 export default function Home() {
+  const [route, setRoute] = useState<Route>("landing");
+  const [url, setUrl] = useState(DEFAULT_URL);
+
+  const handleAnalyze = useCallback((u: string) => {
+    setUrl(u || DEFAULT_URL);
+    setRoute("loading");
+    if (typeof window !== "undefined") {
+      window.scrollTo({ top: 0 });
+    }
+  }, []);
+
+  const handleBack = useCallback(() => {
+    setRoute("landing");
+    if (typeof window !== "undefined") {
+      window.scrollTo({ top: 0 });
+    }
+  }, []);
+
+  const handleLoadingDone = useCallback(() => {
+    setRoute("dashboard");
+  }, []);
+
+  useEffect(() => {
+    if (route !== "landing") return;
+    if (typeof window === "undefined") return;
+    const els = document.querySelectorAll<HTMLElement>(".reveal");
+    const io = new IntersectionObserver(
+      (entries) => {
+        for (const e of entries) {
+          if (e.isIntersecting) e.target.classList.add("in");
+        }
+      },
+      { threshold: 0.15 },
+    );
+    for (const el of els) io.observe(el);
+    return () => io.disconnect();
+  }, [route]);
+
+  if (route === "loading") {
+    return <LoadingState url={url} onDone={handleLoadingDone} />;
+  }
+  if (route === "dashboard") {
+    return <Dashboard url={url} onBack={handleBack} />;
+  }
   return (
-    <main className="mx-auto flex max-w-2xl flex-1 flex-col items-center justify-center gap-6 px-6 py-24 text-center">
-      <span className="rounded-full border border-border bg-muted/40 px-3 py-1 text-xs font-medium tracking-wide text-muted-foreground uppercase">
-        Scaffold ready
-      </span>
-      <h1 className="text-4xl font-semibold tracking-tight sm:text-5xl">PAARRR</h1>
-      <p className="text-balance text-base text-muted-foreground sm:text-lg">
-        Pull-request Automated Analysis, Reporting, & Review Rig. The landing page, scoring backend,
-        and dashboard ship in the next PRs.
-      </p>
-    </main>
+    <>
+      <Nav onAnalyze={() => handleAnalyze("")} />
+      <Hero onSubmit={handleAnalyze} />
+      <SocialProof />
+      <HowItWorks />
+      <Scoring />
+      <Preview onAnalyze={() => handleAnalyze("")} />
+      <FinalCTA onAnalyze={() => handleAnalyze("")} />
+      <Footer />
+    </>
   );
 }

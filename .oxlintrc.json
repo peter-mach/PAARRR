@@ -30,7 +30,12 @@
   "rules": {
     "no-console": ["warn", { "allow": ["warn", "error"] }],
     "react/react-in-jsx-scope": "off",
-    "import/no-unassigned-import": ["warn", { "allow": ["**/*.css", "**/*.scss"] }]
+    "import/no-unassigned-import": ["warn", { "allow": ["**/*.css", "**/*.scss"] }],
+    "react-perf/jsx-no-new-object-as-prop": "off",
+    "react-perf/jsx-no-new-array-as-prop": "off",
+    "react-perf/jsx-no-new-function-as-prop": "off",
+    "react/no-array-index-key": "off",
+    "unicorn/no-array-sort": "off"
   },
   "ignorePatterns": [".next/**", "node_modules/**", "out/**", "build/**", "next-env.d.ts"]
 }

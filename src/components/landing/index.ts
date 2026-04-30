@@ -1,0 +1,9 @@
+export { HeroIllustration } from "./hero-illustration";
+export { Nav } from "./nav";
+export { Hero } from "./hero";
+export { SocialProof } from "./social-proof";
+export { HowItWorks } from "./how-it-works";
+export { Scoring } from "./scoring";
+export { Preview } from "./preview";
+export { FinalCTA } from "./final-cta";
+export { Footer } from "./footer";
