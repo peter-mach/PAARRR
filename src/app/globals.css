@@ -554,8 +554,10 @@ section {
     gap: 32px !important;
   }
   .hero-right {
-    max-width: 420px;
-    margin: 0 auto;
+    max-width: none;
+    width: calc(100% + var(--gutter) * 2);
+    margin-left: calc(var(--gutter) * -1);
+    margin-right: calc(var(--gutter) * -1);
   }
   .hero-float-card,
   .hero-float-stats {
@@ -660,4 +662,12 @@ section {
     width: 120px !important;
     height: 120px !important;
   }
+}
+
+/* Compass illustration scales with its wrapper (final-cta-compass is sized
+ * to 200px desktop / 120px mobile; the inline SVG would otherwise stay at its
+ * fixed pixel size and overflow the wrapper, shifting it visually off-center). */
+.final-cta-compass svg {
+  width: 100%;
+  height: 100%;
 }
