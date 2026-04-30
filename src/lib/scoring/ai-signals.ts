@@ -59,8 +59,11 @@ export function extractAISignals(input: SignalInput): AISignals {
     if (mapped) detected.add(mapped);
   }
 
-  const authorIsKnownAIBot =
-    /\[bot\]$/i.test(input.authorLogin) || addAgentsFromText(input.authorLogin, detected);
+  // Match the login against AI-agent names only. A bare "[bot]" suffix isn't
+  // enough — dependabot[bot] / renovate[bot] / changesets release bots all
+  // hit that suffix and would otherwise inflate AI-Leverage on dep-bump
+  // and release-cut PRs.
+  const authorIsKnownAIBot = addAgentsFromText(input.authorLogin, detected);
 
   const bodyText = input.body ?? "";
   const bodyHasAIAttribution =
