@@ -44,3 +44,7 @@ next-env.d.ts
 
 # Recruitment brief — not project content, kept locally
 zadanie_rekrutacyjne_photoaid.md
+
+# Screen recordings
+*.mp4
+*.mov
