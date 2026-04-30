@@ -6,6 +6,16 @@ Point PAARRR at a public GitHub repo, get an AI-generated quality score across t
 
 > Recruitment task for PhotoAID. Live demo + recording links land in this README before submission.
 
+<p align="center">
+  <img src="public/screenshots/hero.png" alt="PAARRR landing page" width="900" />
+</p>
+
+<p align="center">
+  <img src="public/screenshots/how-it-works.png" alt="How it works — three steps from repo to report" width="32%" />
+  <img src="public/screenshots/loading.png" alt="Loading state — charting results" width="32%" />
+  <img src="public/screenshots/dashboard.png" alt="Dashboard — verdict, radar, and AI recommendations" width="32%" />
+</p>
+
 ---
 
 ## Run locally
