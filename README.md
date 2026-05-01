@@ -109,7 +109,6 @@ The backend respects `GITHUB_TOKEN` from env (lifts to 5000/h). If a visitor hit
 
 - **Next.js 16 (App Router) + React 19 + TypeScript** — single deployable; route handlers cover the "mini backend" so there's no extra service to host. Static prerendering of the LP keeps Lighthouse mobile in the 90s with zero work.
 - **Tailwind v4** — `@theme` block keeps tokens in CSS, not JS. Component primitives (`.btn`, `.chip`, `.card`, `.input`) are CSS-class utilities to match the prototype's authoring style; Radix/shadcn primitives were removed once the design landed because they weren't load-bearing.
-- **Framer Motion** is in deps for future scroll-reveal work; current animations are CSS keyframes + IntersectionObserver because they tree-shake to nothing.
 - **OpenAI SDK + Octokit** — scoring (structured outputs / zod schema) and GitHub data fetching.
 - **oxlint + oxfmt (oxc)** — Rust-based linter + formatter, zero-config for this scale of project.
 
@@ -163,4 +162,4 @@ The brief leaves several details open. Where I chose:
 
 - **Live demo: <https://paarrr.up.railway.app>** — Railway deployment. Try `peter-mach/PAARRR`, `gastownhall/gastown`, or any public repo with merged PRs. Append `?mock=1` to skip the network and see a fixture-backed dashboard.
 - Screen recording (30+ min, voice + webcam PiP): _added before submission_
-- Repo: _this one_
+- Repo: <https://github.com/peter-mach/PAARRR>
