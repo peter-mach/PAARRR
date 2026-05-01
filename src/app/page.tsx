@@ -1,5 +1,6 @@
 "use client";
 
+import dynamic from "next/dynamic";
 import { useCallback, useEffect, useState } from "react";
 import {
   FinalCTA,
@@ -12,9 +13,20 @@ import {
   Scoring,
   SocialProof,
 } from "@/components/landing";
-import { Dashboard, LoadingState } from "@/components/dashboard";
-import { MOCK_ANALYSIS } from "@/lib/mock-data";
 import type { AnalysisErrorResponse, AnalyzeResponse, RepoAnalysis } from "@/types";
+
+// Dashboard + LoadingState are not on the LCP path — defer their JS so the
+// landing page bundle stays small. Direct file paths (not the barrel) so
+// webpack splits them into their own chunks instead of dragging the whole
+// dashboard graph into the LP bundle.
+const Dashboard = dynamic(
+  () => import("@/components/dashboard/dashboard").then((m) => ({ default: m.Dashboard })),
+  { ssr: false },
+);
+const LoadingState = dynamic(
+  () => import("@/components/dashboard/loading-state").then((m) => ({ default: m.LoadingState })),
+  { ssr: false },
+);
 
 type Route = "landing" | "loading" | "dashboard" | "error";
 type ApiError = AnalysisErrorResponse["error"];
@@ -51,7 +63,7 @@ export default function Home() {
         typeof window !== "undefined" &&
         new URLSearchParams(window.location.search).get("mock") === "1"
       ) {
-        setPendingAnalysis(Promise.resolve(MOCK_ANALYSIS));
+        setPendingAnalysis(import("@/lib/mock-data").then((m) => m.MOCK_ANALYSIS));
         return;
       }
 
@@ -137,12 +149,14 @@ export default function Home() {
   return (
     <>
       <Nav onAnalyze={() => handleAnalyze("")} />
-      <Hero onSubmit={handleAnalyze} />
-      <SocialProof />
-      <HowItWorks />
-      <Scoring />
-      <Preview onAnalyze={() => handleAnalyze("")} />
-      <FinalCTA onAnalyze={() => handleAnalyze("")} />
+      <main>
+        <Hero onSubmit={handleAnalyze} />
+        <SocialProof />
+        <HowItWorks />
+        <Scoring />
+        <Preview onAnalyze={() => handleAnalyze("")} />
+        <FinalCTA onAnalyze={() => handleAnalyze("")} />
+      </main>
       <Footer />
     </>
   );

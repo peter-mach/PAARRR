@@ -74,7 +74,7 @@ export function Footer() {
           display: "flex",
           justifyContent: "space-between",
           fontSize: 12,
-          color: "rgba(255,255,255,0.4)",
+          color: "rgba(255,255,255,0.7)",
         }}
       >
         <div>© 2026 PAARRR. Charted with care.</div>

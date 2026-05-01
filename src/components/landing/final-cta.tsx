@@ -43,7 +43,7 @@ export function FinalCTA({ onAnalyze }: FinalCTAProps) {
         }}
       >
         <div className="final-cta-text">
-          <div className="eyebrow" style={{ color: "var(--accent)" }}>
+          <div className="eyebrow" style={{ color: "var(--gold)" }}>
             All hands on deck
           </div>
           <h2
