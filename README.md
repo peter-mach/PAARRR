@@ -133,6 +133,7 @@ The scorer is calibrated to be conservative on purpose: rather than guess from "
 ## How AI was used
 
 - **Driver:** Claude Code (Opus) with an iterative loop (plan → tool calls → review diff → adjust). Multi-agent dispatch for parallelizable chunks (LP + dashboard implementation in parallel; 4-way code review in parallel).
+- **Review pass:** Codex with GPT-5.5 was used for a final multi-agent code review, dependency cleanup, and targeted requirement-gap fixes before submission.
 - **What AI did:** scaffold, the scoring prompt design, type schemas, the LP component code, dashboard charts, the LLM scoring pipeline, error mapping, README copy.
 - **What I did myself:** scoring weight calibration, the choice to swap ESLint for oxc, edge-case prioritization (rate limit handling with runtime token override, no-PR repo, all-PR scoring failure), visual direction (crimson accent, ship illustration), and verifying agent claims before propagating them (caught two hallucinated "P0 bugs" during the review pass).
 - **Traces:** `prompts.md` captures the four highest-leverage prompts. Co-authored-by trailers and `[ai]`/`[cc]` tags appear on every AI-assisted commit.
@@ -161,5 +162,5 @@ The brief leaves several details open. Where I chose:
 ## Links
 
 - **Live demo: <https://paarrr.up.railway.app>** — Railway deployment. Try `peter-mach/PAARRR`, `gastownhall/gastown`, or any public repo with merged PRs. Append `?mock=1` to skip the network and see a fixture-backed dashboard.
-- Screen recording (30+ min, voice + webcam PiP): _added before submission_
+- Screen recording (30+ min, voice + webcam PiP): <https://www.dropbox.com/scl/fo/m84icx1ctgknf3z98uor0/AL4yJKHacSBa8f7Xv8GN2ig?rlkey=s5w57w9pqwq0rnf7fpd0e3ogh&dl=0>
 - Repo: <https://github.com/peter-mach/PAARRR>
