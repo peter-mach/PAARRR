@@ -78,10 +78,10 @@ export function Hero({ onSubmit }: HeroProps) {
         }}
       >
         <div className="hero-left">
-          <div className="chip chip-accent fade-in" style={{ animationDelay: ".1s" }}>
+          <div className="chip chip-accent" style={{ marginTop: 0 }}>
             <SparkIcon size={12} /> Set sail in 30 seconds
           </div>
-          <h1 className="fade-in" style={{ marginTop: 18, animationDelay: ".2s" }}>
+          <h1 style={{ marginTop: 18 }}>
             Score your team&apos;s pull requests like a{" "}
             <span style={{ position: "relative", whiteSpace: "nowrap" }}>
               <span style={{ color: accent, position: "relative", zIndex: 1 }}>
@@ -111,14 +111,12 @@ export function Hero({ onSubmit }: HeroProps) {
             </span>
           </h1>
           <p
-            className="fade-in"
             style={{
               marginTop: 22,
               fontSize: 19,
               lineHeight: 1.55,
               color: "var(--ink-600)",
               maxWidth: 540,
-              animationDelay: ".3s",
             }}
           >
             PAARRR analyzes every merged PR for{" "}
