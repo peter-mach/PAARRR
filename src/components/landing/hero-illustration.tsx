@@ -137,7 +137,7 @@ export function HeroIllustration({ accent = "var(--accent)" }: HeroIllustrationP
         <text x="430" y="270" style={{ animation: "float-y 3.5s ease-in-out infinite .5s" }}>
           PR
         </text>
-        <text x="100" y="380" opacity="0.5" fill="white">
+        <text x="100" y="380" opacity="0.6" fill="white">
           git
         </text>
       </g>

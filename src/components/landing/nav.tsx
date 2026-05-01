@@ -13,6 +13,10 @@ const navLink: CSSProperties = {
   fontWeight: 500,
   color: "var(--ink-700)",
   letterSpacing: "-0.005em",
+  // Lighthouse target-size requires 24x24 minimum for tap targets — pad
+  // the link's hit area without changing visual height.
+  padding: "8px 0",
+  display: "inline-block",
 };
 
 const handleHomeClick = () => {
@@ -45,7 +49,7 @@ export function Nav({ onAnalyze }: NavProps) {
         <button
           type="button"
           onClick={handleHomeClick}
-          aria-label="Back to top"
+          aria-label="PAARRR — back to top"
           style={{ display: "inline-flex", alignItems: "center" }}
         >
           <Logo />
