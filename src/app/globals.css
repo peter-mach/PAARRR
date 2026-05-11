@@ -660,21 +660,12 @@ section {
   min-height: 520px;
 }
 
-.hero-before-card,
 .hero-after-card,
 .hero-strip-card {
   background: white;
   border: 1px solid rgba(211, 215, 217, 0.7);
   border-radius: 8px;
   box-shadow: 0 28px 70px rgba(29, 37, 59, 0.12);
-}
-
-.hero-before-card {
-  position: absolute;
-  top: 16px;
-  left: 42px;
-  width: 190px;
-  padding: 16px;
 }
 
 .hero-after-card {
@@ -720,12 +711,6 @@ section {
   width: 150px;
   height: 76px;
   color: var(--ink-900);
-}
-
-.code-line {
-  height: 10px;
-  border-radius: 999px;
-  background: var(--ink-100);
 }
 
 .metric-pill {
@@ -806,11 +791,6 @@ section {
   .hero-product-visual {
     min-height: 500px;
     transform: translateX(16px);
-  }
-  .hero-before-card {
-    left: 36px;
-    top: 10px;
-    width: 136px;
   }
   .hero-after-card {
     left: 132px;

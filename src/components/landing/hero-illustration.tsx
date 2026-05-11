@@ -4,29 +4,6 @@ import { CheckIcon, StarIcon } from "@/components/icons";
 export function HeroIllustration() {
   return (
     <div className="hero-product-visual" style={{ position: "relative", width: "100%" }}>
-      <div className="hero-before-card" aria-hidden>
-        <div
-          style={{
-            height: 150,
-            borderRadius: 8,
-            background: "linear-gradient(160deg, #d8e0f3, #f6f7f9)",
-            padding: 14,
-            display: "flex",
-            flexDirection: "column",
-            gap: 10,
-            justifyContent: "flex-end",
-          }}
-        >
-          <div className="code-line" style={{ width: "82%", background: "#1d253b" }} />
-          <div className="code-line" style={{ width: "62%" }} />
-          <div className="code-line" style={{ width: "76%" }} />
-        </div>
-        <div style={{ marginTop: 13, display: "grid", gap: 8 }}>
-          <Metric label="Impact" value="?" muted />
-          <Metric label="AI" value="?" muted />
-        </div>
-      </div>
-
       <div className="hero-after-card">
         <div
           style={{
@@ -143,32 +120,6 @@ export function HeroIllustration() {
       <Sparkle style={{ left: "16%", bottom: 112, width: 38 }} />
       <Sparkle style={{ left: "25%", bottom: 74, width: 20, animationDelay: ".35s" }} />
       <Sparkle style={{ right: "10%", bottom: 12, width: 34, animationDelay: ".55s" }} />
-    </div>
-  );
-}
-
-function Metric({
-  label,
-  value,
-  muted = false,
-}: {
-  label: string;
-  value: string;
-  muted?: boolean;
-}) {
-  return (
-    <div
-      style={{
-        display: "flex",
-        justifyContent: "space-between",
-        alignItems: "center",
-        color: muted ? "var(--ink-500)" : "var(--ink-900)",
-        fontSize: 12,
-        fontWeight: 700,
-      }}
-    >
-      <span>{label}</span>
-      <span>{value}</span>
     </div>
   );
 }
