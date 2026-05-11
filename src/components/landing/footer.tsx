@@ -6,9 +6,9 @@ type FooterColumn = {
 };
 
 const COLUMNS: FooterColumn[] = [
-  { h: "Product", l: ["How it works", "Scoring model", "Sample report", "Pricing"] },
-  { h: "Resources", l: ["Docs", "Changelog", "API", "Status"] },
-  { h: "Company", l: ["About", "Blog", "Privacy", "Terms"] },
+  { h: "Product", l: ["How it works", "Scoring model", "Sample report", "Dashboard"] },
+  { h: "Resources", l: ["GitHub API", "AI rubric", "Rate limits", "Status"] },
+  { h: "Company", l: ["About", "Recruitment", "Privacy", "Terms"] },
 ];
 
 export function Footer() {
@@ -32,8 +32,8 @@ export function Footer() {
         <div>
           <Logo color="white" />
           <p style={{ marginTop: 14, fontSize: 14, lineHeight: 1.6, maxWidth: 320 }}>
-            Pull-request Automated Analysis, Reporting, &amp; Review Rig. The fastest way to see
-            who&apos;s shipping treasure.
+            Pull-request Automated Analysis, Reporting, &amp; Review Rig. Fast PR scoring for
+            AI-native engineering teams.
           </p>
         </div>
         {COLUMNS.map((c) => (
@@ -77,7 +77,7 @@ export function Footer() {
           color: "rgba(255,255,255,0.7)",
         }}
       >
-        <div>© 2026 PAARRR. Charted with care.</div>
+        <div>© 2026 PAARRR. Built for pull request analysis.</div>
         <div style={{ display: "flex", gap: 18 }}>
           <span>v0.4.2</span>
           <span style={{ display: "inline-flex", alignItems: "center", gap: 6 }}>
@@ -89,7 +89,7 @@ export function Footer() {
                 background: "var(--green)",
               }}
             />
-            All systems sailing
+            All systems ready
           </span>
         </div>
       </div>

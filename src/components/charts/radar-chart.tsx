@@ -127,7 +127,7 @@ export function RadarChart({
               fontSize="13"
               fontWeight="700"
               fill="var(--ink-900)"
-              letterSpacing="-0.01em"
+              letterSpacing="0"
             >
               {a.label}
             </text>

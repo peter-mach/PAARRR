@@ -1,154 +1,203 @@
-type HeroIllustrationProps = {
-  accent?: string;
-};
+import type { CSSProperties } from "react";
+import { CheckIcon, StarIcon } from "@/components/icons";
 
-/**
- * Hero illustration — paper-boat-on-a-code-wave-sea variant.
- * Ship is the production default per the design handoff;
- * Map and Bottle variants from the prototype's tweaks panel are intentionally dropped.
- */
-export function HeroIllustration({ accent = "var(--accent)" }: HeroIllustrationProps) {
+export function HeroIllustration() {
   return (
-    <svg
-      viewBox="0 0 520 480"
-      style={{ width: "100%", height: "auto", display: "block" }}
-      aria-hidden
+    <div className="hero-product-visual" style={{ position: "relative", width: "100%" }}>
+      <div className="hero-before-card" aria-hidden>
+        <div
+          style={{
+            height: 150,
+            borderRadius: 8,
+            background: "linear-gradient(160deg, #d8e0f3, #f6f7f9)",
+            padding: 14,
+            display: "flex",
+            flexDirection: "column",
+            gap: 10,
+            justifyContent: "flex-end",
+          }}
+        >
+          <div className="code-line" style={{ width: "82%", background: "#1d253b" }} />
+          <div className="code-line" style={{ width: "62%" }} />
+          <div className="code-line" style={{ width: "76%" }} />
+        </div>
+        <div style={{ marginTop: 13, display: "grid", gap: 8 }}>
+          <Metric label="Impact" value="?" muted />
+          <Metric label="AI" value="?" muted />
+        </div>
+      </div>
+
+      <div className="hero-after-card">
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "flex-start",
+            gap: 20,
+          }}
+        >
+          <div>
+            <div style={{ fontSize: 13, color: "var(--ink-500)", fontWeight: 700 }}>
+              Pull request report
+            </div>
+            <div
+              style={{
+                marginTop: 6,
+                fontFamily: "var(--font-display-stack)",
+                fontSize: 44,
+                lineHeight: 1,
+                fontWeight: 700,
+                color: "var(--ink-900)",
+              }}
+            >
+              87
+            </div>
+          </div>
+          <div className="metric-pill">
+            <span style={{ color: "var(--green)", display: "inline-flex" }}>
+              <CheckIcon size={15} />
+            </span>
+            Ready
+          </div>
+        </div>
+
+        <div
+          style={{ marginTop: 24, display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 10 }}
+        >
+          <ScoreBox label="Impact" value={91} color="#4d42e0" />
+          <ScoreBox label="AI-Leverage" value={84} color="#2fcac3" />
+          <ScoreBox label="Quality" value={86} color="#0060fa" />
+        </div>
+
+        <div
+          style={{
+            marginTop: 22,
+            display: "grid",
+            gap: 11,
+            paddingTop: 20,
+            borderTop: "1px solid var(--ink-100)",
+          }}
+        >
+          {[
+            ["#142", "Streaming endpoint", "+487", "-92"],
+            ["#138", "JWT rotation", "+256", "-318"],
+            ["#135", "Connection pool", "+612", "-540"],
+          ].map(([num, title, add, del]) => (
+            <div
+              key={num}
+              style={{
+                display: "grid",
+                gridTemplateColumns: "46px 1fr auto",
+                gap: 10,
+                alignItems: "center",
+                fontSize: 13,
+              }}
+            >
+              <span style={{ color: "var(--ink-500)", fontWeight: 700 }}>{num}</span>
+              <span style={{ color: "var(--ink-900)", fontWeight: 700 }}>{title}</span>
+              <span style={{ fontFamily: "var(--font-mono-stack)", fontSize: 12 }}>
+                <span style={{ color: "var(--green)" }}>{add}</span>{" "}
+                <span style={{ color: "var(--red)" }}>{del}</span>
+              </span>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div className="hero-processing-badge">3s</div>
+      <svg className="hero-sketch-arrow" viewBox="0 0 150 76" fill="none" aria-hidden>
+        <path
+          d="M4 8c17 31 54 44 111 31"
+          stroke="currentColor"
+          strokeWidth="4"
+          strokeLinecap="round"
+        />
+        <path
+          d="M111 39c-10-1-21 4-30 13M111 39c-9-5-17-12-23-24"
+          stroke="currentColor"
+          strokeWidth="4"
+          strokeLinecap="round"
+        />
+      </svg>
+
+      <div className="hero-strip-card" aria-hidden>
+        {[91, 84].map((score) => (
+          <div
+            key={score}
+            style={{
+              height: 82,
+              borderRadius: 6,
+              background: "#f6f7f9",
+              marginBottom: 8,
+              display: "grid",
+              placeItems: "center",
+              color: "var(--primary)",
+              fontWeight: 800,
+            }}
+          >
+            {score}
+          </div>
+        ))}
+      </div>
+
+      <Sparkle style={{ left: "16%", bottom: 112, width: 38 }} />
+      <Sparkle style={{ left: "25%", bottom: 74, width: 20, animationDelay: ".35s" }} />
+      <Sparkle style={{ right: "10%", bottom: 12, width: 34, animationDelay: ".55s" }} />
+    </div>
+  );
+}
+
+function Metric({
+  label,
+  value,
+  muted = false,
+}: {
+  label: string;
+  value: string;
+  muted?: boolean;
+}) {
+  return (
+    <div
+      style={{
+        display: "flex",
+        justifyContent: "space-between",
+        alignItems: "center",
+        color: muted ? "var(--ink-500)" : "var(--ink-900)",
+        fontSize: 12,
+        fontWeight: 700,
+      }}
     >
-      <defs>
-        <linearGradient id="hero-sky" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0" stopColor="#f1f6ff" />
-          <stop offset="1" stopColor="#fdfcf8" />
-        </linearGradient>
-        <linearGradient id="hero-sea" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0" stopColor="#cfe0ff" />
-          <stop offset="1" stopColor="#7fa3e6" />
-        </linearGradient>
-        <linearGradient id="hero-sail" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0" stopColor="#fff" />
-          <stop offset="1" stopColor="#f3ead4" />
-        </linearGradient>
-      </defs>
+      <span>{label}</span>
+      <span>{value}</span>
+    </div>
+  );
+}
 
-      {/* Backdrop circle */}
-      <circle cx="260" cy="220" r="200" fill="url(#hero-sky)" />
-      <circle
-        cx="260"
-        cy="220"
-        r="200"
-        fill="none"
-        stroke="#e6efff"
-        strokeWidth="1"
-        strokeDasharray="3 4"
+function ScoreBox({ label, value, color }: { label: string; value: number; color: string }) {
+  return (
+    <div style={{ borderRadius: 8, background: "var(--primary-50)", padding: 12 }}>
+      <div style={{ fontSize: 11, color: "var(--ink-500)", fontWeight: 700 }}>{label}</div>
+      <div style={{ marginTop: 8, display: "flex", alignItems: "center", gap: 8 }}>
+        <span style={{ fontSize: 22, lineHeight: 1, color: "var(--ink-900)", fontWeight: 800 }}>
+          {value}
+        </span>
+        <span style={{ color }}>
+          <StarIcon size={14} />
+        </span>
+      </div>
+    </div>
+  );
+}
+
+function Sparkle({ style }: { style: CSSProperties }) {
+  return (
+    <svg className="handdrawn-sparkle" viewBox="0 0 44 54" style={style} fill="none" aria-hidden>
+      <path
+        d="M21.5 2c2.7 14.6 7.8 23.1 20 25.2-12.2 3.1-17.3 11.5-20 24.8C18.7 38.7 13.2 30.3 2 27.2 13.2 25.1 18.7 16.6 21.5 2Z"
+        stroke="currentColor"
+        strokeWidth="4"
+        strokeLinejoin="round"
       />
-
-      {/* Sun */}
-      <circle cx="380" cy="120" r="36" fill={accent} opacity="0.18" />
-      <circle cx="380" cy="120" r="22" fill={accent} opacity="0.3" />
-      <circle cx="380" cy="120" r="12" fill={accent} />
-
-      {/* Clouds */}
-      <g fill="#fff" opacity="0.95">
-        <ellipse cx="120" cy="110" rx="34" ry="11" />
-        <ellipse cx="140" cy="105" rx="22" ry="9" />
-        <ellipse cx="430" cy="180" rx="28" ry="9" />
-      </g>
-
-      {/* Sea waves */}
-      <g>
-        <path
-          d="M60 320 Q130 300 200 320 T340 320 T480 320 L480 410 L60 410 Z"
-          fill="url(#hero-sea)"
-        />
-        <path
-          d="M60 340 Q130 322 200 340 T340 340 T480 340"
-          fill="none"
-          stroke="#fff"
-          strokeWidth="2"
-          opacity="0.6"
-        />
-        <path
-          d="M60 365 Q130 350 200 365 T340 365 T480 365"
-          fill="none"
-          stroke="#fff"
-          strokeWidth="2"
-          opacity="0.4"
-        />
-        <path
-          d="M60 390 Q130 378 200 390 T340 390 T480 390"
-          fill="none"
-          stroke="#fff"
-          strokeWidth="2"
-          opacity="0.3"
-        />
-      </g>
-
-      {/* Ship — animated rocking */}
-      <g
-        style={{
-          transformOrigin: "260px 320px",
-          animation: "ship-rock 4s ease-in-out infinite",
-        }}
-      >
-        {/* Hull */}
-        <path d="M170 305 L350 305 L325 360 L195 360 Z" fill="var(--ink-900)" />
-        <path d="M180 312 L340 312 L322 318 L198 318 Z" fill={accent} />
-        <rect x="215" y="328" width="14" height="14" rx="2" fill="#f8f3e7" />
-        <rect x="245" y="328" width="14" height="14" rx="2" fill="#f8f3e7" />
-        <rect x="275" y="328" width="14" height="14" rx="2" fill="#f8f3e7" />
-        <rect x="305" y="328" width="14" height="14" rx="2" fill="#f8f3e7" />
-
-        {/* Mast */}
-        <rect x="258" y="170" width="4" height="135" fill="var(--ink-800)" />
-
-        {/* Big sail */}
-        <path
-          d="M262 175 L262 295 L335 295 Q325 235 262 175 Z"
-          fill="url(#hero-sail)"
-          stroke="var(--ink-300)"
-          strokeWidth="1"
-        />
-        <path d="M262 200 L320 270" stroke="var(--ink-200)" strokeWidth="1" fill="none" />
-        <path d="M262 230 L312 285" stroke="var(--ink-200)" strokeWidth="1" fill="none" />
-
-        {/* Small sail */}
-        <path
-          d="M258 180 L258 280 L195 280 Q205 230 258 180 Z"
-          fill="url(#hero-sail)"
-          stroke="var(--ink-300)"
-          strokeWidth="1"
-        />
-
-        {/* Pirate flag */}
-        <rect x="260" y="155" width="40" height="22" fill="var(--ink-900)" />
-        <g fill="white" transform="translate(280 166)">
-          <circle cx="0" cy="0" r="4" />
-          <circle cx="-1.5" cy="-0.5" r="0.6" fill="var(--ink-900)" />
-          <circle cx="1.5" cy="-0.5" r="0.6" fill="var(--ink-900)" />
-        </g>
-        <line x1="262" y1="155" x2="299" y2="177" stroke="white" strokeWidth="1.2" />
-        <line x1="299" y1="155" x2="262" y2="177" stroke="white" strokeWidth="1.2" />
-      </g>
-
-      {/* Floating bits — code symbols on waves */}
-      <g fontFamily="var(--font-mono-stack)" fontSize="14" fontWeight="700" fill="var(--ink-700)">
-        <text x="80" y="260" style={{ animation: "float-y 3s ease-in-out infinite" }}>
-          {"</>"}
-        </text>
-        <text x="430" y="270" style={{ animation: "float-y 3.5s ease-in-out infinite .5s" }}>
-          PR
-        </text>
-        <text x="100" y="380" opacity="0.6" fill="white">
-          git
-        </text>
-      </g>
-
-      {/* Compass rose corner */}
-      <g transform="translate(70 70)" opacity="0.6">
-        <circle r="22" fill="none" stroke={accent} strokeWidth="1" />
-        <circle r="14" fill="none" stroke={accent} strokeWidth="0.8" strokeDasharray="2 2" />
-        <path d="M0 -16 L4 0 L0 16 L-4 0 Z" fill={accent} />
-        <path d="M-16 0 L0 -4 L16 0 L0 4 Z" fill={accent} opacity="0.5" />
-      </g>
     </svg>
   );
 }

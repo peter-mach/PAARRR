@@ -5,9 +5,7 @@ type Dimension = {
   name: string;
   weight: number;
   color: string;
-  bg: string;
   icon: ReactNode;
-  tagline: string;
   desc: string;
   sigs: string[];
 };
@@ -16,134 +14,111 @@ const DIMENSIONS: Dimension[] = [
   {
     name: "Impact",
     weight: 40,
-    color: "var(--accent)",
-    bg: "var(--accent-100)",
-    icon: <BoltIcon size={22} />,
-    tagline: "Does this PR move the boat?",
-    desc: "We weight architectural shifts, performance wins, and net-new features above renames or dep bumps. Size ≠ significance.",
-    sigs: ["Touches core modules", "Net new functionality", "Performance gains"],
+    color: "#4d42e0",
+    icon: <BoltIcon size={24} />,
+    desc: "Functional changes, architectural improvements, performance work, and meaningful product progress score higher than routine churn.",
+    sigs: ["Core modules touched", "User-visible value", "Performance or reliability gain"],
   },
   {
     name: "AI-Leverage",
     weight: 35,
-    color: "var(--primary)",
-    bg: "var(--primary-100)",
-    icon: <RobotIcon size={22} />,
-    tagline: "Are you crewed up with AI?",
-    desc: "We look for the fingerprints of generative tooling: scope, consistency, co-authored-by tags, prompt-driven structure. High = good — that is the modern crew.",
-    sigs: ["Co-authored-by", "Consistent generated structure", "High output / description ratio"],
+    color: "#2fcac3",
+    icon: <RobotIcon size={24} />,
+    desc: "The rubric rewards candidates who use AI as real leverage: coherent large changes, AI trailers, structured implementation, and strong output pace.",
+    sigs: [
+      "Co-authored-by evidence",
+      "Consistent generated structure",
+      "High change volume with focus",
+    ],
   },
   {
     name: "Quality",
     weight: 25,
-    color: "var(--gold)",
-    bg: "var(--gold-100)",
-    icon: <ShieldIcon size={22} />,
-    tagline: "Is the code shipshape?",
-    desc: "Focused scope, descriptive PR copy explaining why, presence of tests, refactoring vs naive bolt-ons.",
-    sigs: ["Single-purpose PR", "Tests included", "Refactor over bolt-on"],
+    color: "#0060fa",
+    icon: <ShieldIcon size={24} />,
+    desc: "A focused PR, clear rationale, tests, and simplification beat broad changes that only add surface area.",
+    sigs: ["Single-purpose scope", "Tests or safeguards", "Explains why, not only what"],
   },
 ];
 
 export function Scoring() {
   return (
-    <section id="scoring" style={{ background: "var(--parchment)" }}>
+    <section id="scoring" className="reference-rich-section">
       <div className="container">
-        <div
-          className="reveal"
-          style={{ textAlign: "center", maxWidth: 660, margin: "0 auto 56px" }}
-        >
-          <div className="eyebrow">What we score</div>
-          <h2 style={{ marginTop: 12 }}>Three dimensions. One total. Zero guesswork.</h2>
-          <p className="muted" style={{ marginTop: 14, fontSize: 18 }}>
-            Each merged PR gets scored 0–100 on three axes. The repo total is a weighted average —
-            calibrated for AI-native teams.
+        <div className="reference-rich-inner reveal">
+          <h2 style={{ fontSize: 54 }}>
+            Welcome to PAARRR: Your Trusted Digital Pull Request Booth
+          </h2>
+          <p style={{ marginTop: 30, fontSize: 18, lineHeight: 1.7, color: "var(--ink-900)" }}>
+            PAARRR turns a public GitHub repository into a scorecard for recruitment, code review,
+            and team health. It mirrors the reference flow: pick the document, run an automated
+            verification, then receive a result that is easy to trust.
+          </p>
+          <p style={{ marginTop: 22, fontSize: 18, lineHeight: 1.7, color: "var(--ink-900)" }}>
+            <strong>For Every PR:</strong> each merged pull request receives scores for Impact,
+            AI-Leverage, and Quality. The total score is weighted toward value delivered, while
+            still rewarding AI-native work and clean engineering practice.
           </p>
         </div>
+
         <div
           className="grid-cols-3"
           style={{
             display: "grid",
             gridTemplateColumns: "repeat(3, 1fr)",
-            gap: 20,
+            gap: 24,
+            marginTop: 58,
           }}
         >
           {DIMENSIONS.map((d, i) => (
-            <div
+            <article
               key={d.name}
               className="reveal card"
-              style={{ padding: 30, transitionDelay: `${i * 100}ms` }}
+              style={{
+                padding: 26,
+                transitionDelay: `${i * 80}ms`,
+                background: "var(--paper)",
+              }}
             >
               <div
-                className="score-card-head"
                 style={{
+                  width: 50,
+                  height: 50,
+                  borderRadius: 8,
+                  background: "white",
+                  color: d.color,
                   display: "flex",
-                  alignItems: "flex-start",
-                  justifyContent: "space-between",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  border: "1px solid var(--ink-100)",
                 }}
               >
-                <div
-                  style={{
-                    width: 52,
-                    height: 52,
-                    borderRadius: 14,
-                    background: d.bg,
-                    color: d.color,
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                  }}
-                >
-                  {d.icon}
-                </div>
-                <div
-                  style={{
-                    fontFamily: "var(--font-mono-stack)",
-                    fontWeight: 700,
-                    fontSize: 12,
-                    color: d.color,
-                    background: d.bg,
-                    padding: "6px 12px",
-                    borderRadius: 999,
-                  }}
-                >
-                  WEIGHT {d.weight}%
-                </div>
+                {d.icon}
               </div>
-              <h3 style={{ marginTop: 22 }}>{d.name}</h3>
+              <h3
+                style={{
+                  marginTop: 24,
+                  fontFamily: "var(--font-sans-stack)",
+                  fontSize: 24,
+                  fontWeight: 800,
+                }}
+              >
+                {d.name}
+              </h3>
               <div
                 style={{
-                  fontSize: 14,
-                  fontStyle: "italic",
+                  marginTop: 8,
                   color: d.color,
-                  marginTop: 4,
-                  fontWeight: 500,
+                  fontSize: 14,
+                  fontWeight: 800,
                 }}
               >
-                &ldquo;{d.tagline}&rdquo;
+                Weight {d.weight}%
               </div>
-              <p className="muted" style={{ marginTop: 14, fontSize: 14.5, lineHeight: 1.6 }}>
+              <p style={{ marginTop: 16, fontSize: 15, lineHeight: 1.65, color: "var(--ink-700)" }}>
                 {d.desc}
               </p>
-              <div
-                style={{
-                  marginTop: 18,
-                  paddingTop: 18,
-                  borderTop: "1px dashed var(--ink-200)",
-                }}
-              >
-                <div
-                  style={{
-                    fontSize: 11,
-                    fontWeight: 700,
-                    color: "var(--ink-500)",
-                    textTransform: "uppercase",
-                    letterSpacing: "0.08em",
-                    marginBottom: 10,
-                  }}
-                >
-                  Signals we look for
-                </div>
+              <div style={{ marginTop: 18, display: "grid", gap: 8 }}>
                 {d.sigs.map((s) => (
                   <div
                     key={s}
@@ -151,19 +126,19 @@ export function Scoring() {
                       display: "flex",
                       alignItems: "center",
                       gap: 8,
-                      fontSize: 13,
-                      color: "var(--ink-700)",
-                      marginBottom: 6,
+                      color: "var(--ink-900)",
+                      fontSize: 14,
+                      fontWeight: 600,
                     }}
                   >
                     <span style={{ color: d.color, display: "inline-flex" }}>
-                      <CheckIcon size={14} />
+                      <CheckIcon size={15} />
                     </span>
                     {s}
                   </div>
                 ))}
               </div>
-            </div>
+            </article>
           ))}
         </div>
       </div>

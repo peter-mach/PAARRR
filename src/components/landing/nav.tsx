@@ -9,10 +9,10 @@ type NavProps = {
 };
 
 const navLink: CSSProperties = {
-  fontSize: 14,
+  fontSize: 16,
   fontWeight: 500,
-  color: "var(--ink-700)",
-  letterSpacing: "-0.005em",
+  color: "var(--ink-900)",
+  letterSpacing: 0,
   // Lighthouse target-size requires 24x24 minimum for tap targets — pad
   // the link's hit area without changing visual height.
   padding: "8px 0",
@@ -32,9 +32,8 @@ export function Nav({ onAnalyze }: NavProps) {
         position: "sticky",
         top: 0,
         zIndex: 50,
-        background: "rgba(253, 252, 248, 0.85)",
-        backdropFilter: "blur(12px)",
-        borderBottom: "1px solid var(--ink-100)",
+        background: "rgba(243, 249, 251, 0.92)",
+        backdropFilter: "blur(10px)",
       }}
     >
       <div
@@ -43,7 +42,7 @@ export function Nav({ onAnalyze }: NavProps) {
           display: "flex",
           alignItems: "center",
           justifyContent: "space-between",
-          height: 72,
+          height: 100,
         }}
       >
         <button
@@ -54,20 +53,23 @@ export function Nav({ onAnalyze }: NavProps) {
         >
           <Logo />
         </button>
-        <div className="nav-desktop" style={{ gap: 28, alignItems: "center" }}>
-          <a href="#how" style={navLink}>
-            How it works
+        <div className="nav-desktop" style={{ gap: 34, alignItems: "center" }}>
+          <a href="#scoring" style={navLink}>
+            Resources
           </a>
           <a href="#scoring" style={navLink}>
-            What we score
+            Popular Repos
+          </a>
+          <a href="#how" style={navLink}>
+            How it Works
           </a>
           <a href="#preview" style={navLink}>
-            Sample report
+            About
           </a>
           <button
             type="button"
             className="btn btn-primary"
-            style={{ height: 40, fontSize: 14 }}
+            style={{ height: 42, padding: "0 22px", fontSize: 14 }}
             onClick={onAnalyze}
           >
             Analyze a repo <ArrowIcon size={16} />
@@ -82,10 +84,10 @@ export function Nav({ onAnalyze }: NavProps) {
           style={{
             width: 44,
             height: 44,
-            borderRadius: 12,
+            borderRadius: 8,
             alignItems: "center",
             justifyContent: "center",
-            background: open ? "var(--ink-100)" : "transparent",
+            background: open ? "var(--primary-100)" : "transparent",
           }}
         >
           <svg
@@ -129,21 +131,21 @@ export function Nav({ onAnalyze }: NavProps) {
             onClick={() => setOpen(false)}
             style={{ ...navLink, padding: "14px 4px", fontSize: 16 }}
           >
-            How it works
+            How it Works
           </a>
           <a
             href="#scoring"
             onClick={() => setOpen(false)}
             style={{ ...navLink, padding: "14px 4px", fontSize: 16 }}
           >
-            What we score
+            Popular Repos
           </a>
           <a
             href="#preview"
             onClick={() => setOpen(false)}
             style={{ ...navLink, padding: "14px 4px", fontSize: 16 }}
           >
-            Sample report
+            About
           </a>
           <button
             type="button"
