@@ -12,8 +12,8 @@ Point PAARRR at a public GitHub repo, get an AI-generated quality score across t
 
 <p align="center">
   <img src="public/screenshots/how-it-works.png" alt="How it works — three steps from repo to report" width="32%" />
-  <img src="public/screenshots/loading.png" alt="Loading state — charting results" width="32%" />
-  <img src="public/screenshots/dashboard.png" alt="Dashboard — verdict, radar, and AI recommendations" width="32%" />
+  <img src="public/screenshots/loading.png" alt="Loading state — reading GitHub and scoring PRs" width="32%" />
+  <img src="public/screenshots/dashboard.png" alt="Dashboard — repository score, radar, and AI recommendations" width="32%" />
 </p>
 
 ---
@@ -51,8 +51,8 @@ The dashboard cache is in-memory and lifetime-of-process, so a redeploy effectiv
 
 - **Hero with animated, typed placeholder** in the URL field; **client-side URL validation** (`parseRepoUrl`) before any network call, with inline error messaging and `aria-invalid`/`aria-describedby` wiring.
 - Mobile-friendly URL input: `type=url`, `inputMode=url`, `autoCapitalize=off`, `autoCorrect=off`, `spellCheck=false`.
-- Sections per the brief: Hero, Social proof marquee, How it works (3 steps with treasure-path), What we score (3 dimensions with weights), Sample report preview, Final CTA, Footer.
-- Hand-rolled **paper-boat-on-code-wave SVG** illustration with subtle ship-rock and float-y animations; **edge-to-edge on mobile**.
+- Sections per the brief: Hero, social proof logo row, How it works, What we score, Sample report preview, Final CTA, Footer.
+- Hand-rolled **PR report illustration** with score cards, analysis badge, dashboard strip, and subtle float animations; **edge-to-edge on mobile**.
 - **Mobile-first responsive** at 1024 / 768 breakpoints, plus an explicit **`prefers-reduced-motion`** opt-out that strips every keyframe animation, scroll reveal, and confetti flight for users who request it.
 
 ### Backend (`/api/analyze`)
@@ -96,7 +96,7 @@ The backend respects `GITHUB_TOKEN` from env (lifts to 5000/h). If a visitor hit
 
 ### Loading state
 
-- Multi-stage progress (Hailing GitHub → Hauling in PRs → Plotting course → Charting results) with messages that cycle on a creep timer during the long-tail wait. The bar is decoupled from the synchronous fetch by design — when scoring runs ~30 s on a large repo the user always sees motion. Real-progress streaming via SSE is a clean future swap.
+- Multi-stage progress (Reading GitHub → Collecting PRs → Scoring with AI → Building report) with messages that cycle on a creep timer during the long-tail wait. The bar is decoupled from the synchronous fetch by design — when scoring runs ~30 s on a large repo the user always sees motion. Real-progress streaming via SSE is a clean future swap.
 
 ### Code quality
 
@@ -135,7 +135,7 @@ The scorer is calibrated to be conservative on purpose: rather than guess from "
 - **Driver:** Claude Code (Opus) with an iterative loop (plan → tool calls → review diff → adjust). Multi-agent dispatch for parallelizable chunks (LP + dashboard implementation in parallel; 4-way code review in parallel).
 - **Review pass:** Codex with GPT-5.5 was used for a final multi-agent code review, dependency cleanup, and targeted requirement-gap fixes before submission.
 - **What AI did:** scaffold, the scoring prompt design, type schemas, the LP component code, dashboard charts, the LLM scoring pipeline, error mapping, README copy.
-- **What I did myself:** scoring weight calibration, the choice to swap ESLint for oxc, edge-case prioritization (rate limit handling with runtime token override, no-PR repo, all-PR scoring failure), visual direction (crimson accent, ship illustration), and verifying agent claims before propagating them (caught two hallucinated "P0 bugs" during the review pass).
+- **What I did myself:** scoring weight calibration, the choice to swap ESLint for oxc, edge-case prioritization (rate limit handling with runtime token override, no-PR repo, all-PR scoring failure), visual direction (passport-photo.online-inspired system adapted to PR analysis), and verifying agent claims before propagating them (caught two hallucinated "P0 bugs" during the review pass).
 - **Traces:** `prompts.md` captures the four highest-leverage prompts. Co-authored-by trailers and `[ai]`/`[cc]` tags appear on every AI-assisted commit.
 
 ## Design decisions
