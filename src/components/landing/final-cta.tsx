@@ -1,6 +1,6 @@
 "use client";
 
-import { ArrowIcon, CompassIcon } from "@/components/icons";
+import { ArrowIcon, CheckIcon } from "@/components/icons";
 
 type FinalCTAProps = {
   onAnalyze: () => void;
@@ -10,28 +10,13 @@ export function FinalCTA({ onAnalyze }: FinalCTAProps) {
   return (
     <section
       style={{
-        padding: "80px 0",
+        padding: "78px 0",
         background: "var(--ink-900)",
         color: "white",
         position: "relative",
         overflow: "hidden",
       }}
     >
-      {/* Subtle decorative wave at the top */}
-      <svg
-        style={{
-          position: "absolute",
-          top: 0,
-          left: 0,
-          width: "100%",
-          opacity: 0.1,
-        }}
-        viewBox="0 0 1440 100"
-        preserveAspectRatio="none"
-        aria-hidden
-      >
-        <path d="M0 50 Q360 10 720 50 T1440 50 L1440 0 L0 0 Z" fill="white" />
-      </svg>
       <div
         className="container stack-mobile"
         style={{
@@ -43,18 +28,14 @@ export function FinalCTA({ onAnalyze }: FinalCTAProps) {
         }}
       >
         <div className="final-cta-text">
-          <div className="eyebrow" style={{ color: "var(--gold)" }}>
-            All hands on deck
-          </div>
           <h2
             style={{
               color: "white",
-              marginTop: 12,
-              fontSize: 44,
-              letterSpacing: "-0.03em",
+              fontSize: 48,
+              letterSpacing: 0,
             }}
           >
-            Find out who&apos;s shipping treasure on your team.
+            Get Started in Minutes
           </h2>
           <p
             style={{
@@ -64,7 +45,8 @@ export function FinalCTA({ onAnalyze }: FinalCTAProps) {
               maxWidth: 520,
             }}
           >
-            Free for public repos. Drops a full report in under 60 seconds. No card, no installs.
+            Paste a repository URL and receive a scored PR dashboard in about a minute. Public repos
+            work without setup.
           </p>
           <button
             type="button"
@@ -75,17 +57,35 @@ export function FinalCTA({ onAnalyze }: FinalCTAProps) {
             Analyze a repo <ArrowIcon />
           </button>
         </div>
-        <div style={{ display: "flex", justifyContent: "center" }}>
+        <div style={{ display: "grid", gap: 14, justifyContent: "center" }}>
           <div
-            className="final-cta-compass"
             style={{
-              width: 200,
-              height: 200,
-              color: "var(--accent)",
+              width: 220,
+              borderRadius: 8,
+              background: "rgba(255,255,255,0.08)",
+              border: "1px solid rgba(255,255,255,0.14)",
+              padding: 18,
+              color: "white",
               animation: "float-y 4s ease-in-out infinite",
             }}
           >
-            <CompassIcon size={200} />
+            {["Impact verified", "AI leverage scored", "Quality reviewed"].map((item) => (
+              <div
+                key={item}
+                style={{
+                  display: "flex",
+                  gap: 10,
+                  alignItems: "center",
+                  padding: "9px 0",
+                  fontWeight: 700,
+                }}
+              >
+                <span style={{ color: "var(--green)", display: "inline-flex" }}>
+                  <CheckIcon size={16} />
+                </span>
+                {item}
+              </div>
+            ))}
           </div>
         </div>
       </div>

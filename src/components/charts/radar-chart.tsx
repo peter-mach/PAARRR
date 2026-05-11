@@ -114,7 +114,8 @@ export function RadarChart({
       })}
       {axes.map((a) => {
         const lr = r + 28;
-        const x = cx + Math.cos(a.angle) * lr;
+        const rawX = cx + Math.cos(a.angle) * lr;
+        const x = Math.min(size - 58, Math.max(58, rawX));
         const y = cy + Math.sin(a.angle) * lr;
         return (
           <g key={`label-${a.label}`}>
@@ -127,7 +128,7 @@ export function RadarChart({
               fontSize="13"
               fontWeight="700"
               fill="var(--ink-900)"
-              letterSpacing="-0.01em"
+              letterSpacing="0"
             >
               {a.label}
             </text>

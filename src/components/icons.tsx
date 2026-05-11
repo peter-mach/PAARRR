@@ -79,60 +79,6 @@ export const SparkIcon = ({ size = 24, className }: IconProps) => (
   </svg>
 );
 
-export const CompassIcon = ({ size = 28, className }: IconProps) => (
-  <svg width={size} height={size} viewBox="0 0 32 32" fill="none" className={className} aria-hidden>
-    <circle cx="16" cy="16" r="14" stroke="currentColor" strokeWidth="1.5" />
-    <circle cx="16" cy="16" r="10" stroke="currentColor" strokeWidth="1" strokeDasharray="2 2" />
-    <path
-      d="M16 4v3M16 25v3M4 16h3M25 16h3"
-      stroke="currentColor"
-      strokeWidth="1.5"
-      strokeLinecap="round"
-    />
-    <path d="M16 8 19 16 16 24 13 16Z" fill="currentColor" />
-    <circle cx="16" cy="16" r="1.5" fill="white" />
-  </svg>
-);
-
-export const AnchorIcon = ({ size = 24, className }: IconProps) => (
-  <svg
-    width={size}
-    height={size}
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="1.8"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-    className={className}
-    aria-hidden
-  >
-    <circle cx="12" cy="5" r="2.5" />
-    <path d="M12 7.5v14" />
-    <path d="M5 12h14" />
-    <path d="M5 16a7 7 0 0 0 14 0" />
-  </svg>
-);
-
-export const MapIcon = ({ size = 24, className }: IconProps) => (
-  <svg
-    width={size}
-    height={size}
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="1.8"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-    className={className}
-    aria-hidden
-  >
-    <path d="M9 4 3 6v14l6-2 6 2 6-2V4l-6 2z" />
-    <path d="M9 4v14" />
-    <path d="M15 6v14" />
-  </svg>
-);
-
 export const BoltIcon = ({ size = 24, className }: IconProps) => (
   <svg
     width={size}
@@ -249,64 +195,5 @@ export const StarIcon = ({ size = 16, className }: IconProps) => (
     aria-hidden
   >
     <path d="m12 2 3.1 6.3 6.9 1-5 4.9 1.2 6.8L12 17.8l-6.2 3.2L7 14.2 2 9.3l6.9-1z" />
-  </svg>
-);
-
-export const SkullIcon = ({ size = 16, className }: IconProps) => (
-  <svg
-    width={size}
-    height={size}
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="1.6"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-    className={className}
-    aria-hidden
-  >
-    <path d="M12 2C7 2 4 5.5 4 10v3l2 2v3h3v-2h2v2h2v-2h2v2h3v-3l2-2v-3c0-4.5-3-8-8-8z" />
-    <circle cx="9" cy="11" r="1.5" fill="currentColor" />
-    <circle cx="15" cy="11" r="1.5" fill="currentColor" />
-    <path d="m11 14 1 2 1-2" />
-  </svg>
-);
-
-export const WheelIcon = ({ size = 28, className }: IconProps) => (
-  <svg
-    width={size}
-    height={size}
-    viewBox="0 0 32 32"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="1.5"
-    strokeLinecap="round"
-    className={className}
-    aria-hidden
-  >
-    <circle cx="16" cy="16" r="6" />
-    <circle cx="16" cy="16" r="2" fill="currentColor" />
-    <path d="M16 2v8M16 22v8M2 16h8M22 16h8" />
-    <path d="M6 6l5.5 5.5M20.5 20.5L26 26M6 26l5.5-5.5M20.5 11.5L26 6" />
-  </svg>
-);
-
-export const TelescopeIcon = ({ size = 24, className }: IconProps) => (
-  <svg
-    width={size}
-    height={size}
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="1.8"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-    className={className}
-    aria-hidden
-  >
-    <path d="m3 12 5-8 4 2-3 8z" />
-    <path d="m9 14 6-2 3 5-7 2z" />
-    <path d="M11 21h6" />
-    <path d="M14 17v4" />
   </svg>
 );

@@ -36,7 +36,7 @@ export function PRRow({ pr, index, animateIn }: PRRowProps) {
         opacity: show ? 1 : 0,
         transform: show ? "translateY(0)" : "translateY(12px)",
         transition: "opacity .5s ease, transform .5s ease",
-        borderRadius: 16,
+        borderRadius: 8,
       }}
     >
       <div style={{ minWidth: 0 }}>
@@ -69,7 +69,7 @@ export function PRRow({ pr, index, animateIn }: PRRowProps) {
             color: "var(--ink-900)",
             overflow: "hidden",
             textOverflow: "ellipsis",
-            letterSpacing: "-0.01em",
+            letterSpacing: 0,
             display: "-webkit-box",
             WebkitLineClamp: 2,
             WebkitBoxOrient: "vertical",

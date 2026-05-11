@@ -35,7 +35,7 @@ export function TotalBadge({ value, delay }: TotalBadgeProps) {
         fontFamily: "var(--font-display-stack)",
         fontWeight: 800,
         fontSize: 22,
-        letterSpacing: "-0.04em",
+        letterSpacing: 0,
         transform: show ? "scale(1)" : "scale(0.6)",
         opacity: show ? 1 : 0,
         transition: "transform .6s cubic-bezier(.2,1.6,.4,1), opacity .6s ease",

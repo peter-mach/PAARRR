@@ -73,7 +73,7 @@ export function DashboardSummary({
                 marginTop: 4,
               }}
             >
-              Worth its weight in gold
+              Strong PR review signal
             </div>
           </div>
         </div>
@@ -85,7 +85,7 @@ export function DashboardSummary({
             flexWrap: "wrap",
           }}
         >
-          <span className="chip chip-gold">⛵ Captain&apos;s pick</span>
+          <span className="chip chip-gold">Review-ready profile</span>
           <span className="chip chip-accent">Top-quartile AI usage</span>
         </div>
         <div
