@@ -6,8 +6,8 @@ import { RadarChart } from "@/components/charts/radar-chart";
 import { AIInsights } from "@/components/dashboard/ai-insights";
 import { AuthorsGrid } from "@/components/dashboard/authors-grid";
 import { Stat } from "@/components/dashboard/stat";
-import { CompassIcon, TelescopeIcon } from "@/components/icons";
-import { Logo } from "@/components/logo";
+import { RobotIcon } from "@/components/icons";
+import { Logo, LogoMark } from "@/components/logo";
 import { PRRow } from "@/components/score/pr-row";
 import { Toolbar } from "@/components/score/toolbar";
 import { fireConfetti } from "@/lib/animations";
@@ -82,10 +82,11 @@ export function Dashboard({ analysis, onBack }: DashboardProps) {
 
   const accent = "var(--accent)";
   const { aggregate } = analysis;
+  const verdictLabel = getVerdictLabel(aggregate.total);
 
   const tabs: { id: TabId; label: string }[] = [
     { id: "prs", label: `Pull requests (${filtered.length})` },
-    { id: "authors", label: `Crew (${authors.length})` },
+    { id: "authors", label: `Authors (${authors.length})` },
   ];
 
   return (
@@ -215,10 +216,10 @@ export function Dashboard({ analysis, onBack }: DashboardProps) {
                 color: "white",
               }}
             >
-              <CompassIcon size={260} />
+              <LogoMark size={260} color="white" detailColor="var(--ink-900)" />
             </div>
             <div className="eyebrow" style={{ color: "var(--accent)", position: "relative" }}>
-              The verdict
+              Repository score
             </div>
             <div
               style={{
@@ -255,7 +256,7 @@ export function Dashboard({ analysis, onBack }: DashboardProps) {
                 position: "relative",
               }}
             >
-              Worth its weight in gold ⛵
+              {verdictLabel}
             </div>
             <div
               className="dash-stats"
@@ -335,10 +336,10 @@ export function Dashboard({ analysis, onBack }: DashboardProps) {
                 justifyContent: "center",
               }}
             >
-              <TelescopeIcon size={22} />
+              <RobotIcon size={22} />
             </div>
             <div>
-              <div className="eyebrow">From the crow&apos;s nest</div>
+              <div className="eyebrow">AI review notes</div>
               <h3 style={{ marginTop: 4 }}>AI recommendations</h3>
             </div>
           </div>
@@ -434,4 +435,10 @@ export function Dashboard({ analysis, onBack }: DashboardProps) {
       </div>
     </div>
   );
+}
+
+function getVerdictLabel(total: number) {
+  if (total >= 80) return "Ready for final review";
+  if (total >= 60) return "Promising, needs review";
+  return "Needs focused follow-up";
 }

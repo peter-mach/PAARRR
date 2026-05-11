@@ -453,25 +453,6 @@ section {
   border-radius: 2px;
 }
 
-@keyframes rope-pull {
-  0% {
-    stroke-dashoffset: 200;
-  }
-  100% {
-    stroke-dashoffset: 0;
-  }
-}
-
-@keyframes ship-rock {
-  0%,
-  100% {
-    transform: rotate(-3deg);
-  }
-  50% {
-    transform: rotate(3deg);
-  }
-}
-
 /* Loading progress bar — pure CSS so it cannot be defeated by React state
  * updates getting batched/dropped during a long-running fetch. The bar
  * fills 0 → 95% over 25s with a soft ease-out curve, then `forwards` holds
@@ -962,16 +943,4 @@ section {
   .final-cta-text h2 {
     font-size: 32px !important;
   }
-  .final-cta-compass {
-    width: 120px !important;
-    height: 120px !important;
-  }
-}
-
-/* Compass illustration scales with its wrapper (final-cta-compass is sized
- * to 200px desktop / 120px mobile; the inline SVG would otherwise stay at its
- * fixed pixel size and overflow the wrapper, shifting it visually off-center). */
-.final-cta-compass svg {
-  width: 100%;
-  height: 100%;
 }

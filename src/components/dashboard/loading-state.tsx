@@ -1,7 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { CheckIcon, CompassIcon } from "@/components/icons";
+import { CheckIcon } from "@/components/icons";
+import { LogoMark } from "@/components/logo";
 import type { AnalysisErrorResponse, RepoAnalysis } from "@/types";
 
 type AnalysisError = AnalysisErrorResponse["error"];
@@ -14,18 +15,18 @@ type LoadingStateProps = {
 };
 
 const STAGES = [
-  { label: "Hailing GitHub", sub: "Fetching repository metadata" },
-  { label: "Hauling in PRs", sub: "Pulling merged pull requests + diffs" },
-  { label: "Plotting course", sub: "Sending to AI with the scoring rubric" },
-  { label: "Charting results", sub: "Compiling the manifest" },
+  { label: "Reading GitHub", sub: "Fetching repository metadata" },
+  { label: "Collecting PRs", sub: "Pulling merged pull requests and diffs" },
+  { label: "Scoring with AI", sub: "Applying the PR scoring rubric" },
+  { label: "Building report", sub: "Preparing the dashboard data" },
 ] as const;
 
 const FINAL_MESSAGES = [
   { label: "Scoring pull requests", sub: "AI is grading Impact, AI-Leverage, and Quality" },
-  { label: "Checking the math", sub: "Recomputing weighted totals from the rubric" },
-  { label: "Ranking the crew", sub: "Grouping authors and sorting the PR leaderboard" },
+  { label: "Checking weighted totals", sub: "Recomputing scores from the rubric" },
+  { label: "Ranking authors", sub: "Grouping contributors and sorting the PR leaderboard" },
   { label: "Drafting recommendations", sub: "Turning score patterns into concrete next steps" },
-  { label: "Preparing dashboard", sub: "Packing the report for the results view" },
+  { label: "Preparing dashboard", sub: "Assembling the report for the results view" },
 ] as const;
 
 // Stage timings derived from the same curve the bar's CSS animation uses,
@@ -140,17 +141,15 @@ export function LoadingState({ url, promise, onDone, onError }: LoadingStateProp
             style={{
               width: 96,
               height: 96,
-              borderRadius: "50%",
-              background: "var(--ink-900)",
-              color: "white",
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
               position: "relative",
-              animation: "ship-rock 3s ease-in-out infinite",
+              filter: "drop-shadow(0 18px 34px rgba(29,37,59,0.16))",
+              animation: "float-y 3s ease-in-out infinite",
             }}
           >
-            <CompassIcon size={56} />
+            <LogoMark size={76} />
           </div>
         </div>
         <div
